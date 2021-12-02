@@ -5,7 +5,7 @@ module.exports = {
 			return message.channel.send(`This command only works in <#${client.config.mainServer.channels.suggestions}>`);
 		}
 		await message.delete();
-		if (!args[1] && (!member.roles.cache.has(client.config.mainServer.staffRoles))) {
+		if (!args[1] && (!member.roles.cache.has(client.config.mainServer.roles.moderator))) {
 			return message.reply('You need to suggest something.').then(x => setTimeout(() => x.delete(), 6000));
 		}
 		if (args[1].length > 2048) {
