@@ -78,7 +78,7 @@ module.exports = (client, message, args) => {
 		const cpu = client.cpulist[manufacturer][matches.filter(x => x).sort((a, b) => b - a).firstKey()];
 		message.channel.send(client.cpuEmbed(client, { cpu, manufacturer, color }));
 	} else {
-		const limit = 20;
+		const limit = 200;
 		const bestMatches = nameSearch ? matches.filter(x => x).sort((a, b) => b - a).firstKey(limit) : matches.filter(x => x).keyArray().sort().slice(0, limit);
 		let text = ['']
 		bestMatches.forEach((x, i) => {
@@ -93,7 +93,7 @@ module.exports = (client, message, args) => {
 		text.forEach((x, i) => {
 			embed.addField('Page ' + (i + 1), x, true);
 		});
-		message.channel.send(embed).then(embedMessage => {
+		message.channel.send(embed).then((x => setTimeout(() => x.edit('_Removed to save space._') && x.suppressEmbeds(), 90000))).then(embedMessage => {
 			if (!multipleResponseAsk) return;
 			message.channel.awaitMessages(numberMessage => numberMessage.author.id === message.author.id, { max: 1, time: 40000, errors: ['time'] }).then(collected => {
 				const index = parseInt(collected.first().content) - 1;

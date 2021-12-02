@@ -173,7 +173,7 @@ module.exports = {
 				});
 			}
 			rankedChipsets.sort((a, b) => b[1].score - a[1].score);
-			const limit = 20;
+			const limit = 200;
 			const embed = new client.embed()
 				.setTitle('Choose chipset')
 				.setDescription('Your search returned many chipset\'s.' +( multipleSearch === 's' ? ' Choose one and respond with the corresponding number. (20s)' : ' Here is a list of them.'))
@@ -205,7 +205,7 @@ module.exports = {
 			} else {
 				embed.setFooter(`Showing ${limit} of ${rankedChipsets.length} chipsets.`)
 			}
-			message.channel.send(embed);
+			message.channel.send(embed).then(x => setTimeout(() => x.edit('_Removed to save space._') && x.suppressEmbeds(), 90000));
 			if (multipleSearch === 's') {
 				return message.channel.awaitMessages(x => x.author.id === message.author.id && parseInt(x.content), { max: 1, time: 20000, errors: ['time']}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
