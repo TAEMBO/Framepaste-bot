@@ -1,4 +1,7 @@
 module.exports = async (message, client) => {
+	if (message.content.includes('forgor')) {
+		message.react('💀')
+	}
 	if (message.content.includes("userbenchmark.com")) {
 		message.reply(":b:ingus y u use userbenchmark");
 	}

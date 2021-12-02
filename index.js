@@ -649,7 +649,6 @@ client.on("message", async (message) => {
 		return message.delete();
 	}
 	const punishableRoleMentions = [
-		client.config.mainServer.roles.trialmoderator,
 		client.config.mainServer.roles.moderator,
 		client.config.mainServer.roles.administrator,
 		client.config.mainServer.roles.owner
