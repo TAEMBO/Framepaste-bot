@@ -644,7 +644,7 @@ client.on("message", async (message) => {
     if (message.channel.type === 'dm') require('./dmforward.js')(message, client);
 	if (!message.guild) return;
 	const suggestCommand = client.commands.get('suggest');
-	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(' ')[0] === client.prefix + x) && !message.author.bot && (!member.roles.cache.has(client.config.mainServer.roles.moderator))) {
+	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(' ')[0] === client.prefix + x) && !message.author.bot && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator))) {
 		message.reply(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 12000));
 		return message.delete();
 	}
