@@ -804,10 +804,6 @@ client.on("message", async (message) => {
 		client.punishments.addPunishment('warn', message.member, { reason: 'Discord advertisement' }, client.user.id)
 		message.reply('No advertising other Discord servers.').then(x => setTimeout(() => x.delete(), 10000))
 	}
-	// forgor to label this
-	if (message.content.includes('forgor')) {
-		message.react('💀')
-	}
 });
 modmailClient.threads = new client.collection();
 modmailClient.on('message', message => {
