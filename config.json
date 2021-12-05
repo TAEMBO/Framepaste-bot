@@ -31,28 +31,28 @@
 			"levels": {
                 "one": {
                     "id": "903539767113814056",
-                    "age": 60,
-                    "messages": 1000
+                    "age": 30,
+                    "messages": 500
                 },
                 "two": {
                     "id": "903539759891243010",
-                    "age": 90,
-                    "messages": 2000
+                    "age": 60,
+                    "messages": 1000
                 },
                 "three": {
                     "id": "903539753528459295",
-                    "age": 120,
-                    "messages": 4000
+                    "age": 90,
+                    "messages": 2000
                 },
                 "four": {
                     "id": "903539742103203920",
-                    "age": 150,
-                    "messages": 8000
+                    "age": 120,
+                    "messages": 4000
                 },
                 "five": {
                     "id": "903539725611184179",
-                    "age": 180,
-                    "messages": 16000
+                    "age": 150,
+                    "messages": 8000
                 }
             }
 		},
