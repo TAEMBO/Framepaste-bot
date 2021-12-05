@@ -410,12 +410,6 @@ client.commands.pages.sort((a, b) => {
 	} else {
 		return 0;
 	}
-}).sort((a, b) => {
-	if (a.category.toLowerCase() === 'pc creator' && b.category.toLowerCase() !== 'pc creator') {
-		return -1;
-	} else {
-		return 1;
-	}
 });
 
 // starboard functionality
