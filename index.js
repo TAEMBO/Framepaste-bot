@@ -579,9 +579,9 @@ client.on('messageReactionRemove', async (reaction, user) => {
 	}, client);
 
 });
-// give access to #voice-chat-text to members when they join vc
+// give access to #no-mic to members when they join vc
 client.on('voiceStateUpdate', (oldState, newState) => {
-	const memberRole = oldState.guild.roles.cache.get("747630391392731218");
+	const memberRole = oldState.guild.roles.cache.get("917440924219473930");
 	if (!memberRole) return;
 	if (newState.channelID) {
 		newState.member.roles.add(memberRole);
