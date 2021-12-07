@@ -792,7 +792,11 @@ client.on("message", async (message) => {
 	
 	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && message.guild.id === client.config.mainServer.id) {
 	message.delete()
-	message.reply("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
+	if (message.member.hasPermission('ADMINISTRATOR')) {
+		message.reply("you just got self moderated lmao").then(x => setTimeout(() => x.delete(), 5000))
+	} else {
+		message.reply("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))
+	}}
 
 	// handle discord invite links
 	if (message.content.includes('discord.gg/') && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) && message.guild.id === client.config.mainServer.id) {
