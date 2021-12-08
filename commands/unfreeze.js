@@ -13,7 +13,7 @@ module.exports = {
             message.reply('you do not have permission to use this command')
         }
     },
-    name: 'unlock',
-    description: `Lock @ everyone send message permissions`,
+    name: 'unfreeze',
+    description: `Unlock the server for casuals`,
     category: 'Moderation'
 };
