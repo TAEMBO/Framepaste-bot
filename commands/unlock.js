@@ -13,7 +13,7 @@ module.exports = {
             message.reply('you do not have permission to use this command')
         }
     },
-    name: 'lockdown',
+    name: 'unlock',
     description: `Lock @ everyone send message permissions`,
     category: 'Moderation'
 };
