@@ -716,6 +716,7 @@ client.on("message", async (message) => {
 
 		// repeated messages
 		if (message.content.length > 10 && ['https://', 'http://', '@everyone', '@here', '.com', '.ru', '.org', '.net'].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
+            if (!message.member.hasPermission('ADMINISTRATOR')) {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
 				// add this message to the list
@@ -773,6 +774,7 @@ client.on("message", async (message) => {
 				client.repeatedMessages[message.author.id].to = setTimeout(onTimeout, 60000);
 			}
 		}
+    }
 
 		const BLACKLISTED_CHANNELS = [
 			'902524214718902332', /* bot-commands */
@@ -790,7 +792,11 @@ client.on("message", async (message) => {
 	
 	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && message.guild.id === client.config.mainServer.id) {
 	message.delete()
-	message.reply("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
+	if (message.member.hasPermission('ADMINISTRATOR')) {
+		message.reply("you just got self moderated lmao").then(x => setTimeout(() => x.delete(), 5000))
+	} else {
+		message.reply("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))
+	}}
 
 	// handle discord invite links
 	if (message.content.includes('discord.gg/') && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) && message.guild.id === client.config.mainServer.id) {
