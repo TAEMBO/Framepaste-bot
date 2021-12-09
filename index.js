@@ -714,68 +714,6 @@ client.on("message", async (message) => {
 			delete client.repeatedMessages[message.author.id];
 		}
 
-		// repeated messages
-		if (message.content.length > 10 && ['https://', 'http://', '@everyone', '@here', '.com', '.ru', '.org', '.net'].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
-            if (!message.member.hasPermission('ADMINISTRATOR')) {
-			const thisContent = message.content.slice(0, 32);
-			if (client.repeatedMessages[message.author.id]) {
-				// add this message to the list
-				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: thisContent, ch: message.channel.id });
-
-				// reset timeout
-				clearTimeout(client.repeatedMessages[message.author.id].to);
-				client.repeatedMessages[message.author.id].to = setTimeout(onTimeout, 60000);
-
-				// this is the time in which 3 messages have to be sent, in milliseconds
-				const threshold = 60000;
-
-				// message mustve been sent after (now - threshold), so purge those that were sent earlier
-				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold)
-
-				// if user has sent the same message 2 times in the last threshold milliseconds, change their nickname
-				if (client.repeatedMessages[message.author.id]?.find(x => {
-					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 2;
-				})) {
-					client.repeatedMessages[message.author.id].nicknameChanged = true;
-					message.member.setNickname('⚠ Possible Scammer ⚠', 'repeated messages');
-				}
-
-				// if user has sent the same message 3 times in the last threshold milliseconds, notify them
-				/*if (client.repeatedMessages[message.author.id]?.find(x => {
-					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 3;
-				})) {
-					client.repeatedMessages[message.author.id].warnMsg = await message.reply('Stop spamming that message!');
-				}*/
-
-				// a spammed message is one that has been sent at least 3 times in the last threshold milliseconds
-				const spammedMessage = client.repeatedMessages[message.author.id]?.find(x => {
-					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size >= 3;
-				});
-
-				// if a spammed message exists;
-				if (spammedMessage) {
-					// softban
-					const softbanResult = await client.punishments.addPunishment('softban', message.member, { reason: 'repeated messages' }, client.user.id);
-
-					// timestamp of first spammed message
-					const spamOriginTimestamp = client.repeatedMessages[message.author.id].firstKey();
-
-					// send info about this user and their spamming
-					client.channels.cache.get(client.config.mainServer.channels.modchat).send(`Anti-spam triggered, here's the details:\n\`https://\` ${message.content.toLowerCase().includes('https://') ? ':white_check_mark:' : ':x:'}\n\`http://\` ${message.content.toLowerCase().includes('http://') ? ':white_check_mark:' : ':x:'}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes('@everyone') || message.content.toLowerCase().includes('@here')) ? ':white_check_mark:' : ':x:'}\n\`top-level domain\` ${['.com', '.ru', '.org', '.net'].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join('\n')}\nThreshold: ${threshold}ms\nLRS Message Count: ${client.userLevels.getUser(message.author.id)}`);
-
-					// and clear their list of long messages
-					delete client.repeatedMessages[message.author.id];
-				}
-			} else {
-				client.repeatedMessages[message.author.id] = new client.collection();
-				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: message.content.slice(0, 32), ch: message.channel.id });
-
-				// auto delete after 1 minute
-				client.repeatedMessages[message.author.id].to = setTimeout(onTimeout, 60000);
-			}
-		}
-    }
-
 		const BLACKLISTED_CHANNELS = [
 			'902524214718902332', /* bot-commands */
 			'879581805529948180' /* staff-logs */
