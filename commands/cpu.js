@@ -1,7 +1,7 @@
 function cpuEmbed(client, cpu, manufacturer) {
 	let color;
-	if (manufacturer.toLowerCase() === 'intel') color = '#40c7f7';
-	else if (manufacturer.toLowerCase() === 'amd') color = 'cf4125';
+	if (manufacturer.toLowerCase() === 'intel') color = 2793983;
+	else if (manufacturer.toLowerCase() === 'amd') color = 13582629;
 	const embed = new client.embed()
 		.setTitle(manufacturer.charAt(0).toUpperCase() + manufacturer.slice(1).toLowerCase() + ' ' + cpu.name)
 		.addField('Cores', cpu.cores, true)
