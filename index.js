@@ -788,7 +788,7 @@ client.on("message", async (message) => {
 	}
 
 	// handle banned words
-	const bannedWords = ["fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
+	const bannedWords = ["shlt", "fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
 	
 	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && message.guild.id === client.config.mainServer.id) {
 	message.delete()
