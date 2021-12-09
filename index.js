@@ -704,7 +704,7 @@ client.on("message", async (message) => {
 				return;
 			} catch (error) {
 				console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
-				return message.channel.send('Skill issue man, an error happened while executing that command.');
+				return message.channel.send('Skill issue man. an error happened while executing that command.');
 			}
 		}
 	} else {
