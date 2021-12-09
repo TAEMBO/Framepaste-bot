@@ -790,7 +790,7 @@ client.on("message", async (message) => {
 	// handle banned words
 	const bannedWords = ["shlt", "fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
 	
-	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && message.guild.id === client.config.mainServer.id) {
+	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && !message.member.roles.cache.has(client.config.mainServer.roles.moderator) && message.guild.id === client.config.mainServer.id) {
 	message.delete()
 	if (message.member.hasPermission('ADMINISTRATOR')) {
 		message.reply("you just got self moderated lmao").then(x => setTimeout(() => x.delete(), 5000))
