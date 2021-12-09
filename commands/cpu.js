@@ -12,7 +12,6 @@ function cpuEmbed(client, cpu, manufacturer) {
 		.addField('Socket', cpu.socket ? (cpu.socket === 'N/A' ? 'N/A' : cpu.socket): 'N/A', true)
 		.addField('MSRP', cpu.price ? (cpu.price === 'N/A' ? 'N/A' : '$' + cpu.price.toFixed(2)) : 'N/A')
 		.setColor(color);
-		if (cpu.imageUrl) embed.setImage(cpu.imageUrl);
 	return embed;
 }
 
