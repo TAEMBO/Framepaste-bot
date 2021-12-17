@@ -5,9 +5,10 @@
 	},
 	"prefix": ",",
 	"eval": {
-		"allowed": true,
+		"allowed": false,
 		"whitelist": [
-			"615761944154210305"
+			"615761944154210305",
+			"349093541978439685"
 		]
 	},
 	"enableAutoResponse": false,
