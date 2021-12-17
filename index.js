@@ -669,7 +669,8 @@ client.on("message", async (message) => {
 			// channel restrictions
 			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[message.channel.id]?.some(x => x.includes(commandFile.name))) {
 				if (!client.hasModPerms(client, message.member) && !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) 
-				return message.channel.send('Command is restricted in this channel, use <#902524214718902332>').then(m => setTimeout(() => m.delete(), 7000));
+				message.delete();
+				return message.reply('Command is restricted in this channel, use <#902524214718902332>').then(m => setTimeout(() => m.delete(), 7000));
 			}
 
 			// cooldown
@@ -726,7 +727,7 @@ client.on("message", async (message) => {
 	}
 
 	// handle banned words
-	const bannedWords = ["shlt", "fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
+	const bannedWords = ["shlt", "fů", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
 	
 	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && message.guild.id === client.config.mainServer.id) {
 	message.delete()
