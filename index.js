@@ -644,8 +644,7 @@ client.on("message", async (message) => {
 	}
 	const punishableRoleMentions = [
 		client.config.mainServer.roles.moderator,
-		client.config.mainServer.roles.administrator,
-		client.config.mainServer.roles.owner
+		client.config.mainServer.roles.administrator
 	];
 	if (message.mentions.roles.some(mentionedRole => punishableRoleMentions.includes(mentionedRole.id))) {
 		console.log('user mentioned staff role');
