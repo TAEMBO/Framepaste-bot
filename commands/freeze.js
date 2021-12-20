@@ -1,16 +1,16 @@
 module.exports = {
 	run: async (client, message, args) => {
-		if (message.member.hasPermission('ADMINISTRATOR')) {
-
+		if (message.member.roles.cache.has(client.config.mainServer.roles.moderator)) {
+            // credits to Skippy for this
             const role = message.guild.roles.everyone;
             const perms = role.permissions.toArray()
 
             const newPerms = perms.filter((perm) => perm !== 'SEND_MESSAGES');
             await role.edit({ permissions: newPerms })
-            message.channel.send('Locked down channels')
+            message.channel.send('Froze server')
         
         } else {
-            message.reply('you do not have permission to use this command')
+            message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`)
         }
 	},
 	name: 'freeze',

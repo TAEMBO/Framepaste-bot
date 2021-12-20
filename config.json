@@ -1,9 +1,9 @@
 {
 	"botSwitches": {
-		"fp": true,
+		"fpb": true,
 		"modmail": false
 	},
-	"prefix": ",",
+	"prefix": "m",
 	"eval": {
 		"allowed": true,
 		"whitelist": [
@@ -19,12 +19,14 @@
 		"staffRoles": [
 			"owner",
 			"administrator",
-			"moderator"
+			"moderator",
+			"trialmoderator"
 		],
 		"roles": {
 			"owner": "571032502181822506",
 			"administrator": "901677965631443015",
 			"moderator": "858077018732888084",
+			"trialmoderator": "922141395597262859",
 			"muted": "889389102112333864",
 			"everyone": "858054240416432158",
 			"levels": {
@@ -58,9 +60,9 @@
 		"channels": {
 			"staffLogs": "879581805529948180",
 			"suggestions": "912591798436761631",
-			"modchat": 858079064309235742,
+			"modchat": "858079064309235742",
 			"modmail": "837436210183798826",
-			"modlog": "865714090000646144",
+			"modlogs": "879581805529948180",
 			"starboard": "914665869391577128"
 
 		}
