@@ -3,7 +3,7 @@
 		"fpb": true,
 		"modmail": false
 	},
-	"prefix": "m",
+	"prefix": ",",
 	"eval": {
 		"allowed": true,
 		"whitelist": [
