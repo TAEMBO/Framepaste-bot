@@ -4,13 +4,13 @@ module.exports = async (client) => {
    client.on("messageDelete", async (msg)=>{
        if(msg.partial) return;
        if(msg.author.bot) return;
-      channel.send({embeds: [new MessageEmbed().setTitle("Message Deleted!").setDescription(`Content:\n\`\`\`js\n${msg.content}\n\`\`\`\nChannel: <#${msg.channel.id}>`).setAuthor(`Author: ${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({})).setColor(14495300)]})
+      channel.send({embeds: [new MessageEmbed().setTitle("Message Deleted!").setDescription(`Content:\n\`\`\`\n${msg.content}\n\`\`\`\nChannel: <#${msg.channel.id}>`).setAuthor(`Author: ${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({})).setColor(14495300)]})
    })
    client.on("messageUpdate", async (oldMsg, newMsg)=>{
        if(oldMsg.partial) return;
        if(newMsg.partial) return;
        if(oldMsg.author.bot) return;
-       channel.send({embeds: [new MessageEmbed().setTitle("Message Edited!").setDescription(`Old Content:\n\`\`\`js\n${oldMsg.content}\n\`\`\`\nNew Content:\n\`\`\`js\n${newMsg.content}\n\`\`\`\nChannel: <#${oldMsg.channel.id}>`).setAuthor(`Author: ${oldMsg.author.tag} (${oldMsg.author.id})`, oldMsg.author.displayAvatarURL({})).setColor(client.embedColor)], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("LINK").setURL(`${oldMsg.url}`).setLabel("Jump to message"))]})
+       channel.send({embeds: [new MessageEmbed().setTitle("Message Edited!").setDescription(`Old Content:\n\`\`\`\n${oldMsg.content}\n\`\`\`\nNew Content:\n\`\`\`js\n${newMsg.content}\n\`\`\`\nChannel: <#${oldMsg.channel.id}>`).setAuthor(`Author: ${oldMsg.author.tag} (${oldMsg.author.id})`, oldMsg.author.displayAvatarURL({})).setColor(client.embedColor)], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("LINK").setURL(`${oldMsg.url}`).setLabel("Jump to message"))]})
    })
    client.on("guildMemberAdd", async (member)=>{
         const embed = new MessageEmbed()
