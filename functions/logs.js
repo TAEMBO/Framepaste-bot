@@ -44,4 +44,5 @@ module.exports = async (client) => {
     .setColor(client.embedColor)
     channel.send({embeds: [embed]})
 })
+ channel.send(':warning: Bot restarted :warning:')
 };
