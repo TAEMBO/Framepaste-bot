@@ -118,7 +118,7 @@ client.userLevels = new database("./databases/userLevels.json", "object");
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
 	_milestone() {
-		const milestones = [10, 100, 1000, 696969, 800000, 1000000]; // always keep the previously achived milestone in the array so the progress is correct. here you can stack as many future milestones as youd like
+		const milestones = [10, 100, 1000, 50000, 69696, 100000, 200000, 300000, 400000, 420000, 500000]; // always keep the previously achived milestone in the array so the progress is correct. here you can stack as many future milestones as youd like
 		const total = Object.values(this._content || {}).reduce((a, b) => a + b, 0);
 		const next = milestones.find(x => x >= total) || undefined;
 		const previous = milestones[milestones.indexOf(next) - 1] || 0;
@@ -710,7 +710,7 @@ client.on("messageCreate", async (message) => {
 		}
 
 		// repeated messages
-		if (message.content.length > 10 && ["https://", "http://", "@everyone", "@here", ".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
+		/* if (message.content.length > 10 && ["https://", "http://", "@everyone", "@here", ".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
 				// add this message to the list
@@ -735,11 +735,11 @@ client.on("messageCreate", async (message) => {
 				}
 
 				// if user has sent the same message 3 times in the last threshold milliseconds, notify them
-				/*if (client.repeatedMessages[message.author.id]?.find(x => {
+				if (client.repeatedMessages[message.author.id]?.find(x => {
 					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 3;
 				})) {
 					client.repeatedMessages[message.author.id].warnMsg = await message.reply("Stop spamming that message!");
-				}*/
+				}
 
 				// a spammed message is one that has been sent at least 3 times in the last threshold milliseconds
 				const spammedMessage = client.repeatedMessages[message.author.id]?.find(x => {
@@ -767,7 +767,7 @@ client.on("messageCreate", async (message) => {
 				// auto delete after 1 minute
 				client.repeatedMessages[message.author.id].to = setTimeout(onTimeout, 60000);
 			}
-		}
+		}*/
 
 		const BLACKLISTED_CHANNELS = [
 			"902524214718902332", /* bot-commands */
