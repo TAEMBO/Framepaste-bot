@@ -776,9 +776,6 @@ client.on("messageCreate", async (message) => {
 		];
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
-
-		require("./autores.js")(message, client);
-	
 	}
 
 	// handle banned words
@@ -797,6 +794,9 @@ client.on("messageCreate", async (message) => {
 	// forgor to label this
 	if (message.content.includes("forgor")) {
 		message.react("💀")
+	}
+	if (message.content.includes("userbenchmark.com")) {
+		message.reply(":b:ingus y u use userbenchmark");
 	}
 });
 client.on("interactionCreate", async (button)=>{
