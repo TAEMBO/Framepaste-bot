@@ -47,7 +47,7 @@ Object.assign(client, {
 		parts: ["name", "usage", "shortDescription", "alias"],
 		titles: ["alias"]
 	},
-	embedColor: 3971825,
+	embedColor: 14014681,
 	starLimit: 3,
 	selfStarAllowed: false
 });
