@@ -7,6 +7,6 @@ module.exports = {
         .setFooter('cloned from discord.gg/buildapc', 'https://cdn.discordapp.com/icons/286168815585198080/a_e1016a9b8d8f7c97dafef6b655e0d1b1.webp');
         message.channel.send({embeds: [embed]})
 	},
-	name: 'win',
+	name: 'ddu',
 	hidden: true
 };
