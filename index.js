@@ -656,7 +656,7 @@ client.on("messageCreate", async (message) => {
 		}).catch(() => console.log("failed to collect \"y\" from staff"));
 	}
 	if (message.content.startsWith(client.prefix)) {
-		const args = message.content.slice(client.prefix.length).replace(/\n/g, " ").split(" ");
+		const args = message.content.toLowerCase().slice(client.prefix.length).replace(/\n/g, " ").split(" ");
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
 			console.log(`Running command "${commandFile.name}"`);
