@@ -228,7 +228,7 @@ Object.assign(client.punishments, {
 		switch (type) {
 			case "ban":
 				const banData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const dm = await member.send(`You\"ve been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${banData.id})`).catch(err => console.log(`dm failed while ${moderator} was banning ${member.user.id} (case ${banData.id}):`, err.message));
+				const dm = await member.send(`You've been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${banData.id})`).catch(err => console.log(`dm failed while ${moderator} was banning ${member.user.id} (case ${banData.id}):`, err.message));
 				const banResult = await member.ban({ reason: `${reason || "unspecified"} | Case #${banData.id}` }).catch(err => err.message);
 				if (typeof banResult === "string") {
 					dm.delete();
@@ -285,12 +285,12 @@ Object.assign(client.punishments, {
 					if (reason) muteData.reason = reason;
 					this.addData(muteData);
 					this.forceSave();
-					member.send(`You\"ve been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${muteData.id})`).catch(err => console.log(`dm failed while ${moderator} was muting ${member.user.id} (case ${muteData.id}):`, err.message));
+					member.send(`You've been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${muteData.id})`).catch(err => console.log(`dm failed while ${moderator} was muting ${member.user.id} (case ${muteData.id}):`, err.message));
 					return `**Case #${muteData.id}:** Successfully muted ${member.user.tag} (\`${member.user.id}\`) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\``;
 				}
 			case "warn":
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const warnResult = await member.send(`You\"ve been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => console.log(`dm failed while ${moderator} was warning ${member.user.id} (case ${warnData.id}):`, err.message));
+				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => console.log(`dm failed while ${moderator} was warning ${member.user.id} (case ${warnData.id}):`, err.message));
 				if (typeof warnResult === "string") {
 					return "Warn was unsuccessful: " + warnResult;
 				} else {
@@ -319,7 +319,7 @@ Object.assign(client.punishments, {
 					removePunishmentResult = await member.roles.remove(client.config.mainServer.roles.muted, `${reason || "unspecified"} | Case #${id}`).catch(err => err.message);
 					
 					if (typeof removePunishmentResult !== "string") {
-						removePunishmentResult.send(`You\"ve been unmuted in ${removePunishmentResult.guild.name}.`);
+						removePunishmentResult.send(`You've been unmuted in ${removePunishmentResult.guild.name}.`);
 						removePunishmentResult = removePunishmentResult.user; // removing a role returns a guildmember
 					}
 				} else {
@@ -704,9 +704,12 @@ client.on("messageCreate", async (message) => {
 		}
 
 		// repeated messages
-		/* if (message.content.length > 10 && ["https://", "http://", "@everyone", "@here", ".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
+		if (message.content.length > 10 && ["https://", "http://", "@everyone", "@here", ".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id && !client.hasModPerms(client, message.member)) {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
+				if (thisContent.includes('tenor')) {
+					return;
+				}   else {
 				// add this message to the list
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: thisContent, ch: message.channel.id });
 
@@ -728,12 +731,12 @@ client.on("messageCreate", async (message) => {
 					message.member.setNickname("⚠ Possible Scammer ⚠", "repeated messages");
 				}
 
-				// if user has sent the same message 3 times in the last threshold milliseconds, notify them
+				/* if user has sent the same message 3 times in the last threshold milliseconds, notify them
 				if (client.repeatedMessages[message.author.id]?.find(x => {
 					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 3;
 				})) {
 					client.repeatedMessages[message.author.id].warnMsg = await message.reply("Stop spamming that message!");
-				}
+				}*/
 
 				// a spammed message is one that has been sent at least 3 times in the last threshold milliseconds
 				const spammedMessage = client.repeatedMessages[message.author.id]?.find(x => {
@@ -749,19 +752,19 @@ client.on("messageCreate", async (message) => {
 					const spamOriginTimestamp = client.repeatedMessages[message.author.id].firstKey();
 
 					// send info about this user and their spamming
-					client.channels.cache.get(client.config.mainServer.channels.pccbtesting).send({content: `Anti-spam triggered, here"s the details:\n\`https://\` ${message.content.toLowerCase().includes("https://") ? ":white_check_mark:" : ":x:"}\n\`http://\` ${message.content.toLowerCase().includes("http://") ? ":white_check_mark:" : ":x:"}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes("@everyone") || message.content.toLowerCase().includes("@here")) ? ":white_check_mark:" : ":x:"}\n\`top-level domain\` ${[".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join("\n")}\nThreshold: ${threshold}ms\nLRS Message Count: ${client.userLevels.getUser(message.author.id)}`});
+					client.channels.cache.get(client.config.mainServer.channels.modchat).send({content: `Anti-spam triggered, here's the details:\n\`https://\` ${message.content.toLowerCase().includes("https://") ? ":white_check_mark:" : ":x:"}\n\`http://\` ${message.content.toLowerCase().includes("http://") ? ":white_check_mark:" : ":x:"}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes("@everyone") || message.content.toLowerCase().includes("@here")) ? ":white_check_mark:" : ":x:"}\n\`top-level domain\` ${[".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join("\n")}\nThreshold: ${threshold}ms\nLRS Message Count: ${client.userLevels.getUser(message.author.id)}`});
 
 					// and clear their list of long messages
 					delete client.repeatedMessages[message.author.id];
 				}
-			} else {
+			}} else {
 				client.repeatedMessages[message.author.id] = new client.collection();
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: message.content.slice(0, 32), ch: message.channel.id });
 
 				// auto delete after 1 minute
 				client.repeatedMessages[message.author.id].to = setTimeout(onTimeout, 60000);
 			}
-		}*/
+		}
 
 		const BLACKLISTED_CHANNELS = [
 			"902524214718902332", /* bot-commands */
