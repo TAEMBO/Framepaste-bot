@@ -783,7 +783,7 @@ client.on("messageCreate", async (message) => {
 	message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 
 	// handle discord invite links
-	if (message.content.includes("discord.gg/") && (!message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) && message.guild.id === client.config.mainServer.id) {
+	if (message.content.includes("discord.gg/") && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator && message.guild.id === client.config.mainServer.id) {
 		message.delete()
 		client.punishments.addPunishment("warn", message.member, { reason: "Discord advertisement" }, client.user.id)
 		message.channel.send("No advertising other Discord servers.").then(x => setTimeout(() => x.delete(), 10000))
