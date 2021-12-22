@@ -350,7 +350,7 @@ Object.assign(client.punishments, {
 	}
 });
 client.punishments.initLoad();
-client.votes = new database("./databases/votes.json", "array")
+client.votes = new database("./databases/suggestvotes.json", "array")
 client.votes.initLoad();
 
 // channel restrictions
