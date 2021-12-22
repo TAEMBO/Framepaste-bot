@@ -58,7 +58,7 @@ module.exports = {
 				const embed = new client.embed()
 					.setTitle('Why can I not do bot commands?')
 					.addField(':small_blue_diamond: The command you tried to do is restricted in this channel.', 'This is to reduce spam and clutter.')
-					.addField(':small_blue_diamond: Try a different channel instead.', '<#748122380383027210> is a channel dedicated to using bot commands.')
+					.addField(':small_blue_diamond: Try a different channel instead.', '<#902524214718902332> is a channel dedicated to using bot commands.')
 					.addField(':small_blue_diamond: This phenomenon is called _channel restrictions._', `<@&${client.config.mainServer.roles.moderator}>s restrict certain categories of commands from being used in different channels. Active restrictions are available for everyone to see with \`${client.prefix}channelrestrictions\`.`)
 					.addField(':small_blue_diamond: How come _you_ can use restricted commands?', `Anyone with the <@&${client.config.mainServer.roles.levels.three.id}> role can bypass channel restrictions.`)
 					.setColor(client.embedColor)
