@@ -8,7 +8,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 	});
 	const embed = new client.embed()
 		.setTitle(`__Commands: ${pageInfo.name}__`)
-		.setColor(3971825)
+		.setColor(client.embedColor)
 		.setDescription(text);
 	if (toEdit) {
 		return embed;
