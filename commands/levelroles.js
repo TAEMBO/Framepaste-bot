@@ -161,6 +161,7 @@ module.exports = {
 				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - ~~Access to <#919472838631641118>~~ Stif disagrees\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public and private threads as well as external sticker permission\n<@&${client.config.mainServer.roles.levels.three.id}> - Bypassing Channel Restrictions\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
 				.setColor(client.embedColor)
 			message.channel.send({embeds: [embed]});
+			return;
 
 		} else if (args[1] === 'nerdstats' || args[1] === 'nsts') {
 			
