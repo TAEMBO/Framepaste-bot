@@ -154,6 +154,14 @@ module.exports = {
 			const yeahok = new d.MessageAttachment(img.toBuffer(), "dailymsgs.png")
 			message.channel.send({embeds: [embed], files: [yeahok]});
 			return;
+		} else if (args[1] ==='perks') {
+
+			const embed = new client.embed()
+				.setTitle('Level Roles: Perks')
+				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - ~~Access to <#919472838631641118>~~ Stif disagrees\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public and private threads as well as external sticker permission\n<@&${client.config.mainServer.roles.levels.three.id}> - Bypassing Channel Restrictions\n<${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainserver.roles.levels.five.id}> - N/A`)
+				.setColor(client.embedColor)
+			message.channel.send({embeds: [embed]});
+
 		} else if (args[1] === 'nerdstats' || args[1] === 'nsts') {
 			
 			// amount of users in messageCounts
