@@ -778,7 +778,7 @@ client.on("messageCreate", async (message) => {
 	// handle banned words
 	const bannedWords = ["f u c k", "shlt", "fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
 	
-	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && !client.hasModPerms(client, message.member) && message.guild.id === client.config.mainServer.id) {
+	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
 	message.delete()
 	message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 
