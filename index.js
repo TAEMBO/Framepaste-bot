@@ -626,8 +626,8 @@ client.on("messageCreate", async (message) => {
 	if(message.channel.type === "DM") { require("./dmforward")(message, client)}
 	if (!message.guild) return;
 	const suggestCommand = client.commands.get("suggest");
-	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(" ")[0] === client.prefix + x) && !message.author.bot) {
-		message.channel.send(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 12000));
+	if (client.config.mainServer.channels.suggestions === message.channel.id && !message.member.roles.cache.has(client.config.mainServer.roles.moderator) && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(" ")[0] === client.prefix + x) && !message.author.bot) {
+		message.channel.send(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 10000));
 		return message.delete();
 	}
 	const punishableRoleMentions = [
