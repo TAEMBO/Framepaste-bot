@@ -1,6 +1,6 @@
 module.exports = {
 	run: (client, message, args) => {
-		message.channel.send("https://cdn.discordapp.com/attachments/571031705109135361/797223985347297300/unknown.png");
+		message.channel.send("https://cdn.discordapp.com/attachments/571031705109135361/797223985347297300/unknown.png \n https://cdn.discordapp.com/attachments/915420466238349322/925219461097726032/usb-types.png");
 	},
 	name: 'usb',
 	category: 'Real Computers',
