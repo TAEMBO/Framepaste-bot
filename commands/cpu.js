@@ -106,7 +106,7 @@ module.exports = {
 				if (manufacturer === "intel") {
 					return { intel: new client.collection(Object.entries(require("../databases/CPUlist-INTEL.json"))) };
 				} else if (manufacturer === "amd") {
-					return { amd: new client.collection(Object.entries(require("../databases/CPUintel-AMD.json"))) };
+					return { amd: new client.collection(Object.entries(require("../databases/CPUlist-AMD.json"))) };
 				}
 			} else {
 				return {
