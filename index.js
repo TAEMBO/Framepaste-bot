@@ -775,10 +775,6 @@ client.on("messageCreate", async (message) => {
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
 	}
 
-	if (!message.content.has(message.attachments) && message.channel.id === '925500847390097461') {
-		message.delete();
-	}
-
 	// handle banned words
 	const bannedWords = ["pelotudo", "boludo", "f u c k", "shlt", "fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
 	
