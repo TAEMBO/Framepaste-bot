@@ -20,13 +20,15 @@
 			"owner",
 			"administrator",
 			"moderator",
-			"trialmoderator"
+			"trialmoderator",
+			"helper"
 		],
 		"roles": {
 			"owner": "571032502181822506",
 			"administrator": "901677965631443015",
 			"moderator": "858077018732888084",
 			"trialmoderator": "922141395597262859",
+			"helper": "903534357858369576",
 			"muted": "889389102112333864",
 			"everyone": "858054240416432158",
 			"levels": {
