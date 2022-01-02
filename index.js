@@ -136,7 +136,7 @@ Object.assign(client.userLevels, {
 		// milestone
 		const milestone = this._milestone();
 		if (milestone && milestone.total === this._milestone().next) {
-			const channel = client.channels.resolve("858073309920755773"); // #announcements
+			const channel = client.channels.resolve("858073309920755774"); // #announcements
 			if (!channel) return console.log("tried to send milestone announcement but channel wasnt found");
 			channel.send(`:tada: Milestone reached! **${milestone.next.toLocaleString("en-US")}** messages have been sent in this server and recorded by Level Roles. :tada:`);
 		}
