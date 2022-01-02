@@ -796,6 +796,13 @@ client.on("messageCreate", async (message) => {
 		message.reply(":b:ingus y u use userbenchmark");
 	}
 });
+// handle banned words: edits
+const bannedWords = ["pelotudo", "boludo", "f u c k", "shlt", "fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
+
+client.on("messageUpdate", async (oldMsg, newMsg)=>{
+	if (bannedWords.some(word => newMsg.content.toLowerCase().includes(word))) {
+		newMsg.delete();
+}})
 client.on("interactionCreate", async (button)=>{
 	if(!button.isButton()) return;
 	require("./suggestions")(client, button)
