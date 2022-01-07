@@ -26,7 +26,7 @@ client.on("ready", async () => {
 });
 modmailClient.on("ready", async () => {
 	setInterval(async () => {
-		await modmailClient.user.setActivity("only moderation uses, do not message ModMail for any other reason.", {
+		await modmailClient.user.setActivity("DMs", {
 			type: "LISTENING",
 		});
 	}, 60000);
