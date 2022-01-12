@@ -4,7 +4,12 @@ module.exports = async (client) => {
    client.on("messageDelete", async (msg)=>{
        if(msg.partial) return;
        if(msg.author.bot) return;
-      channel.send({embeds: [new MessageEmbed().setTitle("Message Deleted!").setDescription(`Content:\n\`\`\`\n${msg.content}\n\`\`\`\nChannel: <#${msg.channel.id}>`).setAuthor(`Author: ${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({})).setColor(14495300)]})
+       if (msg.attachments?.first()?.width && ['png', 'jpeg', 'jpg', 'gif'].some(x => msg.attachments.first().name.endsWith(x))) {
+        channel.send({embeds: [new MessageEmbed().setTitle("Message Deleted!").setDescription(`Content:\n\`\`\`\n${msg.content}\n\`\`\`\nChannel: <#${msg.channel.id}>`).setAuthor(`Author: ${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({})).setColor(14495300)]})
+        channel.send({files: [msg.attachments?.first()]})
+       } else {
+        channel.send({embeds: [new MessageEmbed().setTitle("Message Deleted!").setDescription(`Content:\n\`\`\`\n${msg.content}\n\`\`\`\nChannel: <#${msg.channel.id}>`).setAuthor(`Author: ${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({})).setColor(14495300)]})
+       }
    })
    client.on("messageUpdate", async (oldMsg, newMsg)=>{
        if(oldMsg.partial) return;
