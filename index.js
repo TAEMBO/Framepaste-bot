@@ -809,6 +809,73 @@ client.on("messageUpdate", async (oldMsg, newMsg)=>{
 	if (bannedWords.some(word => newMsg.content.toLowerCase().includes(word))) {
 		newMsg.delete();
 }})
+
+// reaction roles add
+client.on('messageReactionAdd', async (reaction, user) => {
+	if (reaction.message.partial) {
+		try {
+			await reaction.message.fetch();
+		} catch (error) {
+			console.error('Something went wrong when fetching the message: ', error);
+		}
+	}
+	// Giveaways
+	if (reaction.emoji.name === '🎉' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.add('903649265224663121', 'Reaction Roles')}
+	// Streams
+	if (reaction.emoji.name === '🎥' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.add('919795464323338280', 'Reaction Roles')}
+	// Skill issue infected
+	if (reaction.emoji.name === '<:bad:910332416097406976>' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.add('918748679567982602', 'Reaction Roles')}
+	// Skill issue infected 2
+	if (reaction.emoji.name === 'bad' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.add('918748679567982602', 'Reaction Roles')}
+	// Free games
+	if (reaction.emoji.name === '🎮' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.add('920049508291854336', 'Reaction Roles')}
+	// Politics
+	if (reaction.emoji.name === 'obamadiscord' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.add('930193532214444093', 'Reaction Roles')}
+});
+
+// reaction roles remove
+client.on('messageReactionRemove', async (reaction, user) => {
+	if (reaction.message.partial) {
+		try {
+			await reaction.message.fetch();
+		} catch (error) {
+			console.error('Something went wrong when fetching the message: ', error);
+		}
+	}
+	// Giveaways
+	if (reaction.emoji.name === '🎉' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.remove('903649265224663121', 'Reaction Roles')}
+	// Streams
+	if (reaction.emoji.name === '🎥' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.remove('919795464323338280', 'Reaction Roles')}
+	// Skill issue infected
+	if (reaction.emoji.name === 'bad' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.remove('918748679567982602', 'Reaction Roles')}
+	// Free games
+	if (reaction.emoji.name === '🎮' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.remove('920049508291854336', 'Reaction Roles')}
+	// Politics
+	if (reaction.emoji.name === 'obamadiscord' && reaction.message.id === '928716338954919946') {
+		const member = await reaction.message.guild.members.fetch(user.id)
+		member.roles.remove('930193532214444093', 'Reaction Roles')}
+});
+
 client.on("interactionCreate", async (button)=>{
 	if(!button.isButton()) return;
 	require("./suggestions")(client, button)
