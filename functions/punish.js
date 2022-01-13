@@ -31,7 +31,7 @@ module.exports = async (client, message, args, type) => {
 		if (!['softban', 'kick', 'warn'].includes(type)) {
 			await message.channel.send(`How long do you want to ${type} this user for? Reply with a time name, or "forever" to ${type} this user forever. (30s)`);
 			const filter = m => m.author.id === message.author.id;
-			col1 = await message.channel.awaitMessages({ filter, time: 30000, errors: ['time'], max: 1 }).then(collected => {
+			time = await message.channel.awaitMessages({ filter, time: 30000, errors: ['time'], max: 1 }).then(collected => {
 				if (collected.first()?.content.startsWith(client.prefix)) return 'timedout';
 				return collected.first()?.content.toLowerCase() === 'forever' ? 'inf' : collected.first()?.content;
 			}).catch(() => {
