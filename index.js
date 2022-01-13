@@ -787,7 +787,7 @@ client.on("messageCreate", async (message) => {
 	}
 
 	// handle banned words
-	const bannedWords = ["pelotudo", "boludo", "f u c k", "shlt", "fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
+	const bannedWords = ["pelotudo", "boludo", "f u c k", "shlt", "fů", " cum", "cum ", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
 	
 	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
 	message.delete()
@@ -808,7 +808,7 @@ client.on("messageCreate", async (message) => {
 	}
 });
 // handle banned words: edits
-const bannedWords = ["pelotudo", "boludo", "f u c k", "shlt", "fů", "cum", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
+const bannedWords = ["pelotudo", "boludo", "f u c k", "shlt", "fů", " cum", "cum ", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
 
 client.on("messageUpdate", async (oldMsg, newMsg)=>{
 	if (bannedWords.some(word => newMsg.content.toLowerCase().includes(word))) {
