@@ -804,7 +804,7 @@ client.on("messageCreate", async (message) => {
 		message.reply(":b:ingus y u use userbenchmark");
 	}
 	// handle banned words
-	if (client.bannedWords._content.includes(message.content) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
+	if (client.bannedWords._content.includes(message.content.toLowerCase()) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
 		message.delete()
 		message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 });
