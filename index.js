@@ -631,6 +631,11 @@ client.on("messageCreate", async (message) => {
 	if (message.author.bot) return;
 	if(message.channel.type === "DM") { require("./dmforward")(message, client)}
 	if (!message.guild) return;
+
+	// judge-your-build-event message filter; only allow messages that contain an image
+	if (message.channel.id === '925500847390097461' && message.attachments.size<1 && !message.author.bot) {
+		message.delete();
+	}
 	const suggestCommand = client.commands.get("suggest");
 	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(" ")[0] === client.prefix + x) && !message.author.bot) {
 		message.channel.send(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 12000));
