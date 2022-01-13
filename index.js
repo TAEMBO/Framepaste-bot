@@ -625,13 +625,17 @@ client.on("guildMemberRemove", member => {
 	delete client.userLevels._content[member.user.id];
 });
 
+// banned words
+client.bannedWords = new database("./databases/bannedWords.json", "array");
+client.bannedWords.initLoad();
+
 client.on("messageCreate", async (message) => {
 	if (process.argv[2] === "dev" && !client.config.eval.whitelist.includes(message.author.id)) return; // bot is being run in dev mode and a non eval whitelisted user sent a message. ignore the message.
 	if (message.partial) return;
 	if (message.author.bot) return;
 	if(message.channel.type === "DM") { require("./dmforward")(message, client)}
 	if (!message.guild) return;
-
+	
 	// judge-your-build-event message filter; only allow messages that contain an image
 	if (message.channel.id === '925500847390097461' && message.attachments.size<1 && !message.author.bot) {
 		message.delete();
@@ -786,13 +790,6 @@ client.on("messageCreate", async (message) => {
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
 	}
 
-	// handle banned words
-	const bannedWords = ["pelotudo", "boludo", "f u c k", "shlt", "fů", " cum", "cum ", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
-	
-	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
-	message.delete()
-	message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
-
 	// handle discord invite links
 	if (message.content.includes("discord.gg/") && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) && message.guild.id === client.config.mainServer.id) {
 		message.delete()
@@ -806,12 +803,14 @@ client.on("messageCreate", async (message) => {
 	if (message.content.includes("userbenchmark.com")) {
 		message.reply(":b:ingus y u use userbenchmark");
 	}
+	// handle banned words
+	if (client.bannedWords._content.includes(message.content) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
+		message.delete()
+		message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 });
 // handle banned words: edits
-const bannedWords = ["pelotudo", "boludo", "f u c k", "shlt", "fů", " cum", "cum ", "shit", " ass ", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", " dick", "dick ", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", " fag", "fag ", "faggot"]
-
 client.on("messageUpdate", async (oldMsg, newMsg)=>{
-	if (bannedWords.some(word => newMsg.content.toLowerCase().includes(word))) {
+	if (client.bannedWords._content.includes(newMsg.content)) {
 		newMsg.delete();
 }})
 
