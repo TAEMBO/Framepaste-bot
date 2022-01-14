@@ -26,6 +26,11 @@ const quantities = {
 			short: ['mi']
 		},
 		{
+            name: 'yard',
+			value: .9144,
+			short: ['yd']
+		},
+		{
 			name: 'foot',
 			value: 0.3048,
 			short: ['ft', '\'']
