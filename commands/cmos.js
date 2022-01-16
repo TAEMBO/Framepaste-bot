@@ -10,6 +10,5 @@ module.exports = {
 	},
 	name: 'cmos',
     description: 'How to reset BIOS settings to default',
-    category: 'Real Computers',
-    hidden: true
+    category: 'Real Computers'
 };
