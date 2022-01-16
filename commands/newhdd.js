@@ -8,8 +8,7 @@ module.exports = {
         message.channel.send({embeds: [embed]})
 	},
 	name: 'newdrive',
-    description: 'how to set up a new drive',
+    description: 'How to set up a new drive',
     category: 'Real Computers',
-    alias: ['newssd', 'newhdd'],
-	hidden: true
+    alias: ['newssd', 'newhdd']
 };
