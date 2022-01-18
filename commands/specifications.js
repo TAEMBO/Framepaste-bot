@@ -1,3 +1,5 @@
+const { version } = require("discord.js");
+
 module.exports = {
 	run: async (client, message, args) => {
 		if (args[1]) {
@@ -52,12 +54,15 @@ module.exports = {
 				if (!member) return message.channel.send('You failed to mention a user from this server.');
 				if (!client.specsDb.hasUser(member.user.id)) return message.channel.send('They haven\'t added any specs yet.');
 				const embed = client.displaySpecs(client, member);
+				if (member.user.id === '795443537356521502') {
+					embed.addField('Package', `Discord.js V${version}`)
+				}
 				return message.channel.send({embeds: [embed]});
 			}
 		} else {
 			if (!client.specsDb.hasUser(message.author.id)) return message.channel.send(`You haven\'t added any specs yet. Do \`${client.prefix}specifications help\` to learn more.`);
 			const embed = client.displaySpecs(client, message.member);
-			message.channel.send({embeds: [embed]});
+			 message.channel.send({embeds: [embed]});
 		}
 	},
 	name: 'specifications',
