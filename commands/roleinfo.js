@@ -14,6 +14,7 @@ module.exports = {
 				return x.split('_').map((y, i) => i === 0 ? y[0] + y.slice(1).toLowerCase() : y.toLowerCase()).join(' ')
 			}).join(', ') || 'None')
 			.setColor(role.color || '#fefefe')
+			.setThumbnail(role?.iconURL())
 		message.channel.send({embeds: [embed]});
 	},
 	name: 'roleinfo',
