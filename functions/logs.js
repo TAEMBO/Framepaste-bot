@@ -9,6 +9,7 @@ module.exports = async (client) => {
            .setDescription(`<@${msg.author.id}>\nContent:\n\`\`\`\n${msg.content}\n\`\`\`\nChannel: <#${msg.channel.id}>`)
            .setAuthor({name: `Author: ${msg.author.tag} (${msg.author.id})`, iconURL: `${msg.author.displayAvatarURL()}`})
            .setColor(14495300)
+           .setTimestamp(Date.now())
            channel.send({embeds: [embed]})
        if (msg.attachments?.first()?.width && ['png', 'jpeg', 'jpg', 'gif'].some(x => msg.attachments.first().name.endsWith(x))) {
            channel.send({files: [msg.attachments?.first()]})
@@ -22,6 +23,7 @@ module.exports = async (client) => {
            .setDescription(`<@${oldMsg.author.id}>\nOld Content:\n\`\`\`\n${oldMsg.content}\n\`\`\`\nNew Content:\n\`\`\`js\n${newMsg.content}\n\`\`\`\nChannel: <#${oldMsg.channel.id}>`)
            .setAuthor({name: `Author: ${oldMsg.author.tag} (${oldMsg.author.id})`, iconURL: `${oldMsg.author.displayAvatarURL()}`})
            .setColor(client.embedColor)
+           .setTimestamp(Date.now())
        channel.send({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("LINK").setURL(`${oldMsg.url}`).setLabel("Jump to message"))]})
    })
    client.on("guildMemberAdd", async (member)=>{
@@ -30,6 +32,7 @@ module.exports = async (client) => {
         .addField('🔹 Account Creation Date', `${member.user.createdAt.getUTCFullYear()}-${('0' + (member.user.createdAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.user.createdAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.user.createdTimestamp, 1, { longNames: true })} ago`)
         .addField('🔹 ID and Mention', `ID: ${member.user.id}\nMention: <@${member.user.id}>`)
         .setColor(7844437)
+        .setTimestamp(Date.now())
         .setThumbnail(member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 2048}))
         channel.send({embeds: [embed]})
    })
@@ -41,6 +44,7 @@ module.exports = async (client) => {
     .addField('🔹 ID and Mention', `ID: ${member.user.id}\nMention: <@${member.user.id}>`)
     .addField('🔹 Roles', `${member.roles.cache.map(x => x).join(" ")}`)
     .setColor(14495300)
+    .setTimestamp(Date.now())
     .setThumbnail(member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 2048}))
     channel.send({embeds: [embed]})
    })
