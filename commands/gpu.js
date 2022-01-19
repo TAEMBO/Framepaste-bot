@@ -11,6 +11,7 @@ function gpuEmbed(client, gpu, manufacturer) {
 		.addField('TDP', gpu.tdp === 'N/A' ? 'N/A' : gpu.tdp + 'W', true)
 		.addField('MSRP', gpu.price === 'N/A' ? 'N/A' : '$' + gpu.price + ' USD', true)
 		.setColor(color);
+	if (gpu.pcieLink) embed.addField('PCIe Link', 'PCIe ' + gpu.pcieLink, true);
 	if (gpu.imageUrl) embed.setImage(gpu.imageUrl);
 	return embed;
 }
