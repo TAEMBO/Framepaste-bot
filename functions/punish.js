@@ -2,6 +2,7 @@ const d = require("discord.js")
 module.exports = async (client, message, args, type) => {
 	if (message.guild.id !== client.config.mainServer.id) return message.channel.send('this command doesnt work in this server');
 	if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`);
+	if (type !== 'warn' && message.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`);
 	let member;
 	if (args[1]) member = message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => undefined));
 	let memberAsked = false;
@@ -51,6 +52,6 @@ module.exports = async (client, message, args, type) => {
 		});
 		if (reason === 0) return;
 	}
-	const punishmentResult = await client.punishments.addPunishment(type, member, { time, reason }, message.author.id);
-	message.channel.send(punishmentResult);
+	const punishmentResult = await client.punishments.addPunishment(type, member, { time, reason, message }, message.author.id);
+	message.channel.send({content: `${punishmentResult}`});
 };

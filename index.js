@@ -224,7 +224,8 @@ Object.assign(client.punishments, {
 	async addPunishment(type = "", member, options = {}, moderator) {
 		const now = Date.now();
 		const { time, reason } = options;
-		const timeInMillis = time ? client.parseTime(time) : undefined;
+		const ms = require("ms");
+		let timeInMillis = time ? ms(time) : 2419200000
 		switch (type) {
 			case "ban":
 				const banData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
@@ -274,24 +275,29 @@ Object.assign(client.punishments, {
 					this.forceSave();
 					return `**Case #${kickData.id}:** Successfully kicked ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || "unspecified"}\``;
 				}
-			case "mute":
-				if (member.roles.cache.has(client.config.mainServer.roles.muted)) return `Mute was unsuccessful: User already has the **${member.guild.roles.cache.get(client.config.mainServer.roles.muted).name}** role.`
-				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const muteResult = await member.roles.add(client.config.mainServer.roles.muted, `${reason || "unspecified"} | Case #${muteData.id}`).catch(err => err.message);
-				if (typeof muteResult === "string") {
-					return "Mute was unsuccessful: " + muteResult;
-				} else {
-					if (timeInMillis) {
-						muteData.endTime = now + timeInMillis;
-						muteData.duration = timeInMillis;
+				case "mute":
+					const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
+					let muteResult;
+					if(client.hasModPerms(client, member)) return "Staff members cannot be muted."
+					if(timeInMillis){
+					muteResult = await member.timeout(timeInMillis, `${reason || "unspecified"} | Case #${muteData.id}`).catch(err => err.message);
+					} else {
+					muteResult = await member.timeout(2419200000, `${reason || "unspecified"} | Case #${muteData.id}`).catch(err => err.message);
 					}
-					if (reason) muteData.reason = reason;
-					client.makeModlogEntry(muteData, client);
-					this.addData(muteData);
-					this.forceSave();
-					member.send(`You've been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${muteData.id})`).catch(err => console.log(`dm failed while ${moderator} was muting ${member.user.id} (case ${muteData.id}):`, err.message));
-					return `**Case #${muteData.id}:** Successfully muted ${member.user.tag} (\`${member.user.id}\`) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\``;
-				}
+					if (typeof muteResult === "string") {
+						return "Mute was unsuccessful: " + muteResult;
+					} else {
+						if (timeInMillis) {
+							muteData.endTime = now + timeInMillis;
+							muteData.duration = timeInMillis;
+						}
+						if (reason) muteData.reason = reason;
+						client.makeModlogEntry(muteData, client);
+						this.addData(muteData);
+						this.forceSave();
+						member.send(`You've been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${muteData.id})`).catch(err => console.log(`dm failed while ${moderator} was muting ${member.user.id} (case ${muteData.id}):`, err.message));
+						return `**Case #${muteData.id}:** Successfully muted ${member.user.tag} (\`${member.user.id}\`) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\``;
+					}
 			case "warn":
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => console.log(`dm failed while ${moderator} was warning ${member.user.id} (case ${warnData.id}):`, err.message));
