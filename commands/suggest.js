@@ -16,6 +16,7 @@ module.exports = {
             .setAuthor(`${message.member.displayName} (${message.author.id})`, message.author.avatarURL({ format: 'png', size: 128 }))
             .setTitle(`Suggestion:`)
             .setDescription(message.content.slice(message.content.indexOf(' ') + 1))
+            .setFooter('Read pins for more info')
             .setTimestamp()
             .setColor('269CD0')
         if (message.attachments?.first()?.width && ['png', 'jpeg', 'jpg', 'gif'].some(x => message.attachments.first().name.endsWith(x))) {
