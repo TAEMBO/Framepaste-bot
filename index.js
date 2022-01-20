@@ -346,7 +346,7 @@ Object.assign(client.punishments, {
 				client.makeModlogEntry(removePunishmentData, client);
 				this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
 				this.addData(removePunishmentData).forceSave();
-				return `Successfully ${punishment.type === "ban" ? "unbanned" : "unmuted"} ${removePunishmentResult.tag} (${removePunishmentResult.id}) for reason \`${reason || "unspecified"}\``;
+				return `Successfully ${punishment.type === "ban" ? "unbanned" : "unmuted"} ${removePunishmentResult?.tag} (${removePunishmentResult.id}) for reason \`${reason || "unspecified"}\``;
 			}
 		} else {
 			try {
