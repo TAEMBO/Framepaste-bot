@@ -26,11 +26,11 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 					if (button.customId === 'back') {
 						if (pageIndex - 1 < 0) pageIndex = client.commands.pages.length;
 						pageIndex--;
-						button.reply({content: "** **"}).then((i)=>{button.deleteReply()})
+						button.deferUpdate()
 					} else if (button.customId === 'forward') {
 						if (pageIndex + 1 >= client.commands.pages.length) pageIndex = -1;
 						pageIndex++;
-						button.reply({content: "** **"}).then((i)=>{button.deleteReply()})
+						button.deferUpdate()
 					}
 					await Promise.all([botMessage.edit({embeds: [helpPage(pageIndex, client, message, args, true)]})]);
 				});
