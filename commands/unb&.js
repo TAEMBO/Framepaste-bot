@@ -7,6 +7,10 @@ module.exports = {
 			return message.channel.send(`<@${message.author.id}> bingus no trying to loophole`).then(x => setTimeout(() => x.delete(), 6000))
 		} else if (args[1] === '@here') {
 			 return message.channel.send(`<@${message.author.id}> bingus no trying to loophole`).then(x => setTimeout(() => x.delete(), 6000))
+		} else if (args[1] === 'everyone') {
+			return message.channel.send(`<@${message.author.id}> bingus no trying to loophole`).then(x => setTimeout(() => x.delete(), 6000))
+		} else if (args[1] === 'here') {
+			 return message.channel.send(`<@${message.author.id}> bingus no trying to loophole`).then(x => setTimeout(() => x.delete(), 6000))
 		} else if (args[1]) {
 			message.channel.send(`<@${args[1]}> had their honorary ban revoked!`)}
 	},
