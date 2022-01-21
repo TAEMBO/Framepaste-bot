@@ -6,5 +6,6 @@ module.exports = {
 		} else message.channel.send('Your honorary ban has been revoked!')
 	},
 	name: 'unb&',
+	usage: ['userID'],
 	hidden: true
 };
