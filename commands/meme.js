@@ -45,7 +45,7 @@ module.exports = {
 				} else meme.url = urlMessage.attachments.first()?.url;
 				if (!meme.url) return failed();
 
-				await message.channel.send('Is the creator of this meme a member of the PC Creator Discord server? Answer with y/n. (30s)');
+				await message.channel.send('Is the creator of this meme a member of the Framepaste Discord server? Answer with y/n. (30s)');
 				const filili = x => x.author.id === message.author.id;
 				const onDiscord = (await message.channel.awaitMessages({ filili, max: 1, time: 30000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!onDiscord) return failed();
@@ -68,9 +68,9 @@ module.exports = {
 				}
 				if (!meme.author.name) return failed();
 
-				const highestKey = Math.max(...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x)), 0) + 2;
+				const highestKey = Math.max(...Array.from(memes.keys()).map(x => parseInt(x)).filter(x => !isNaN(x)), ...Array.from(client.memeQueue.keys()).map(x => parseInt(x)), 0) + 2;
 				const allNumbers = Array.from(Array(highestKey).keys()).slice(1);
-				[...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x))].forEach(usedKey => {
+				[...Array.from(memes.keys()).map(x => parseInt(x)).filter(x => !isNaN(x)), ...Array.from(client.memeQueue.keys()).map(x => parseInt(x))].forEach(usedKey => {
 					allNumbers.splice(allNumbers.indexOf(usedKey), 1);
 				});
 				const key = allNumbers[0];
