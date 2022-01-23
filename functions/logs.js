@@ -61,6 +61,7 @@ module.exports = async (client) => {
     .setTitle(`${messages.size} Messages Were Deleted.`)
     .addField("Channel", `<#${messages.first().channel.id}>`)
     .setColor(client.embedColor)
+    .setTimestamp(Date.now())
     channel.send({embeds: [embed]})
 })
  channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(' ')}`)
