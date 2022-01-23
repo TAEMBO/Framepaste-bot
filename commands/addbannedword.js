@@ -7,7 +7,7 @@ module.exports = {
 	},
 	name: 'addbannedword',
     alias: ['abw', 'bannedword'],
-	usage: ['user id / mention'],
+	usage: ['word'],
 	description: 'Add a word to the bannedWords database',
 	category: 'Moderation'
 };
