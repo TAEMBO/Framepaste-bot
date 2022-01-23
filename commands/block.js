@@ -7,7 +7,7 @@ module.exports = {
 		message.channel.send('Successfully blocked user ' + userid);
 	},
 	name: 'block',
-	usage: ['user id / mention'],
+	usage: ['word'],
 	description: 'Block user from sending DMs to the bot or ModMail. Used as a punishment for users who abuse the aforementioned features.',
 	shortDescription: 'Block user from DMing bot.',
 	category: 'Moderation'
