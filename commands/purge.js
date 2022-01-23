@@ -6,7 +6,7 @@ module.exports = {
 		if (!amount) return message.channel.send('You need to specify an amount of messages to delete.');
 		if (amount > 100) return message.channel.send('You can only delete 100 messages at once. This is a Discord API limitation.');
 		const deleted = await message.channel.bulkDelete(amount + 1).catch(err => message.channel.send('Something went wrong while deleting messages.'));
-		message.channel.send(`Deleted **${deleted.size}** messages.`).then(x => setTimeout(() => x.delete(), 4000));
+		message.channel.send(`Deleted **${deleted.size - 1}** messages.`).then(x => setTimeout(() => x.delete(), 4000));
 	},
 	name: 'purge',
 	description: 'Delete many messages from a channel.',
