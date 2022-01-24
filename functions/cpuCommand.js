@@ -3,7 +3,7 @@ const { Client } = require("discord.js");
 async function cpuEmbed(client, options){
 	const { cpu, manufacturer, color } = options;
 	const embed = new client.embed()
-		.setTitle(manufacturer.charAt(0).toUpperCase() + manufacturer.slice(1).toLowerCase() + ' ' + cpu.name)
+		.setTitle(manufacturer + ' ' + cpu.name)
 		.addField('Cores', `${cpu.cores}`, true)
 		.addField('Base Clock Speed', `${cpu.base ? (cpu.base === 'N/A' ? 'N/A' : cpu.base + ' GHz') : 'N/A'}`, true)
 		.addField('TDP', `${cpu.tdp ? (cpu.tdp === 'N/A' ? 'N/A' : cpu.tdp + 'W') : 'N/A'}`, true)
