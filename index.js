@@ -816,7 +816,7 @@ client.on("messageCreate", async (message) => {
 });
 // handle banned words: edits
 client.on("messageUpdate", async (oldMsg, newMsg)=>{
-	if (client.bannedWords._content.some(word => newMsg.content.toLowerCase().includes(word))) {
+	if (client.bannedWords._content.some(word => newMsg.content.toLowerCase().includes(word)) && newMsg.guild.id === client.config.mainServer.id) {
 		newMsg.delete();
 }})
 
