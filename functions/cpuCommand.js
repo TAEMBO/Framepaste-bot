@@ -118,11 +118,11 @@ module.exports = async (client, message, args) => {
 			const filter = m => m.author.id === message.author.id;
 			message.channel.awaitMessages({ filter, max: 1, time: 40000, errors: ['time'] }).then(async collected => {
 				const index = parseInt(collected.first().content);
-				if (!index) return message.channel.send('Invalid number.');
+				if (!typeof index === Number) return;
 				const cpu = await client.cpulist[manufacturer][bestMatches[index]];
 				const ee = await cpuEmbed(client, {cpu, manufacturer, color})
 				message.channel.send({embeds: [ee]});
-			}).catch(err => message.channel.send('You failed to respond with a number.'));
+			}).catch(err => message.channel.send('Invalid response.'));
 		});
 	}
 };
