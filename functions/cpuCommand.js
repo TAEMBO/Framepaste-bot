@@ -102,7 +102,7 @@ module.exports = async (client, message, args) => {
 		const bestMatches = nameSearch ? eeao.sort((a, b) => b - a).firstKey(limit) : eeao.sort((a, b) => b - a).firstKey(limit) //slice(0, limit);
 		let text = ['']
 		bestMatches.forEach((x, i) => {
-			const cpuName = `\`${i + 1}: ${client.cpulist[manufacturer][x].name}\`\n`;
+			const cpuName = `\`${i}: ${client.cpulist[manufacturer][x].name}\`\n`;
 			if (text[text.length - 1].length + cpuName.length <= 1024) text[text.length - 1] += cpuName;
 			else text.push(cpuName);
 		});
@@ -111,7 +111,7 @@ module.exports = async (client, message, args) => {
 			.setDescription(`Your search returned many CPUs. ${multipleResponseAsk ? 'Respond with the corresponding number to learn more about a specific cpu.' : 'Here is a list of them.'}`)
 			.setFooter(matches.filter(x => x).size > limit ? 'Showing ' + limit + ' best matches of ' + matches.filter(x => x).size + ' total matches.' : 'Showing all ' + matches.filter(x => x).size + ' matches.').setColor(color)
 		text.forEach((x, i) => {
-			embed.addField('Page ' + (i + 1), x, true);
+			embed.addField('Page ' + (i), x, true);
 		});
 		message.channel.send({embeds: [embed]}).then(async embedMessage => {
 			if (!multipleResponseAsk) return;
