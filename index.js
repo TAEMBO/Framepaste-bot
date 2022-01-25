@@ -808,13 +808,13 @@ client.on("messageCreate", async (message) => {
 		message.channel.send("No advertising other Discord servers.").then(x => setTimeout(() => x.delete(), 10000))
 	}
 	// auto responses
-	if (message.content.includes.toLowerCase()("forgor")) {
+	if (message.content.toLowerCase().includes("forgor")) {
 		message.react("💀")
 	}
-	if (message.content.includes.toLowerCase()('warn')) {
+	if (message.content.toLowerCase().includes('warn')) {
 		message.reply('https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg').then(x => setTimeout(() => x.delete(), 20000))
 	}
-	if (message.content.includes.toLowerCase()("userbenchmark.com")) {
+	if (message.content.toLowerCase().includes("userbenchmark.com")) {
 		message.reply(":b:ingus y u use userbenchmark");
 	}
 	// handle banned words
