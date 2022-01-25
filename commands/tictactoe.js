@@ -154,7 +154,7 @@ module.exports = {
 					const result = await message.channel.send(game.boardState() + `\n${game.participants[game.turn].toString()}, Where do you want to place your \`${game.markers[game.turn]}\`? (60s)`).then(async c => {
 						// returns what .then() returns. waits for the player to send coordinates. message must contain comma
 						const filter2 = d => d.author.id === game.participants[game.turn].user.id && d.content.includes(',') && d.content.indexOf(',') <= 1;
-						return await message.channel.awaitMessages({ filter2, max: 1, time: 60000, errors: ['time'] }).then(async e => {
+						return await message.channel.awaitMessages({ filter: filter2, max: 1, time: 60000, errors: ['time'] }).then(async e => {
 							// ,end
 							if (e.first()?.content.startsWith(client.prefix + 'end')) {
 								await message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) wants to surrender!`);
