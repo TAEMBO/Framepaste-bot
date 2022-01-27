@@ -32,6 +32,7 @@ module.exports = async (client) => {
        if (member.guild.id !== client.config.mainServer.id) return;
        const embed = new MessageEmbed()
            .setTitle(`Member Joined: ${member.user.tag}`)
+           .addField('🔹 Account Creation Date', `${member.user.createdAt.getUTCFullYear()}-${('0' + (member.user.createdAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.user.createdAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.user.createdTimestamp, 1, { longNames: true })} ago`)
            .addField('🔹 ID and Mention', `ID: ${member.user.id}\nMention: <@${member.user.id}>`)
            .setColor(7844437)
            .setTimestamp(Date.now())
