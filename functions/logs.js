@@ -18,6 +18,7 @@ module.exports = async (client) => {
    client.on("messageUpdate", async (oldMsg, newMsg)=>{
        if (oldMsg.partial) return;
        if (newMsg.partial) return;
+       if (newMsg.content === oldMsg.content) return;
        if (oldMsg.author.bot) return;
        if (oldMsg.guild.id !== client.config.mainServer.id) return;
        const embed = new client.embed()
