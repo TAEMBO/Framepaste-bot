@@ -51,7 +51,7 @@ module.exports = {
 				const embed = new client.embed()
 					.setTitle('Acceptable command and category names')
 					.setDescription(client.categoryNames.join(', '))
-					.setFooter('Or any bot command name.')
+					.setFooter({text: 'Or any bot command name.'})
 					.setColor(client.embedColor)
 				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else if (['how', 'why', 'what'].includes(args[1])) {

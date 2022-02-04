@@ -69,7 +69,7 @@ module.exports = async (message, modmailClient, client) => {
 			const embed = new client.embed()
 				.setTitle('ModMail Summary')
 				.setDescription(`\`Case ID: ${caseId}\`\nR: Recipient: ${message.author.toString()} (${message.author.tag}), M: Moderator - Time Elapsed: ${client.formatTime(Date.now() - modmailClient.threads.get(message.author.id).startTime, 2)} - Times are in UTC\n\`\`\`\n${modmailClient.threads.get(message.author.id).messages.join('\n')}\n\`\`\``)
-				.setFooter('Starting Time')
+				.setFooter({text: 'Starting Time'})
 				.setTimestamp(modmailClient.threads.get(message.author.id).startTime)
 				.setColor(client.embedColor)
 			modmailChannel.send({embeds: [embed]});

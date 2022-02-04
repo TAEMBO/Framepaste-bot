@@ -12,7 +12,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('__Tic Tac Toe Statistics__')
 				.setDescription(`A total of ${db.getTotalGames()} games have been played.`)
-				.setFooter(`Do "${client.prefix}ttt stats [username]" for player stats.`)
+				.setFooter({text: `Do "${client.prefix}ttt stats [username]" for player stats.`})
 				.setColor(client.embedColor)
 			await message.channel.send({embeds: [embed]});
 			await message.channel.send(`Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], db.calcWinPercentage(x[1])]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``);

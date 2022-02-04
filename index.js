@@ -494,9 +494,9 @@ Object.assign(client.starboard, {
 	sendEmbed(data) {
 		let description = [data.message.content, ""];
 		const embed = new client.embed()
-			.setAuthor(`${data.message.member.displayName} [${data.message.author.tag}]`, data.message.author.avatarURL({ format: "png", size: 128 }))
+			.setAuthor({name: `${data.message.member.displayName} [${data.message.author.tag}]`, iconURL: data.message.author.avatarURL({ format: "png", size: 128 })})
 			.setTimestamp(data.message.createdTimestamp)
-			.setFooter(`MSG:${data.message.id}, USER:${data.message.author.id}`)
+			.setFooter({text: `MSG:${data.message.id}, USER:${data.message.author.id}`})
 			.addField("\u200b", `[Jump to Message](${data.message.url})`)
 			.setColor("#ffcc00");
 		

@@ -201,9 +201,9 @@ module.exports = {
 				}
 			}
 			if (rankedChipsets.length <= limit) {
-				embed.setFooter(`Showing all ${rankedChipsets.length} chipsets.`)
+				embed.setFooter({text: `Showing all ${rankedChipsets.length} chipsets.`})
 			} else {
-				embed.setFooter(`Showing ${limit} of ${rankedChipsets.length} chipsets.`)
+				embed.setFooter({text: `Showing ${limit} of ${rankedChipsets.length} chipsets.`})
 			}
 			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			if (multipleSearch === "s") {

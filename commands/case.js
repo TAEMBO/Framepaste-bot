@@ -40,7 +40,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('Punishments given to ' + args[1])
 				.setDescription(`User: <@${args[1]}>`)
-				.setFooter(`${userPunishments.length} total punishments. Viewing page ${pageNumber} out of ${Math.ceil(userPunishments.length / 25)}.`)
+				.setFooter({text: `${userPunishments.length} total punishments. Viewing page ${pageNumber} out of ${Math.ceil(userPunishments.length / 25)}.`})
 				.setColor(client.embedColor)
 			embed.addFields(userPunishments.slice((pageNumber - 1) * 25, pageNumber * 25));
 			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});

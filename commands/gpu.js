@@ -202,9 +202,9 @@ module.exports = {
 				}
 			}
 			if (rankedGpus.length <= limit) {
-				embed.setFooter(`Showing all ${rankedGpus.length} GPUs.`)
+				embed.setFooter({text: `Showing all ${rankedGpus.length} GPUs.`})
 			} else {
-				embed.setFooter(`Showing ${limit} of ${rankedGpus.length} GPUs.`)
+				embed.setFooter({text: `Showing ${limit} of ${rankedGpus.length} GPUs.`})
 			}
 			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			if (multipleSearch === 's') {

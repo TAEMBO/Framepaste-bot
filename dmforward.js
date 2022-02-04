@@ -9,7 +9,7 @@ module.exports = async (message, client) => {
     const memberOfPccs = !!guildMemberObject
     const embed = new client.embed()
         .setTitle('Forwarded DM Message')
-        .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL({ format: 'png', dynamic: true}))
+        .setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: message.author.displayAvatarURL({ format: 'png', dynamic: true})})
         .setColor(3971825)
         .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b')
         .setTimestamp(Date.now());

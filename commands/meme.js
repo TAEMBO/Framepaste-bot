@@ -157,13 +157,13 @@ module.exports = {
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
 				.setTitle(meme.name)
-				.setFooter(meme.description + ' | Added By: ' + (meme.adder || 'Unknown') + (meme.timestamp ? (` | ${client.formatTime(Date.now() - meme.timestamp, 1, { longNames: (!meme.adder || meme.adder === 'Self') })} ago`) : ''))
+				.setFooter({text: meme.description + ' | Added By: ' + (meme.adder || 'Unknown') + (meme.timestamp ? (` | ${client.formatTime(Date.now() - meme.timestamp, 1, { longNames: (!meme.adder || meme.adder === 'Self') })} ago`) : '')})
 				.setColor(color)
 			if (meme.url && meme.url.startsWith('http')) embed.setImage(meme.url);
 			if (member) {
-				embed.setAuthor(`By ${member.tag} (${member.id})`, member.displayAvatarURL({ format: 'png', size: 256 }))
+				embed.setAuthor({name: `By ${member.tag} (${member.id})`, iconURL: member.displayAvatarURL({ format: 'png', size: 256 })})
 			} else {
-				embed.setAuthor('By ' + meme.author.name)
+				embed.setAuthor({name: 'By ' + meme.author.name})
 			}
 			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}

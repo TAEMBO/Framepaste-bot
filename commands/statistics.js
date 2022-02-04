@@ -15,7 +15,7 @@ module.exports = {
 			.setTitle('Statistics: Command Usage')
 			.setDescription('List of commands that have been used in this session, ordered by amount of uses. Table contains command name and amount of uses.\nTotal amount of commands used in this session: ' + client.commands.filter(x => x.uses).map(x => x.uses).reduce((a, b) => a + b, 0) + '\nCommands used per category:\n' + client.categoryNames.map(x => `${x}: ${client.commands.filter(y => y.category === x && y.uses).map(x => x.uses).reduce((a, b) => a + b, 0)}`).join('\n'))
 			.setColor(client.embedColor)
-			.setFooter(`Uptime: ${client.formatTime(client.uptime, 2, { commas: true, longNames: true })}`)
+			.setFooter({text: `Uptime: ${client.formatTime(client.uptime, 2, { commas: true, longNames: true })}`})
 		if (rows.join('').length > 1024) {
 			let fieldValue = '';
 			rows.forEach(row => {
