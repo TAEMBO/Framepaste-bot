@@ -109,7 +109,7 @@ module.exports = async (client, message, args) => {
 		const embed = new client.embed()
 			.setTitle('Choose CPU')
 			.setDescription(`Your search returned many CPUs. ${multipleResponseAsk ? 'Respond with the corresponding number to learn more about a specific cpu.' : 'Here is a list of them.'}`)
-			.setFooter(matches.filter(x => x).size > limit ? 'Showing ' + limit + ' best matches of ' + matches.filter(x => x).size + ' total matches.' : 'Showing all ' + matches.filter(x => x).size + ' matches.').setColor(color)
+			.setFooter({text: matches.filter(x => x).size > limit ? 'Showing ' + limit + ' best matches of ' + matches.filter(x => x).size + ' total matches.' : 'Showing all ' + matches.filter(x => x).size + ' matches.'}).setColor(color)
 		text.forEach((x, i) => {
 			embed.addField('Page ' + (i), x, true);
 		});

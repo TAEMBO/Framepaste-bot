@@ -16,17 +16,17 @@ module.exports = async (client, button) =>{
             })
         })
         if(hasVoted){
-            button.reply({embeds: [new MessageEmbed().setDescription("You've already voted!").setColor("#dd2e44").setAuthor(button.user.tag, button.user.displayAvatarURL({}))], ephemeral: true})
+            button.reply({embeds: [new MessageEmbed().setDescription("You've already voted!").setColor("#dd2e44").setAuthor({name: button.user.tag, iconURL: button.user.displayAvatarURL({})})], ephemeral: true})
         } else if(button.message.embeds[0].author.name=== `${button.member.displayName} (${button.user.id})`){
-            button.reply({embeds: [new MessageEmbed().setDescription("You can't vote on your own suggestion!").setColor("#dd2e44").setAuthor(button.user.tag, button.user.displayAvatarURL({}))], ephemeral: true})
+            button.reply({embeds: [new MessageEmbed().setDescription("You can't vote on your own suggestion!").setColor("#dd2e44").setAuthor({name: button.user.tag, iconURL: button.user.displayAvatarURL({})})], ephemeral: true})
         } else if(button.customId === "suggestion-decline"){
             const ee = await parseInt(button.component.label) + 1;
             UpdateButtons(upvotes, ee, button.message, button.user.id)
-            button.reply({embeds: [new MessageEmbed().setDescription("❌ Downvote recorded!").setColor("#dd2e44").setAuthor(button.user.tag, button.user.displayAvatarURL({}))], ephemeral: true})
+            button.reply({embeds: [new MessageEmbed().setDescription("❌ Downvote recorded!").setColor("#dd2e44").setAuthor({name: button.user.tag, iconURL: button.user.displayAvatarURL({})})], ephemeral: true})
         } else if(button.customId === "suggestion-upvote") {
             const ee = await parseInt(button.component.label) + 1;
             UpdateButtons(ee, downvotes, button.message, button.user.id)
-            button.reply({embeds: [new MessageEmbed().setDescription("✅ Upvote recorded!").setColor("#77b255").setAuthor(button.user.tag, button.user.displayAvatarURL({}))], ephemeral: true})
+            button.reply({embeds: [new MessageEmbed().setDescription("✅ Upvote recorded!").setColor("#77b255").setAuthor({name: button.user.tag, iconURL: button.user.displayAvatarURL({})})], ephemeral: true})
         }
         // delete message and dont handle reaction if message is not a suggestion, but a suggestion command
         if (button.message.author.id !== client.user.id && message.content.startsWith(client.prefix + 'suggest')) return message.delete();
