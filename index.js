@@ -813,7 +813,7 @@ client.on("messageCreate", async (message) => {
 	}
 	if (message.content.toLowerCase().includes('warn')) {
 		// 20% chance it will respond with an image
-		if (Math.random() < 0.2) message.reply('https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg').then(x => setTimeout(() => x.delete(), 7000))
+		if (Math.random() < 0.2) message.reply({content: 'https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg', allowedMentions: { repliedUser: false }}).then(x => setTimeout(() => x.delete(), 7000))
 	}
 	if (message.content.toLowerCase().includes("userbenchmark.com")) {
 		message.reply(":b:ingus y u use userbenchmark");

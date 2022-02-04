@@ -14,7 +14,7 @@ module.exports = {
 			.addField(':small_blue_diamond: Roles', member.roles.cache.size > 1 ? member.roles.cache.filter(x => x.id !== message.guild.roles.everyone.id).sort((a, b) => b.position - a.position).map(x => x).join(member.roles.cache.size > 4 ? ' ' : '\n').slice(0, 1024) : 'None')
 			.setColor(member.displayColor || '#fefefe')
 			.setImage(member.user.bannerURL({ format: 'png', dynamic: true, size: 1024}))
-		message.reply({embeds: [embed]}).catch((err)=>{message.channel.send({content: 'something went wrong'})});
+		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((err)=>{message.channel.send({content: 'something went wrong'})});
 	},
 	name: 'userinfo',
 	usage: ['mention / user id / username'],

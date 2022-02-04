@@ -4,7 +4,7 @@ module.exports = {
 		if (!args[1]) return message.channel.send('You need to add a user or user ID.');
 		const userid = message.mentions.users.first()?.id || args[1];
 		client.dmForwardBlacklist.addData(userid).forceSave();
-		message.reply('Successfully blocked user ' + userid);
+		message.reply({content: `Successfully blocked user ${userid}`, allowedMentions: { repliedUser: false }});
 	},
 	name: 'block',
 	usage: ['user id / mention'],

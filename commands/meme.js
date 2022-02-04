@@ -20,7 +20,7 @@ module.exports = {
 					}
 				}
 			} else embed.setDescription('No memes have been added yet.');
-			return message.reply({embeds: [embed]});
+			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		} else {
 			if (args[1] === 'add') {
 				await message.reply('Creating your own meme...\nWhat is the name of your meme? (60s)');
@@ -81,7 +81,7 @@ module.exports = {
 					.setTitle('A meme with the following info has been created:')
 					.setDescription('```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\nInform one of the following people so they can approve your meme:\n' + client.config.eval.whitelist.map(x => '<@' + x + '>').join('\n') + '\nWith the following information: ":clap: meme :clap: review ' + key + '"')
 					.setColor(color)
-				return message.reply({embeds: [embed]});
+				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else if (args[1] === 'review') {
 				if (!client.config.eval.whitelist.includes(message.author.id)) return message.reply('You\'re not allowed to do that.');
 				if (args[2]) {
@@ -113,7 +113,7 @@ module.exports = {
 						client.memeQueue.delete(args[2]);
 
 						// inform user
-						message.reply(':clap: Meme :clap: Approved!');
+						message.reply({content: ':clap: Meme :clap: Approved!', allowedMentions: { repliedUser: false }});
 						return;
 					};
 
@@ -122,18 +122,18 @@ module.exports = {
 						client.memeQueue.delete(args[2]);
 
 						// inform user
-						message.reply('The submission has been declined and removed from the queue.');
+						message.reply({content: 'The submission has been declined and removed from the queue.', allowedMentions: { repliedUser: false }});
 						return;
 					};
 
 
-					if (!meme) return message.reply('That meme doesn\'t exist.');
+					if (!meme) return message.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
 					if (args[3] && ['y', 'n'].includes(args[3].toLowerCase())) {
 						if (args[3].toLowerCase() === 'y') approve()
 						else decline();
 						return;
 					}
-					await message.reply(':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. Type "cancel" to leave this meme in the queue. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n' + (Math.random() < (1 / 3) ? '\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' : '') + meme.url);
+					await message.reply({content: ':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. Type "cancel" to leave this meme in the queue. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n' + (Math.random() < (1 / 3) ? '\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' : '') + meme.url, allowedMentions: { repliedUser: false }});
 					const fil = x => x.author.id === message.author.id && ['y', 'n', 'cancel'].some(y => x.content.toLowerCase().startsWith(y));
 					const approval = (await message.channel.awaitMessages({ filter: fil, max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 					if (!approval) return failed();
@@ -143,17 +143,17 @@ module.exports = {
 					else if (approval.toLowerCase().startsWith('n'))
 						decline();
 					else if (approval.toLowerCase().startsWith('cancel'))
-						message.reply('The review process has ended and the unapproved meme remains in the queue.');
+						message.reply({content: 'The review process has ended and the unapproved meme remains in the queue.', allowedMentions: { repliedUser: false }});
 					else
 						failed();
 					return;
 				} else {
-					return message.reply('Memes pending review:\n```\n' + (client.memeQueue.size >= 1 ? client.memeQueue.map((meme, key) => `${key}. ${meme.name}`).join('\n') : 'None') + '\n```');
+					return message.reply({content: 'Memes pending review:\n```\n' + (client.memeQueue.size >= 1 ? client.memeQueue.map((meme, key) => `${key}. ${meme.name}`).join('\n') : 'None') + '\n```', allowedMentions: { repliedUser: false }});
 				}
 			}
 			const query = args.slice(1).join(' ').toLowerCase();
 			const meme = memes.get(args[1]) || memes.filter(x => x.name.toLowerCase().includes(query) || x.description.toLowerCase().includes(query)).sort((a, b) => (a.name.length - query.length) - (b.name.length - query.length)).first();
-			if (!meme) return message.reply('That meme doesn\'t exist.');
+			if (!meme) return message.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
 				.setTitle(meme.name)
@@ -165,7 +165,7 @@ module.exports = {
 			} else {
 				embed.setAuthor('By ' + meme.author.name)
 			}
-			message.reply({embeds: [embed]});
+			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}
 	},
 	name: 'meme',

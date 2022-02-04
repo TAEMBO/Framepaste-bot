@@ -1,14 +1,14 @@
 module.exports = {
 	run: async (client, message, args) => {
 		if (client.games.has(message.channel.id)) {
-			return message.reply(`There is already an ongoing game in this channel created by ${client.games.get(message.channel.id)}`);
+			return message.channel.send(`There is already an ongoing game in this channel created by ${client.games.get(message.channel.id)}`);
 		}
 		client.games.set(message.channel.id, message.author.tag);
-		await message.reply(`A hangman game has started. ${message.member.toString()}, DM me with the word(s) that you would like your opponents to guess. (60s)`);
+		await message.channel.send(`A hangman game has started. ${message.member.toString()}, DM me with the word(s) that you would like your opponents to guess. (60s)`);
 		const dmChannel = await message.member.createDM();
 		const collectedMessages = await dmChannel.awaitMessages({ errors: ['time'], max: 1, time: 60000 })
 			.catch(error => {
-				message.reply(`${message.member.toString()} failed to provide a word for me. The hangman game has been cancelled.`);
+				message.channel.send(`${message.member.toString()} failed to provide a word for me. The hangman game has been cancelled.`);
 				client.games.delete(message.channel.id);
 			});
 		if (!collectedMessages) return;
@@ -25,7 +25,7 @@ module.exports = {
 				winText = `\nThe whole word has been revealed. The hangman game ends. The word was:\n\`\`\`\n${word}\n\`\`\``;
 				client.games.delete(message.channel.id);
 			}
-			message.reply(`A part of the word has been revealed. This what the word looks like now:\n\`\`\`\n${hideWordResult}\n\`\`\`` + winText);
+			message.channel.send(`A part of the word has been revealed. This what the word looks like now:\n\`\`\`\n${hideWordResult}\n\`\`\`` + winText);
 		}
 		function hideWord() {
 			hiddenLetters = false;
@@ -40,7 +40,7 @@ module.exports = {
 		}
 		function guessLetter(letter) {
 			latestActivity = Date.now();
-			if (guesses.includes(letter)) return message.reply('That letter has been guessed already.');
+			if (guesses.includes(letter)) return message.channel.send('That letter has been guessed already.');
 			guesses.push(letter);
 			if (!word.includes(letter)) {
 				fouls++;
@@ -67,7 +67,7 @@ module.exports = {
 			if(guessMessage.author.bot) return;
 			if(guessMessage.content.toLowerCase().startsWith('guess')){
 			const guess = guessMessage.content.slice(6).toLowerCase();
-			if (!guess || guess.length === 0) return guessMessage.reply('You\'re using the \`guess\` command wrong. Get good.');
+			if (!guess || guess.length === 0) return guessMessage.reply({content: 'You\'re using the \`guess\` command wrong. Get good.', allowedMentions: { repliedUser: false }});
 			if (guess.length > 1) {
 				guessWord(guess);
 			} else {
@@ -80,7 +80,7 @@ module.exports = {
 			if (Date.now() > latestActivity + 5 * 60 * 1000 && client.games.has(message.channel.id)) {
 				guessCollector.stop();
 				client.games.delete(message.channel.id);
-				message.reply('The hangman game has ended due to inactivity.');
+				message.channel.send('The hangman game has ended due to inactivity.');
 				clearInterval(interval);
 			}
 		}, 5000);
@@ -151,9 +151,9 @@ module.exports = {
 				guessCollector.stop();
 				clearInterval(interval);
 			}
-			message.reply(`The word doesn\'t include that ${!textGuess ? 'letter' : 'piece of text'}.\nAn incorrect guess leads to the addition of things to the drawing. It now looks like this:\n\`\`\`\n${stages[fouls - 1].join('\n')}\n\`\`\`` + loseText);
+			message.channel.send(`The word doesn\'t include that ${!textGuess ? 'letter' : 'piece of text'}.\nAn incorrect guess leads to the addition of things to the drawing. It now looks like this:\n\`\`\`\n${stages[fouls - 1].join('\n')}\n\`\`\`` + loseText);
 		}
-		message.reply(`I have received a word from ${message.member.toString()}. Anyone can guess letters or the full word by doing \`guess [letter or word]\`\nThe word is:\n\`\`\`\n${hideWord()}\n\`\`\``);
+		message.channel.send(`I have received a word from ${message.member.toString()}. Anyone can guess letters or the full word by doing \`guess [letter or word]\`\nThe word is:\n\`\`\`\n${hideWord()}\n\`\`\``);
 	},
 	name: 'hangman',
 	description: 'Play the hangman game with other Discord users',

@@ -10,7 +10,7 @@ module.exports = {
             message.reply('Froze server')
         
         } else {
-            message.reply(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`)
+            message.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }})
         }
 	},
 	name: 'freeze',

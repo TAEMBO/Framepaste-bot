@@ -30,7 +30,7 @@ module.exports = {
 		} else {
 			embed.addField('\u200b', '```\n' + rows.join('') + '```');
 		}
-		message.reply({embeds: [embed]});
+		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
 	name: 'statistics',
 	description: 'See a list of commands ordered by usage',

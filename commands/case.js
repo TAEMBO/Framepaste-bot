@@ -2,7 +2,7 @@ module.exports = {
 	run: (client, message, args) => {
 		if (!client.hasModPerms(client, message.member)) return message.reply(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 		const caseid = parseInt(args[1]);
-		if (!caseid) return message.reply('Invalid case #.');
+		if (!caseid) return message.reply({content: 'Invalid case #.', allowedMentions: { repliedUser: false }});
 		const punishment = client.punishments._content.find(x => x.id === caseid);
 		if (punishment) {
 			// show single case
@@ -23,7 +23,7 @@ module.exports = {
 			}
 			if (punishment.expired) embed.addField(':small_blue_diamond: Expired', `This case has been overwritten by Case #${cancelledBy.id} for reason \`${cancelledBy.reason}\``)
 			if (punishment.cancels) embed.addField(':small_blue_diamond: Overwrites', `This case overwrites Case #${cancels.id} \`${cancels.reason}\``)
-			message.reply({embeds: [embed]});
+			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		} else {
 			// if caseid is a user id, show their punishments, sorted by most recent
 			const userPunishments = client.punishments._content.filter(x => x.member === args[1]).sort((a, b) => a.time - b.time).map(punishment => {
@@ -43,7 +43,7 @@ module.exports = {
 				.setFooter(`${userPunishments.length} total punishments. Viewing page ${pageNumber} out of ${Math.ceil(userPunishments.length / 25)}.`)
 				.setColor(client.embedColor)
 			embed.addFields(userPunishments.slice((pageNumber - 1) * 25, pageNumber * 25));
-			return message.reply({embeds: [embed]});
+			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}
 	},
 	name: 'case',

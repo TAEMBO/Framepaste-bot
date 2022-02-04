@@ -16,8 +16,8 @@ const removeUsername = (text) => {
 };
 module.exports = {
 	run: async (client, message, args) => {
-		if (!client.config.eval.allowed) return message.reply('Eval is disabled.');
-		if (!client.config.eval.whitelist.includes(message.author.id)) return message.reply('You\'re not allowed to use eval');
+		if (!client.config.eval.allowed) return message.reply({content: 'Eval is disabled.', allowedMentions: { repliedUser: false }});
+		if (!client.config.eval.whitelist.includes(message.author.id)) return message.reply({content: 'You\'re not allowed to use eval', allowedMentions: { repliedUser: false }});
 		const code = message.content.slice(client.prefix.length + args[0].length + 1);
 		let output = 'error';
 		let error = false;
@@ -30,11 +30,11 @@ module.exports = {
 				.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
 				.addField('Output', `\`\`\`\n${err}\n\`\`\``)
 				.setColor('ff0000');
-			message.reply({embeds: [embed]}).then(errorEmbedMessage => {
+			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).then(errorEmbedMessage => {
 				const filter = x => x.content === 'stack' && x.author.id === message.author.id
 				const messagecollector = message.replyteMessageCollector({ filter, max: 1, time: 60000 });
 				messagecollector.on('collect', collected => {
-					collected.reply(`\`\`\`\n${removeUsername(err.stack)}\n\`\`\``);
+					collected.reply({content: `\`\`\`\n${removeUsername(err.stack)}\n\`\`\``, allowedMentions: { repliedUser: false }});
 				});
 			});
 		}
@@ -51,7 +51,7 @@ module.exports = {
 			.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
 			.addField('Output', `\`\`\`${removeUsername(output).slice(0, 1016)}\n\`\`\``)
 			.setColor(client.embedColor);
-		message.reply({embeds: [embed]});
+		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
 	name: 'eval',
 	description: 'Run code for debugging purposes'

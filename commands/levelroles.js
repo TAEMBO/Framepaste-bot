@@ -1,7 +1,7 @@
 const d = require("discord.js")
 module.exports = {
 	run: async (client, message, args) => {
-		if (message.guild.id !== client.config.mainServer.id) return message.reply('This command doesn\'t work in this server.');
+		if (message.guild.id !== client.config.mainServer.id) return message.reply({content: 'This command doesn\'t work in this server.', allowedMentions: { repliedUser: false }});
 
 		// dailymsgs.json
 		const dailyMsgs = require('../databases/dailyMsgs.json');
@@ -152,7 +152,7 @@ module.exports = {
 				.setImage('attachment://dailymsgs.png')
 				.setColor(client.embedColor)
 			const yeahok = new d.MessageAttachment(img.toBuffer(), "dailymsgs.png")
-			message.reply({embeds: [embed], files: [yeahok]});
+			message.reply({embeds: [embed], files: [yeahok], allowedMentions: { repliedUser: false }});
 			return;
 		} else if (args[1] ==='perks') {
 
@@ -160,7 +160,7 @@ module.exports = {
 				.setTitle('Level Roles: Perks')
 				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Bypassing Channel Restrictions & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
 				.setColor(client.embedColor)
-			message.reply({embeds: [embed]});
+			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			return;
 
 		} else if (args[1] === 'nerdstats' || args[1] === 'nsts') {
@@ -232,7 +232,7 @@ module.exports = {
 		const member = args[1] ? message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => { })) : message.member;
 
 		// if no user could be specified, error
-		if (!member) return message.reply('You failed to mention a user from this server.');
+		if (!member) return message.reply({content: 'You failed to mention a user from this server.', allowedMentions: { repliedUser: false }});
 
 		// information about users progress on level roles
 		const eligiblity = await client.userLevels.getEligible(member);
@@ -289,7 +289,7 @@ module.exports = {
 				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => message.reply('You\'ve received the **' + nextRole.name + '** role.')).catch(() => message.reply('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => message.reply('You\'ve received the **' + nextRole.name + '** role.')).catch(() => message.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
 						// and inform user of outcome
 					}, 500);
 				}
@@ -317,7 +317,7 @@ module.exports = {
 			messageContents.push(`You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles message count.`);
 		}
 
-		message.reply(messageContents.join('\n')); // compile message and send
+		message.reply({content: messageContents.join('\n'), allowedMentions: { repliedUser: false }}); // compile message and send
 	},
 	name: 'levelroles',
 	usage: ['?user ID / mention / "stats" / "nerdstats"'],
