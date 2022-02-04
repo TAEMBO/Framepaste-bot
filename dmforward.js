@@ -10,7 +10,7 @@ module.exports = async (message, client) => {
     const embed = new client.embed()
         .setTitle('Forwarded DM Message')
         .setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: message.author.displayAvatarURL({ format: 'png', dynamic: true})})
-        .setColor(3971825)
+        .setColor(client.embedColor)
         .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b')
         .setTimestamp(Date.now());
     let messageAttachmentsText = '';
