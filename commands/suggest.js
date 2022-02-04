@@ -3,26 +3,26 @@ module.exports = {
     run: async (client, message, args) => {
         if (message.channel.id !== client.config.mainServer.channels.suggestions) {
             client.cooldowns.get(message.author.id)?.set('suggest', 0);
-            return message.reply(`This command only works in <#${client.config.mainServer.channels.suggestions}>`);
+            return message.reply({content: `This command only works in <#${client.config.mainServer.channels.suggestions}>`, allowedMentions: { repliedUser: false }});
         }
         await message.delete();
         if (!args[1]) {
-            return message.reply('You need to suggest something.').then(x => setTimeout(() => x.delete(), 6000));
+            return message.channel.send('You need to suggest something.').then(x => setTimeout(() => x.delete(), 6000));
         }
         if (args[1].length > 2048) {S
-            return message.reply('Your suggestion must be less than or equal to 2048 characters in length.').then(x => setTimeout(() => x.delete(), 6000));
+            return message.channel.send('Your suggestion must be less than or equal to 2048 characters in length.').then(x => setTimeout(() => x.delete(), 6000));
         }
         const embed = new MessageEmbed()
-            .setAuthor(`${message.member.displayName} (${message.author.id})`, message.author.avatarURL({ format: 'png', size: 128 }))
+            .setAuthor({name: `${message.member.displayName} (${message.author.id})`, iconURL: message.author.avatarURL({ format: 'png', size: 128 })})
             .setTitle(`Suggestion:`)
             .setDescription(message.content.slice(message.content.indexOf(' ') + 1))
-            .setFooter('Read pins for more info')
+            .setFooter({text: 'Read pins for more info'})
             .setTimestamp()
             .setColor('269CD0')
         if (message.attachments?.first()?.width && ['png', 'jpeg', 'jpg', 'gif'].some(x => message.attachments.first().name.endsWith(x))) {
-            const suggestion = await message.reply({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel("1"), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel("1"))], files: [message.attachments?.first()]});
+            const suggestion = await message.channel.send({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel("1"), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel("1"))], files: [message.attachments?.first()]});
         } else {
-            const suggestion = await message.reply({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel("1"), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel("1"))]});
+            const suggestion = await message.channel.send({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel("1"), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel("1"))]});
         }
     },
     name: 'suggest',
