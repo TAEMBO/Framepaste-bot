@@ -22,6 +22,5 @@ module.exports = async (message, client) => {
     embed
         .addField('User', `<@${message.author.id}>`)
         .addField('Connections', `:small_blue_diamond: Message sender **${guildMemberObject ? 'is' : ' is not'}** on the **${pcCreatorServer.name}** Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
-    channel.send({embeds: [embed]})
-    channel.send({content: client.config.eval.whitelist.map(x => `<@${x}>`).join(', ')});
+    channel.send({content: client.config.eval.whitelist.map(x => `<@${x}>`).join(', '), embeds: [embed]});
 };
