@@ -7,10 +7,10 @@ module.exports = {
 
             const newPerms = perms.filter((perm) => perm !== 'SEND_MESSAGES');
             await role.edit({ permissions: newPerms })
-            message.channel.send('Froze server')
+            message.reply('Froze server')
         
         } else {
-            message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`)
+            message.reply(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`)
         }
 	},
 	name: 'freeze',

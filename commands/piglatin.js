@@ -23,8 +23,8 @@ module.exports = {
 					}
 				}
 			});
-			if (words.join(' ').length === 0) return message.channel.send('Sorry, I can\'t translate your text because the result would be nothing.');
-			return message.channel.send(words.join(' '));
+			if (words.join(' ').length === 0) return message.reply('Sorry, I can\'t translate your text because the result would be nothing.');
+			return message.reply(words.join(' '));
 		}
 		words = words.map(word => {
 			// if word begins with a vowel
@@ -53,8 +53,8 @@ module.exports = {
 				return text;
 			}
 		});
-		if (words.join(' ').length === 0) return message.channel.send('Sorry, I can\'t translate your text because the result would be nothing.');
-		message.channel.send(words.join(' ').toLowerCase());
+		if (words.join(' ').length === 0) return message.reply('Sorry, I can\'t translate your text because the result would be nothing.');
+		message.reply(words.join(' ').toLowerCase());
 	},
 	name: 'piglatin',
 	description: 'Translates text into Pig Latin or Pig Latin to english if the text is already in Pig Latin. Pig Latin to english sucks because the bot is stupid.',

@@ -1,7 +1,7 @@
 const d = require("discord.js")
 module.exports = {
 	run: async (client, message, args) => {
-		if (message.guild.id !== client.config.mainServer.id) return message.channel.send('This command doesn\'t work in this server.');
+		if (message.guild.id !== client.config.mainServer.id) return message.reply('This command doesn\'t work in this server.');
 
 		// dailymsgs.json
 		const dailyMsgs = require('../databases/dailyMsgs.json');
@@ -152,7 +152,7 @@ module.exports = {
 				.setImage('attachment://dailymsgs.png')
 				.setColor(client.embedColor)
 			const yeahok = new d.MessageAttachment(img.toBuffer(), "dailymsgs.png")
-			message.channel.send({embeds: [embed], files: [yeahok]});
+			message.reply({embeds: [embed], files: [yeahok]});
 			return;
 		} else if (args[1] ==='perks') {
 
@@ -160,7 +160,7 @@ module.exports = {
 				.setTitle('Level Roles: Perks')
 				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Bypassing Channel Restrictions & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
 				.setColor(client.embedColor)
-			message.channel.send({embeds: [embed]});
+			message.reply({embeds: [embed]});
 			return;
 
 		} else if (args[1] === 'nerdstats' || args[1] === 'nsts') {
@@ -224,7 +224,7 @@ module.exports = {
 				.setTitle('Level Roles: Stats')
 				.setDescription(`A total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${userCount.toLocaleString('en-US')} users.\nIn the last ${actualDataLength} days, on average, ${averageMsgsPerDay.toLocaleString('en-US', { maximumFractionDigits: 2 })} messages have been sent every day.\nAn average user has sent ${average.toFixed(2)} messages.\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more than or as many messages as an average user.\nThe median user has sent ${median} messages.\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}% of messages while Level Roles has existed.\nThe next message milestone ${milestone.next ? `is ${milestone.next.toLocaleString('en-US')} messages and the progress from the previous milestone (${milestone.previous.toLocaleString('en-US')}) to the next is ${(milestone.progress * 100).toFixed(2)}%.\nAt the current rate, reaching the next milestone would ${(!serverHalted ? 'take ' : `never happen. The server would grind to a halt in `) + client.formatTime(millisecondsToMilestone, 2, { commas: true, longNames: true })}.` : `doesn\'t exist.`}`)
 				.setColor(client.embedColor)
-			message.channel.send({embeds: [embed]});
+			message.reply({embeds: [embed]});
 			return;
 		}
 
@@ -232,7 +232,7 @@ module.exports = {
 		const member = args[1] ? message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => { })) : message.member;
 
 		// if no user could be specified, error
-		if (!member) return message.channel.send('You failed to mention a user from this server.');
+		if (!member) return message.reply('You failed to mention a user from this server.');
 
 		// information about users progress on level roles
 		const eligiblity = await client.userLevels.getEligible(member);
@@ -289,7 +289,7 @@ module.exports = {
 				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => message.channel.send('You\'ve received the **' + nextRole.name + '** role.')).catch(() => message.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => message.reply('You\'ve received the **' + nextRole.name + '** role.')).catch(() => message.reply('Something went wrong while giving you the **' + nextRole.name + '** role.'));
 						// and inform user of outcome
 					}, 500);
 				}
@@ -317,7 +317,7 @@ module.exports = {
 			messageContents.push(`You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles message count.`);
 		}
 
-		message.channel.send(messageContents.join('\n')); // compile message and send
+		message.reply(messageContents.join('\n')); // compile message and send
 	},
 	name: 'levelroles',
 	usage: ['?user ID / mention / "stats" / "nerdstats"'],

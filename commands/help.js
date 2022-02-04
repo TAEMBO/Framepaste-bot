@@ -13,7 +13,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 	if (toEdit) {
 		return embed;
 	} else {
-		message.channel.send({embeds: [embed], components: [new e.MessageActionRow().addComponents(new e.MessageButton().setStyle("SECONDARY").setCustomId("back").setEmoji("⬅️"), new e.MessageButton().setStyle("SECONDARY").setCustomId("forward").setEmoji("➡️"))]})
+		message.reply({embeds: [embed], components: [new e.MessageActionRow().addComponents(new e.MessageButton().setStyle("SECONDARY").setCustomId("back").setEmoji("⬅️"), new e.MessageButton().setStyle("SECONDARY").setCustomId("forward").setEmoji("➡️"))]})
 			// add reactions to go forward or backward pages
 			.then(async botMessage => {
 				let endTimestamp = Date.now() + 60000;
@@ -57,7 +57,7 @@ module.exports = {
     run: (client, message, args) => {
 		// if they ask for a specific page (number)
 		if (parseInt(args[1])) {
-			if (!client.commands.pages[parseInt(args[1]) - 1]) return message.channel.send('That page number doesn\'t exist.');
+			if (!client.commands.pages[parseInt(args[1]) - 1]) return message.reply('That page number doesn\'t exist.');
 			return helpPage(parseInt(args[1]) - 1, client, message, args);
 		}
 		// category (name)
@@ -71,7 +71,7 @@ module.exports = {
 				.setTitle(`__Commands: ${command.name}__`)
 				.setDescription(client.commandInfo(client, command, { insertNewline: true, parts: ['name', 'usage', 'description', 'shortDescription', 'alias', 'category', 'autores', 'cooldown'], titles: ['name', 'usage', 'shortDescription', 'alias', 'category', 'autores', 'cooldown'] }))
 				.setColor(client.embedColor)
-			return message.channel.send({embeds: [embed]});
+			return message.reply({embeds: [embed]});
 		} 
 		// if run() still hasnt been returned, send category 0 page 1
 		return helpPage(undefined, client, message, args);

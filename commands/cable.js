@@ -5,7 +5,7 @@ module.exports = {
         .setTitle(`Bandwidth calculator`)
 		.setURL('https://k.kramerav.com/support/bwcalculator.asp')
         .setColor(client.embedColor)
-        message.channel.send({embeds: [embed]})
+        message.reply({embeds: [embed]})
 	},
 	name: 'cable',
 	alias: ['bandwidth', 'hdmi'],

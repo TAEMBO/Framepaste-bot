@@ -387,7 +387,7 @@ module.exports = {
 					.setTitle('Convert help: ' + wantedQuantity)
 					.setDescription(`This quantity comprises ${units.length} units, which are:\n\n${units.sort((a, b) => a.name.localeCompare(b.name)).map(unit => `**${unit.name[0].toUpperCase() + unit.name.slice(1)}** (${unit.short.map(x => `\`${x}\``).join(', ')})`).join('\n')}`)
 					.setColor(client.embedColor)
-				return message.channel.send({embeds: [embed]});
+				return message.reply({embeds: [embed]});
 			}
 			const embed = new client.embed()
 				.setTitle('Convert help')
@@ -396,9 +396,9 @@ module.exports = {
 				.addField('Supported Quantities', Object.keys(quantities).map(x => x[0].toUpperCase() + x.slice(1)).join(', ') + `\n\nTo learn more about a quantity and its units and unit symbols,\ndo \`${client.prefix}convert help [quantity]\``)
 				.addField('Examples', `An amount: "5", "1200300", "1.99"\nA unit: metre, kelvin, Euro\nA unit symbol: "fh", "cm^3", "$", "fl oz"\nAn argument: "180cm", "12.99€", "5km", "16fl oz"\nA target unit: ">km", ">c", ">m2"\nA complete conversion command: "\`${client.prefix}convert 5ft, 8in to cm\`", "\`${client.prefix}convert 300kelvin >celsius\`", "\`${client.prefix}convert 57mm, 3.3cm, 0.4m >cm\`", "\`${client.prefix}convert 2dl, 0.2l to fl oz\`"`)
 				.addField('NEW: Fraction Conversion', 'Use division in your commands to achieve something, for example velocity conversion. In fraction conversion, all the starters\' and the target\'s unit symbol must be a fraction. The syntax for a fraction is \`[unit symbol]["/" or "per"][unit symbol]\`. All of the numerators must be of the same quantity. Same for the denominators. You cannot mix fractions and non-fractions. Examples of Fraction Conversion:\n\`${client.prefix}convert 5m/s >km/h\`\n\`${client.prefix}convert 5 miles per hour, 1 meter per second to kilometers per hour\`')
-			return message.channel.send({embeds: [embed]});
+			return message.reply({embeds: [embed]});
 		}
-		if (!message.content.includes('>') && !message.content.includes('to')) return message.channel.send('There needs to be a greater-than sign (\`>\`) or the word "to" in your message, after the starters and before the target unit.');
+		if (!message.content.includes('>') && !message.content.includes('to')) return message.reply('There needs to be a greater-than sign (\`>\`) or the word "to" in your message, after the starters and before the target unit.');
 		// lets define the > or to, that theyre using
 		const usedSeparator = message.content.includes('>') ? '>' : 'to';
 		const starters = args.slice(1, args.indexOf(args.find(x => x.includes(usedSeparator)))).join(' ').split(',').map(starter => {
@@ -413,11 +413,11 @@ module.exports = {
 				const denominatorUnitSymbol = starter.slice(starter.indexOf(separator) + separator.length).trim();
 				const denominatorUnit = findUnit(denominatorUnitSymbol);
 				if (!numeratorUnit) {
-					message.channel.send(numeratorUnitSymbol + ' is wrong.');
+					message.reply(numeratorUnitSymbol + ' is wrong.');
 					return;
 				}
 				if (!denominatorUnit) {
-					message.channel.send(denominatorUnitSymbol + ' is wrong.');
+					message.reply(denominatorUnitSymbol + ' is wrong.');
 					return;
 				}
 				const division = numeratorUnit.unit.value / denominatorUnit.unit.value;
@@ -438,7 +438,7 @@ module.exports = {
 				return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol.endsWith('s') && unitSymbol.length > 3 ? unitSymbol.slice(0, unitSymbol.length - 1) : unitSymbol));
 			}
 		});
-		if (!starters || starters.length === 0) return message.channel.send('You must convert _something._ Your message has 0 starters.');
+		if (!starters || starters.length === 0) return message.reply('You must convert _something._ Your message has 0 starters.');
 
 		const target = (() => {
 			const targetPortion = args.slice(args.indexOf(args.find(x => x.includes(usedSeparator)))).join(' ').slice(usedSeparator.length).trim();
@@ -451,11 +451,11 @@ module.exports = {
 				const denominatorUnitSymbol = targetPortion.slice(targetPortion.indexOf(separator) + separator.length).trim();
 				const denominatorUnit = findUnit(denominatorUnitSymbol);
 				if (!numeratorUnit) {
-					message.channel.send(numeratorUnitSymbol + ' is wrong.');
+					message.reply(numeratorUnitSymbol + ' is wrong.');
 					return;
 				}
 				if (!denominatorUnit) {
-					message.channel.send(denominatorUnitSymbol + ' is wrong.');
+					message.reply(denominatorUnitSymbol + ' is wrong.');
 					return;
 				}
 				const division = numeratorUnit.unit.value / denominatorUnit.unit.value;
@@ -475,13 +475,13 @@ module.exports = {
 				
 			}
 		})();
-		if (!target) return message.channel.send('You must convert _to_ something. Your message doesn\'t have a (valid) target unit.');
+		if (!target) return message.reply('You must convert _to_ something. Your message doesn\'t have a (valid) target unit.');
 
 		// check that all starters and target are the same quantity
 		const usedQuantities = new Set([target.quantity, ...starters.map(x => x.quantity)]);
 		const numeratorQuantities = new Set([target?.unit?.numeratorQuantity, ...starters.map(x => x?.unit?.numeratorQuantity)]);
 		const denominatorQuantities = new Set([target?.unit?.denominatorQuantity, ...starters.map(x => x?.unit?.denominatorQuantity)]);
-		if (usedQuantities.size > 1 || numeratorQuantities.size > 1 || denominatorQuantities.size > 1) return message.channel.send(`All starting units and the target unit must be of the same quantity. The quantities you used were \`${[...usedQuantities, ...numeratorQuantities, ...denominatorQuantities].filter(x => x)}\``);
+		if (usedQuantities.size > 1 || numeratorQuantities.size > 1 || denominatorQuantities.size > 1) return message.reply(`All starting units and the target unit must be of the same quantity. The quantities you used were \`${[...usedQuantities, ...numeratorQuantities, ...denominatorQuantities].filter(x => x)}\``);
 		const quantity = [...usedQuantities][0];
 
 		// get absolute value: sum of all starters (starter amount * starter unit value)
@@ -510,7 +510,7 @@ module.exports = {
 			.addField('Starting amount', starters.map(x => `${x.amount.toLocaleString('en-US')} ${x.unit.short[0]}`).join(', '), true)
 			.addField('Converted amount', amountInTarget.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' ' + target.unit.short[0], true)
 			.setColor(client.embedColor)
-		message.channel.send({embeds: [embed]});
+		message.reply({embeds: [embed]});
 	},
 	name: 'convert',
 	description: '[BETA] Convert measurements. Use many starting amounts and units by attaching amounts and units of the same quantity with a comma, eg. \`convert 5ft, 8in >cm\` converts the sum of 5 feet and 8 inches into centimeters. For help, add \`help\`',

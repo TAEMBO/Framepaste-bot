@@ -2,7 +2,7 @@ const { Client, Message, MessageEmbed, ClientVoiceManager } = require("discord.j
 
 module.exports = {
     run: async (client, message, args) => {
-        if (message.guild.id !== client.config.mainServer.id) return message.channel.send(`\`${client.prefix}staff\` doesn't work in this server.`);
+        if (message.guild.id !== client.config.mainServer.id) return message.reply(`\`${client.prefix}staff\` doesn't work in this server.`);
         const staff = {
             administrator: await message.guild.roles.fetch(client.config.mainServer.roles.administrator),
             moderator: await message.guild.roles.fetch(client.config.mainServer.roles.moderator),
@@ -18,7 +18,7 @@ module.exports = {
             .setTitle('__Staff Members__')
             .setDescription(`<@&${client.config.mainServer.roles.administrator}>\n${admin}\n\n<@&${client.config.mainServer.roles.moderator}>\n${mod}\n\n<@&${client.config.mainServer.roles.trialmoderator}>\n${tm}\n\n<@&${client.config.mainServer.roles.helper}>\n${helper}`)
             .setColor(client.embedColor)
-        message.channel.send({embeds: [embed]});
+        message.reply({embeds: [embed]});
     },
     name: 'staff',
     description: 'Shows all the current staff members',

@@ -53,7 +53,7 @@ module.exports = {
 					.setDescription(client.categoryNames.join(', '))
 					.setFooter('Or any bot command name.')
 					.setColor(client.embedColor)
-				return message.channel.send({embeds: [embed]});
+				return message.reply({embeds: [embed]});
 			} else if (['how', 'why', 'what'].includes(args[1])) {
 				const embed = new client.embed()
 					.setTitle('Why can I not do bot commands?')
@@ -62,15 +62,15 @@ module.exports = {
 					.addField(':small_blue_diamond: This phenomenon is called _channel restrictions._', `<@&${client.config.mainServer.roles.moderator}>s restrict certain categories of commands from being used in different channels. Active restrictions are available for everyone to see with \`${client.prefix}channelrestrictions\`.`)
 					.addField(':small_blue_diamond: How come _you_ can use restricted commands?', `Anyone with the <@&${client.config.mainServer.roles.levels.three.id}> role can bypass channel restrictions.`)
 					.setColor(client.embedColor)
-				return message.channel.send({embeds: [embed]});
+				return message.reply({embeds: [embed]});
 		 	} else {
 
-				if (!message.mentions.channels.first()) return message.channel.send('You must mention a channel.');
+				if (!message.mentions.channels.first()) return message.reply('You must mention a channel.');
 
 				const channelId = message.mentions.channels.first().id;
 
 				if (args[2]) {
-					if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
+					if (!client.hasModPerms(client, message.member)) return message.reply(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 
 					let restrictionsForThisChannel = client.channelRestrictions._content[channelId];
 
@@ -82,13 +82,13 @@ module.exports = {
 							const removed = restrictionsForThisChannel.splice(restrictionsForThisChannel.map(x => x.toLowerCase()).indexOf(categoryOrCommandName), 1)[0];
 							if (restrictionsForThisChannel.length === 0) client.channelRestrictions.removeData(channelId);
 							client.channelRestrictions.forceSave();
-							return message.channel.send(`Successfully removed restriction of ${removed} commands in <#${channelId}>`);
+							return message.reply(`Successfully removed restriction of ${removed} commands in <#${channelId}>`);
 						} else {
 							const added = client.categoryNames.find(x => x.toLowerCase() === categoryOrCommandName);
 							if (restrictionsForThisChannel) restrictionsForThisChannel.push(added);
 							else client.channelRestrictions._content[channelId] = [added];
 							client.channelRestrictions.forceSave();
-							return message.channel.send(`Successfully added restriction of ${added} commands in <#${channelId}>`);
+							return message.reply(`Successfully added restriction of ${added} commands in <#${channelId}>`);
 						}
 					} else if (client.commands.some(x => x.name === categoryOrCommandName)) {
 						// categoryOrCommandName is a command
@@ -112,7 +112,7 @@ module.exports = {
 							}
 
 							client.channelRestrictions.forceSave();
-							return message.channel.send(`Successfully removed restriction of \`${categoryOrCommandName}\` command in <#${channelId}>`);
+							return message.reply(`Successfully removed restriction of \`${categoryOrCommandName}\` command in <#${channelId}>`);
 						} else {
 							// restrict command
 							if (!restrictionsForThisChannel) {
@@ -135,10 +135,10 @@ module.exports = {
 							}
 							// save
 							client.channelRestrictions.forceSave();
-							return message.channel.send(`Successfully added restriction of \`${categoryOrCommandName}\` command in <#${channelId}>`);
+							return message.reply(`Successfully added restriction of \`${categoryOrCommandName}\` command in <#${channelId}>`);
 						}
 					} else {
-						return message.channel.send('You must enter an acceptable category or command name.');
+						return message.reply('You must enter an acceptable category or command name.');
 					}
 				} else {
 					const embed = new client.embed()
@@ -146,7 +146,7 @@ module.exports = {
 						.setDescription(displayCr([channelId], client))
 						.setColor(client.embedColor)
 					if (embed.description.length === 0) embed.setDescription(`<#${channelId}> has no active channel restrictions.`);
-					return message.channel.send({embeds: [embed]});
+					return message.reply({embeds: [embed]});
 				}
 			}
 		} else {
@@ -155,7 +155,7 @@ module.exports = {
 				.setDescription(displayCr(Object.keys(client.channelRestrictions._content), client))
 				.setColor(client.embedColor)
 			if (embed.description.length === 0) embed.setDescription('None');
-			message.channel.send({embeds: [embed]});
+			message.reply({embeds: [embed]});
 		}
 	},
 	name: 'channelrestrictions',

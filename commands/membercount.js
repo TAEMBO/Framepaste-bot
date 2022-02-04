@@ -4,7 +4,7 @@ module.exports = {
 			await message.guild.fetch();
 			client.memberCount_LastGuildFetchTimestamp = Date.now();
 		}
-		message.channel.send(`**${message.guild.name}** has **${message.guild.approximateMemberCount.toLocaleString()}** members.`);
+		message.reply(`**${message.guild.name}** has **${message.guild.approximateMemberCount.toLocaleString()}** members.`);
 	},
 	name: 'membercount',
 	alias: ['mc'],

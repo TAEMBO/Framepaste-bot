@@ -1,8 +1,8 @@
 module.exports = {
 	run: (client, message, args) => {
-		if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
+		if (!client.hasModPerms(client, message.member)) return message.reply(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 		const caseid = parseInt(args[1]);
-		if (!caseid) return message.channel.send('Invalid case #.');
+		if (!caseid) return message.reply('Invalid case #.');
 		const punishment = client.punishments._content.find(x => x.id === caseid);
 		if (punishment) {
 			// show single case
@@ -23,7 +23,7 @@ module.exports = {
 			}
 			if (punishment.expired) embed.addField(':small_blue_diamond: Expired', `This case has been overwritten by Case #${cancelledBy.id} for reason \`${cancelledBy.reason}\``)
 			if (punishment.cancels) embed.addField(':small_blue_diamond: Overwrites', `This case overwrites Case #${cancels.id} \`${cancels.reason}\``)
-			message.channel.send({embeds: [embed]});
+			message.reply({embeds: [embed]});
 		} else {
 			// if caseid is a user id, show their punishments, sorted by most recent
 			const userPunishments = client.punishments._content.filter(x => x.member === args[1]).sort((a, b) => a.time - b.time).map(punishment => {
@@ -34,7 +34,7 @@ module.exports = {
 			});
 
 			// if case id is not a punishment or a user, failed
-			if (!userPunishments || userPunishments.length === 0) return message.channel.send('No punishments found with that Case # or user ID');
+			if (!userPunishments || userPunishments.length === 0) return message.reply('No punishments found with that Case # or user ID');
 
 			const pageNumber = parseInt(args[2]) || 1;
 			const embed = new client.embed()
@@ -43,7 +43,7 @@ module.exports = {
 				.setFooter(`${userPunishments.length} total punishments. Viewing page ${pageNumber} out of ${Math.ceil(userPunishments.length / 25)}.`)
 				.setColor(client.embedColor)
 			embed.addFields(userPunishments.slice((pageNumber - 1) * 25, pageNumber * 25));
-			return message.channel.send({embeds: [embed]});
+			return message.reply({embeds: [embed]});
 		}
 	},
 	name: 'case',
