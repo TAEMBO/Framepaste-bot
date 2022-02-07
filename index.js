@@ -800,7 +800,27 @@ client.on("messageCreate", async (message) => {
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
 	}
-
+	client.giveawaysManager = new GiveawaysManager(client, {
+		storage: "./giveaways.json",
+		updateCountdownEvery: 5000,
+		default: {
+			botsCanWin: false,
+			embedColor: client.embedColor,
+			reaction: "🎉"
+		}
+	});
+	
+	client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
+		console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
+	});
+	
+	client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
+		console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
+	});
+	
+	client.giveawaysManager.on("giveawayEnded", (giveaway, winners) => {
+		console.log(`Giveaway #${giveaway.messageID} ended! Winners: ${winners.map((member) => member.user.username).join(', ')}`);
+	});
 	// handle discord invite links
 	if (message.content.includes("discord.gg/") && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) && message.guild.id === client.config.mainServer.id) {
 		message.delete()
