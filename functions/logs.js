@@ -29,24 +29,39 @@ module.exports = async (client) => {
            .setTimestamp(Date.now())
        channel.send({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("LINK").setURL(`${oldMsg.url}`).setLabel("Jump to message"))]})
    })
-   client.on("guildMemberAdd", async (member)=>{
+   client.tracker.on("guildMemberAdd", async (member, type, invite)=>{
        if (member.guild.id !== client.config.mainServer.id) return;
-       const embed = new MessageEmbed()
+       if (type == "unknown") {
+
+        const embed = new MessageEmbed()
            .setTitle(`Member Joined: ${member.user.tag}`)
+           .setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
            .addField('🔹 Account Creation Date', `${member.user.createdAt.getUTCFullYear()}-${('0' + (member.user.createdAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.user.createdAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.user.createdTimestamp, 1, { longNames: true })} ago`)
-           .addField('🔹 ID and Mention', `ID: ${member.user.id}\nMention: <@${member.user.id}>`)
+           .addField("🔹Invite Data:", `I couldn't find out how they joined!`)
            .setColor(7844437)
            .setTimestamp(Date.now())
            .setThumbnail(member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 2048}))
         channel.send({embeds: [embed]})
+
+    } else {
+       const embed = new MessageEmbed()
+           .setTitle(`Member Joined: ${member.user.tag}`)
+           .setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
+           .addField('🔹 Account Creation Date', `${member.user.createdAt.getUTCFullYear()}-${('0' + (member.user.createdAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.user.createdAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.user.createdTimestamp, 1, { longNames: true })} ago`)
+           .addField("🔹Invite Data:", `Invite: \`${invite.code}\`\nCreated by: **${invite.inviter.username}**`)
+           .setColor(7844437)
+           .setTimestamp(Date.now())
+           .setThumbnail(member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 2048}))
+        channel.send({embeds: [embed]})
+}
    })
    client.on("guildMemberRemove", async (member)=>{
        if (member.guild.id !== client.config.mainServer.id) return;
        const embed = new MessageEmbed()
            .setTitle(`Member Left: ${member.user.tag}`)
+           .setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
            .addField('🔹 Account Creation Date', `${member.user.createdAt.getUTCFullYear()}-${('0' + (member.user.createdAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.user.createdAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.user.createdTimestamp, 1, { longNames: true })} ago`)
            .addField('🔹 Join Date', `${member.joinedAt.getUTCFullYear()}-${('0' + (member.joinedAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.joinedAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.joinedTimestamp, 1, { longNames: true })} ago`)
-           .addField('🔹 ID and Mention', `ID: ${member.user.id}\nMention: <@${member.user.id}>`)
            .addField('🔹 Roles', `${member.roles.cache.map(x => x).join(" ")}`)
            .setColor(14495300)
            .setTimestamp(Date.now())

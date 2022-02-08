@@ -6,6 +6,12 @@ const fs = require("fs");
 const path = require("path");
 const MessageLogs = require("./functions/logs");
 const database = require("./database.js");
+const InvitesTracker = require('@androz2091/discord-invites-tracker');
+client.tracker = InvitesTracker.init(client, {
+    fetchGuilds: true,
+    fetchVanity: true,
+    fetchAuditLogs: true
+});
 try {
 	client.config = require("./config-test.json");
 	console.log("Using ./config-test.json");
@@ -34,6 +40,8 @@ Object.assign(client, {
 	starLimit: 3,
 	selfStarAllowed: false
 });
+
+// main bot login
 client.on("ready", async () => {
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
 	MessageLogs(client);
@@ -70,6 +78,8 @@ client.on("ready", async () => {
 		console.log(`Giveaway #${giveaway.messageID} ended! Winners: ${winners.map((member) => member.user.username).join(', ')}`);
 	});
 });
+
+// modmail bot login
 modmailClient.on("ready", async () => {
 	setInterval(async () => {
 		await modmailClient.user.setActivity("DMs", {
@@ -78,6 +88,7 @@ modmailClient.on("ready", async () => {
 	}, 60000);
 	console.log(`Modmail Bot active as ${modmailClient.user.tag}`);
 });
+
 Object.assign(client.config, require("./tokens.json"));
 
 // meme approval queue
