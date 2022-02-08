@@ -5,6 +5,9 @@ module.exports = {
         if (message.guild.id !== client.config.mainServer.id) {
             return message.reply({content: 'Wrong server.', allowedMentions: { repliedUser: false }})
         }
+        if (!client.hasModPerms(client, message.member)) {
+            return message.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
+        }
         let giveawayChannel = message.mentions.channels.first();
         if (!giveawayChannel) {
             return message.channel.send(':boom: Uh oh, I couldn\'t find that channel! Try again!');
