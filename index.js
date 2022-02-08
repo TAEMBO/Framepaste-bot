@@ -14,24 +14,7 @@ try {
 	console.log("Using ./config.json");
 }
 client.prefix = client.config.prefix;
-client.on("ready", async () => {
-	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
-	MessageLogs(client);
-	setInterval(async () => {
-		await client.user.setActivity(`${client.prefix}help`, {
-			type: "LISTENING",
-		})
-	}, 60000);
-	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
-});
-modmailClient.on("ready", async () => {
-	setInterval(async () => {
-		await modmailClient.user.setActivity("DMs", {
-			type: "LISTENING",
-		});
-	}, 60000);
-	console.log(`Modmail Bot active as ${modmailClient.user.tag}`);
-});
+client.setMaxListeners(100)
 // global properties
 Object.assign(client, {
 	embed: Discord.MessageEmbed,
@@ -50,6 +33,51 @@ Object.assign(client, {
 	embedColor: 14014681,
 	starLimit: 3,
 	selfStarAllowed: false
+});
+client.on("ready", async () => {
+	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
+	MessageLogs(client);
+	setInterval(async () => {
+		await client.user.setActivity(`${client.prefix}help`, {
+			type: "LISTENING",
+		})
+	}, 60000);
+	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
+
+	// giveaways
+	const { GiveawaysManager } = require('discord-giveaways');
+	client.giveawaysManager = new GiveawaysManager(client, {
+		storage: "./databases/giveaways.json",
+		updateCountdownEvery: 5000,
+		default: {
+			// change role ID that gets ping from C:\Users\xxxx\node_modules\discord-giveaways\src\Constants.js
+			botsCanWin: false,
+			embedColor: client.embedColor,
+			embedColorEnd: 14495300,
+			
+			reaction: "🎉"
+		}
+	});
+	
+	client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
+		console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
+	});
+	
+	client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
+		console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
+	});
+	
+	client.giveawaysManager.on("giveawayEnded", (giveaway, winners) => {
+		console.log(`Giveaway #${giveaway.messageID} ended! Winners: ${winners.map((member) => member.user.username).join(', ')}`);
+	});
+});
+modmailClient.on("ready", async () => {
+	setInterval(async () => {
+		await modmailClient.user.setActivity("DMs", {
+			type: "LISTENING",
+		});
+	}, 60000);
+	console.log(`Modmail Bot active as ${modmailClient.user.tag}`);
 });
 Object.assign(client.config, require("./tokens.json"));
 
@@ -800,27 +828,6 @@ client.on("messageCreate", async (message) => {
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
 	}
-	client.giveawaysManager = new GiveawaysManager(client, {
-		storage: "./giveaways.json",
-		updateCountdownEvery: 5000,
-		default: {
-			botsCanWin: false,
-			embedColor: client.embedColor,
-			reaction: "🎉"
-		}
-	});
-	
-	client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
-		console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
-	});
-	
-	client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
-		console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
-	});
-	
-	client.giveawaysManager.on("giveawayEnded", (giveaway, winners) => {
-		console.log(`Giveaway #${giveaway.messageID} ended! Winners: ${winners.map((member) => member.user.username).join(', ')}`);
-	});
 	// handle discord invite links
 	if (message.content.includes("discord.gg/") && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) && message.guild.id === client.config.mainServer.id) {
 		message.delete()

@@ -3,6 +3,13 @@
 		"fpb": true,
 		"modmail": true
 	},
+	"Giveaway_Options": {
+		"giveawayManagerID": "",
+		"giveawayRoleID": "903649265224663121",
+		"giveawayMention": true,
+		"showMention": true,
+		"hostedBy": true
+		},
 	"prefix": ",",
 	"eval": {
 		"allowed": true,
