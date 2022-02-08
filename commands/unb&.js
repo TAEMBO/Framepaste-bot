@@ -1,20 +1,23 @@
 module.exports = {
-	run: (client, message, args) => {
-		message.delete().catch(err => console.log('couldnt delete message when doing b& because', err.message));
-		if (!args[1]) {
-			message.channel.send('Your honorary ban has been revoked!')
-		} else if (args[1] === '@everyone') {
-			return message.channel.send(`<@${message.author.id}> bingus no trying to loophole`).then(x => setTimeout(() => x.delete(), 6000))
-		} else if (args[1] === '@here') {
-			 return message.channel.send(`<@${message.author.id}> bingus no trying to loophole`).then(x => setTimeout(() => x.delete(), 6000))
-		} else if (args[1] === 'everyone') {
-			return message.channel.send(`<@${message.author.id}> bingus no trying to loophole`).then(x => setTimeout(() => x.delete(), 6000))
-		} else if (args[1] === 'here') {
-			 return message.channel.send(`<@${message.author.id}> bingus no trying to loophole`).then(x => setTimeout(() => x.delete(), 6000))
-		} else if (args[1]) {
-			message.channel.send(`<@${args[1]}> had their honorary ban revoked!`)}
-	},
-	name: 'unb&',
-	usage: ['userID'],
-	hidden: true
+    run: (client, message, args) => {
+        message.delete().catch(err => console.log('couldnt delete message when doing b& because', err.message));
+        let member = message.content.split(" ")[1]
+        let    member2 = member.toString().replace(/[\<>@#&!]/g, "")
+        console.log(member2)
+
+        if (!args[1]) {
+            message.channel.send('Your honorary ban has been revoked!')
+            return;
+        }
+        if(isNaN(member2)){
+            message.channel.send(`Your honorary ban has been revoked!`)
+            return;
+        }
+        if (args[1]) {
+            message.channel.send(`<@${member2.toString()}> had their honorary ban revoked!`)}
+        return;
+    },
+    name: 'unb&',
+    usage: ['userID'],
+    hidden: true
 };
