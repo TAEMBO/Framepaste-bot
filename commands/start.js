@@ -146,8 +146,9 @@ module.exports = {
                 }
             });
         }
+        const channel = client.channels.resolve(giveawayChannel)
 
-
+        channel.send('<@&903649265224663121>').then(x => setTimeout(() => x.delete(), 500)) //giveaway role that gets pinged, then deleted for a cleaner look
         message.channel.send(`:tada: Done! The giveaway for the \`${giveawayPrize}\` is starting in ${giveawayChannel}!`);
     },
     name: "start",

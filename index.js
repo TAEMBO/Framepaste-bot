@@ -50,7 +50,6 @@ client.on("ready", async () => {
 		storage: "./databases/giveaways.json",
 		updateCountdownEvery: 5000,
 		default: {
-			// change role ID that gets ping from C:\Users\xxxx\node_modules\discord-giveaways\src\Constants.js
 			botsCanWin: false,
 			embedColor: client.embedColor,
 			embedColorEnd: 14495300,
