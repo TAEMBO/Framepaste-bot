@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const MessageLogs = require("./functions/logs");
 const database = require("./database.js");
+const {MessageEmbed} = require("discord.js");
 try {
 	client.config = require("./config-test.json");
 	console.log("Using ./config-test.json");
@@ -932,3 +933,24 @@ if (client.config.botSwitches.fpb) {
 if (client.config.botSwitches.modmail) {
 	modmailClient.login(client.config.modmailBotToken);
 }
+client.on('guildMembersChunk', (members,guild,chunk) => {
+	let MemberChunk;
+	members.forEach(function (member){
+		MemberChunk = MemberChunk + `\n ${member.toString()} \`${member.id}\``;
+		member.timeout(Math.floor(Math.random() * 10800000) + 3600000,'Raid Prevention muted for 1 - 4 hours')
+		member.user.send('Raid Prevention: A lot of users from the same guild has been joining, this measure is for prevention and won\'t be registered in our database').catch(e => console.log('Can\'t send DMs to this user'))
+	})
+	const ChunkEmbed = new MessageEmbed()
+		.setColor('#0000ff')
+		.setTitle('Raid Detected')
+		.setDescription('Members of the same guild have joined recently *this may be a raid*')
+		.addField('Members', MemberChunk)
+		.addField('Info', `Index: \`${chunk.index}\` \n Count: \`${chunk.count}\`\n Nonce: \`${chunk.nonce}\``)
+		.addField('Guild', `Name: ${guild.name} \n ID: \`${guild.id}\``)
+		.setTimestamp()
+
+	client.channels.cache.get('928582214210437121').send({embeds: [ChunkEmbed]})
+
+
+})
+
