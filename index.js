@@ -870,10 +870,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
 	if (reaction.emoji.name === '<:bad:910332416097406976>' && reaction.message.id === '928716338954919946') {
 		const member = await reaction.message.guild.members.fetch(user.id)
 		member.roles.add('918748679567982602', 'Reaction Roles')}
-	// Skill issue infected 2
-	if (reaction.emoji.name === 'bad' && reaction.message.id === '928716338954919946') {
-		const member = await reaction.message.guild.members.fetch(user.id)
-		member.roles.add('918748679567982602', 'Reaction Roles')}
 	// Free games
 	if (reaction.emoji.name === '🎮' && reaction.message.id === '928716338954919946') {
 		const member = await reaction.message.guild.members.fetch(user.id)
