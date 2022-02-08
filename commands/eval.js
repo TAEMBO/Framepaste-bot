@@ -32,7 +32,7 @@ module.exports = {
 				.setColor('ff0000');
 			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).then(errorEmbedMessage => {
 				const filter = x => x.content === 'stack' && x.author.id === message.author.id
-				const messagecollector = message.replyteMessageCollector({ filter, max: 1, time: 60000 });
+				const messagecollector = message.channel.createMessageCollector({ filter, max: 1, time: 60000 });
 				messagecollector.on('collect', collected => {
 					collected.reply({content: `\`\`\`\n${removeUsername(err.stack)}\n\`\`\``, allowedMentions: { repliedUser: false }});
 				});
