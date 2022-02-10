@@ -57,7 +57,7 @@ module.exports = {
 				if (member.user.id === '795443537356521502') {
 					embed.addField('Package', `Discord.js V${version}`)
 				}
-				return message.reply({embeds: [embed]});
+				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			}
 		} else {
 			if (!client.specsDb.hasUser(message.author.id)) return message.reply({content: `You haven\'t added any specs yet. Do \`${client.prefix}specifications help\` to learn more.`, allowedMentions: { repliedUser: false }});
