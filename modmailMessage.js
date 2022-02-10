@@ -28,14 +28,14 @@ module.exports = async (message, modmailClient, client) => {
 			if (modReply.content.startsWith('et')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId === caseId) return; // replied to different convo than this
+				if (replyCaseId !== caseId) return; // replied to different convo than this
 				collectorEndTimestamp = Date.now() + 10 * 60 * 1000;
 				timeWarning = false;
 				return modmailChannel.send('Extra time granted. The communication portal will close in 10 minutes.');
 			} else if (modReply.content.startsWith('rpl')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId === caseId) return; // replied to different convo than this
+				if (replyCaseId !== caseId) return; // replied to different convo than this
 				const reply = args.slice(2).join(' ') + '\n' + (modReply.attachments.first()?.url || '');
 				if (reply.trim().length === 0) return modReply.reply(`\`Case ID: ${caseId}\` Your reply needs to contain text or an attachment. Reply not forwarded.`);
 				modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}): ${args.slice(2).join(' ') + (modReply.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
@@ -44,7 +44,7 @@ module.exports = async (message, modmailClient, client) => {
 			} else if (modReply.content.startsWith('end')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId === caseId) return; // replied to different convo than this
+				if (replyCaseId !== caseId) return; // replied to different convo than this
 				const reason = args.slice(2).join(' ');
 				message.channel.send(`:x: ${modReply.member.roles.highest.name} ${modReply.author.tag} has ended this ModMail session with${reason ? ` reason: ${reason}` : 'out a reason.'}`);
 				await modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has been closed${reason ? '' : ' without a reason'}.`);
