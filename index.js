@@ -600,6 +600,9 @@ client.on("messageDelete", async message => {
 
 // repeated messages
 client.repeatedMessages = {};
+client.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
+client.repeatedMessagesContent.initLoad();
+
 
 // event loop, for punishments and daily msgs
 setInterval(() => {
@@ -814,6 +817,10 @@ client.on("messageCreate", async (message) => {
 
 					// timestamp of first spammed message
 					const spamOriginTimestamp = client.repeatedMessages[message.author.id].firstKey();
+
+					// store args in json
+					client.repeatedMessagesContent.addData(message.content.split(' ')).forceSave();
+					const index = client.repeatedMessagesContent._content.length - 1;
 
 					// send info about this user and their spamming
 					client.channels.cache.get(client.config.mainServer.channels.caselogs).send({content: `Anti-spam triggered, here's the details:\n\`https://\` ${message.content.toLowerCase().includes("https://") ? ":white_check_mark:" : ":x:"}\n\`http://\` ${message.content.toLowerCase().includes("http://") ? ":white_check_mark:" : ":x:"}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes("@everyone") || message.content.toLowerCase().includes("@here")) ? ":white_check_mark:" : ":x:"}\n\`top-level domain\` ${[".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join("\n")}\nThreshold: ${threshold}ms\nLRS Message Count: ${client.userLevels.getUser(message.author.id)}`});
