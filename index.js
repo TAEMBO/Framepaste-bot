@@ -385,7 +385,7 @@ Object.assign(client.punishments, {
 					.addField('Reason', `\`${reason || "unspecified"}\``)
 					.setColor(client.embedColor)
 					.setThumbnail('https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg')
-					return message.channel.send({embeds: [embedw]});
+					if (moderator !== '795443537356521502') {message.channel.send({embeds: [embedw]})};
 				}
 		}
 	},
