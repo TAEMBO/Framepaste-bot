@@ -287,7 +287,7 @@ Object.assign(client.punishments, {
 					this.addData(banData);
 					this.forceSave();
 					const embedm = new client.embed()
-					    .setTitle(`Case #${banData.id}: Mute`)
+					    .setTitle(`Case #${banData.id}: Ban`)
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    .addField('Reason', `\`${reason || "unspecified"}\``)
 					    .addField('Duration', `${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"}`)
@@ -312,7 +312,7 @@ Object.assign(client.punishments, {
 						this.addData(softbanData);
 						this.forceSave();
 						const embeds = new client.embed()
-					    	.setTitle(`Case #${softbanData.id}: Warn`)
+					    	.setTitle(`Case #${softbanData.id}: Softban`)
 					    	.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    	.addField('Reason', `\`${reason || "unspecified"}\``)
 					    	.setColor(client.embedColor)
@@ -332,7 +332,7 @@ Object.assign(client.punishments, {
 					this.addData(kickData);
 					this.forceSave();
 					const embedk = new client.embed()
-					    .setTitle(`Case #${kickData.id}: Warn`)
+					    .setTitle(`Case #${kickData.id}: Kick`)
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    .addField('Reason', `\`${reason || "unspecified"}\``)
 					    .setColor(client.embedColor)
