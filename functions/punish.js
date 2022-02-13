@@ -53,5 +53,4 @@ module.exports = async (client, message, args, type) => {
 		if (reason === 0) return;
 	}
 	const punishmentResult = await client.punishments.addPunishment(type, member, { time, reason, message }, message.author.id);
-	message.channel.send({content: `${punishmentResult}`});
 };

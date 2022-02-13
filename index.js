@@ -272,11 +272,11 @@ Object.assign(client.punishments, {
 		switch (type) {
 			case "ban":
 				const banData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const dm = await member.send(`You've been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${banData.id})`).catch(err => console.log(`dm failed while ${moderator} was banning ${member.user.id} (case ${banData.id}):`, err.message));
+				const dm1 = await member.send(`You've been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${banData.id})`).catch(err => setTimeout(() => message.channel.send('Failed to DM user.'), 500));
 				const banResult = await member.ban({ reason: `${reason || "unspecified"} | Case #${banData.id}` }).catch(err => err.message);
 				if (typeof banResult === "string") {
-					dm.delete();
-					return "Ban was unsuccessful: " + banResult;
+					dm1.delete();
+					return message.channel.send(`Ban was unsuccessful: ${banResult}`);
 				} else {
 					if (timeInMillis) {
 						banData.endTime = now + timeInMillis;
@@ -286,49 +286,71 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(banData, client);
 					this.addData(banData);
 					this.forceSave();
-					return `**Case #${banData.id}:** Successfully banned ${member.user.tag} (\`${member.user.id}\`) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\``;
+					const embedm = new client.embed()
+					    .setTitle(`Case #${banData.id}: Mute`)
+					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
+					    .addField('Reason', `\`${reason || "unspecified"}\``)
+					    .addField('Duration', `${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"}`)
+					    .setColor(client.embedColor)
+			    	return message.channel.send({embeds: [embedm]});
 				}
 			case "softban":
 				const guild = member.guild;
 				const softbanData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
+				const dm2 = await member.send(`You've been softbanned from ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${softbanData.id})`).catch(err => setTimeout(() => message.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
 				const softbanResult = await member.ban({ days: 7, reason: `${reason || "unspecified"} | Case #${softbanData.id}` }).catch(err => err.message);
 				if (typeof softbanResult === "string") {
-					return "Softban (ban) was unsuccessful: " + softbanResult;
+					dm2.delete();
+					return message.channel.send(`Softan was unsuccessful: ${softbanResult}`);
 				} else {
 					const unbanResult = guild.members.unban(softbanData.member, `${reason || "unspecified"} | Case #${softbanData.id}`).catch(err => err.message);
 					if (typeof unbanResult === "string") {
-						return "Softban (unban) was unsuccessful: " + unbanResult;
+						return message.channel.send(`Softbanan (unban) was unsuccessful: ${softbanResult}`);
 					} else {
 						if (reason) softbanData.reason = reason;
 						client.makeModlogEntry(softbanData, client);
 						this.addData(softbanData);
 						this.forceSave();
-						return `**Case #${softbanData.id}:** Successfully softbanned ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || "unspecified"}\``;
+						const embeds = new client.embed()
+					    	.setTitle(`Case #${softbanData.id}: Warn`)
+					    	.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
+					    	.addField('Reason', `\`${reason || "unspecified"}\``)
+					    	.setColor(client.embedColor)
+						return message.channel.send({embeds: embeds});
 					}
 				}
 			case "kick":
 				const kickData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
+				const dm3 = await member.send(`You've been kicked from ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${kickData.id})`).catch(err => setTimeout(() => message.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
 				const kickResult = await member.kick(`${reason || "unspecified"} | Case #${kickData.id}`).catch(err => err.message);
 				if (typeof kickResult === "string") {
-					return "Kick was unsuccessful: " + kickResult;
+					dm3.delete();
+					return message.channel.send(`Kick was unsuccessful: ${kickResult}`);
 				} else {
 					if (reason) kickData.reason = reason;
 					client.makeModlogEntry(kickData, client);
 					this.addData(kickData);
 					this.forceSave();
-					return `**Case #${kickData.id}:** Successfully kicked ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || "unspecified"}\``;
+					const embedk = new client.embed()
+					    .setTitle(`Case #${kickData.id}: Warn`)
+					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
+					    .addField('Reason', `\`${reason || "unspecified"}\``)
+					    .setColor(client.embedColor)
+					return message.channel.send({embeds: embedk});
 				}
 			case "mute":
 				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				let muteResult;
 				if(client.hasModPerms(client, member)) return "Staff members cannot be muted."
+				const dm4 = await member.send(`You've been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${muteData.id})`).catch(err => setTimeout(() => message.channel.send('Failed to DM user.'), 500));
 				if(timeInMillis){
 				muteResult = await member.timeout(timeInMillis, `${reason || "unspecified"} | Case #${muteData.id}`).catch(err => err.message);
 				} else {
 				muteResult = await member.timeout(2419200000, `${reason || "unspecified"} | Case #${muteData.id}`).catch(err => err.message);
 				}
 				if (typeof muteResult === "string") {
-					return "Mute was unsuccessful: " + muteResult;
+					dm4.delete();
+					return message.channel.send(`Mute was unsuccessful: ${muteResult}`);
 				} else {
 					if (timeInMillis) {
 						muteData.endTime = now + timeInMillis;
@@ -338,20 +360,32 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(muteData, client);
 					this.addData(muteData);
 					this.forceSave();
-					member.send(`You've been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${muteData.id})`).catch(err => console.log(`dm failed while ${moderator} was muting ${member.user.id} (case ${muteData.id}):`, err.message));
-					return `**Case #${muteData.id}:** Successfully muted ${member.user.tag} (\`${member.user.id}\`) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\``;
+					const embedm = new client.embed()
+					    .setTitle(`Case #${muteData.id}: Mute`)
+						.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
+						.addField('Reason', `\`${reason || "unspecified"}\``)
+						.addField('Duration', `${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)`)
+						.setColor(client.embedColor)
+						.setThumbnail('https://cdn.discordapp.com/attachments/858068843570003998/942295666137370715/muted.png')
+					return message.channel.send({embeds: [embedm]});
 				}
 			case "warn":
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => console.log(`dm failed while ${moderator} was warning ${member.user.id} (case ${warnData.id}):`, err.message));
+				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => setTimeout(() => message.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
 				if (typeof warnResult === "string") {
-					return "Warn was unsuccessful: " + warnResult;
+					return message.channel.send(`Warn was unsuccessful: ${warnResult}`);
 				} else {
 					if (reason) warnData.reason = reason;
 					client.makeModlogEntry(warnData, client);
 					this.addData(warnData);
 					this.forceSave();
-					return `**Case #${warnData.id}:** Successfully warned ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || "unspecified"}\``;
+					const embedw = new client.embed()
+					.setTitle(`Case #${warnData.id}: Warn`)
+					.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
+					.addField('Reason', `\`${reason || "unspecified"}\``)
+					.setColor(client.embedColor)
+					.setThumbnail('https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg')
+					return message.channel.send({embeds: [embedw]});
 				}
 		}
 	},
