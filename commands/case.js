@@ -1,6 +1,6 @@
 module.exports = {
 	run: (client, message, args) => {
-		if (!client.hasModPerms(client, message.member)) return message.reply(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
+		if (!client.hasModPerms(client, message.member)) return message.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
 		const caseid = parseInt(args[1]);
 		if (!caseid) return message.reply({content: 'Invalid case #.', allowedMentions: { repliedUser: false }});
 		const punishment = client.punishments._content.find(x => x.id === caseid);
@@ -34,7 +34,7 @@ module.exports = {
 			});
 
 			// if case id is not a punishment or a user, failed
-			if (!userPunishments || userPunishments.length === 0) return message.reply('No punishments found with that Case # or user ID');
+			if (!userPunishments || userPunishments.length === 0) return message.reply({content: 'No punishments found with that Case # or user ID', allowedMentions: { repliedUser: false }});
 
 			const pageNumber = parseInt(args[2]) || 1;
 			const embed = new client.embed()
