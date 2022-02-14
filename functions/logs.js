@@ -2,6 +2,7 @@ const { MessageEmbed, MessageActionRow, MessageButton, Client } = require("disco
 module.exports = async (client) => {
     const channel = await client.channels.fetch(require("../config.json").mainServer.channels.modlogs)
    client.on("messageDelete", async (msg)=>{
+       if (!client.config.botSwitches.automod) return;
        if (msg.partial) return;
        if (msg.author.bot) return;
        if (msg.guild.id !== client.config.mainServer.id) return;
@@ -16,6 +17,7 @@ module.exports = async (client) => {
            channel.send({files: [msg.attachments?.first()]})
    }})
    client.on("messageUpdate", async (oldMsg, newMsg)=>{
+       if (!client.config.botSwitches.automod) return;
        if (oldMsg.partial) return;
        if (newMsg.partial) return;
        if (newMsg.content === oldMsg.content) return;
@@ -30,6 +32,7 @@ module.exports = async (client) => {
        channel.send({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("LINK").setURL(`${oldMsg.url}`).setLabel("Jump to message"))]})
    })
    client.tracker.on("guildMemberAdd", async (member, type, invite)=>{
+       if (!client.config.botSwitches.automod) return;
        if (member.guild.id !== client.config.mainServer.id) return;
        if (type == "unknown") {
 
@@ -56,6 +59,7 @@ module.exports = async (client) => {
 }
    })
    client.on("guildMemberRemove", async (member)=>{
+       if (!client.config.botSwitches.automod) return;
        if (member.guild.id !== client.config.mainServer.id) return;
        const embed = new MessageEmbed()
            .setTitle(`Member Left: ${member.user.tag}`)
@@ -69,6 +73,7 @@ module.exports = async (client) => {
         channel.send({embeds: [embed]})
    })
    client.on("messageDeleteBulk", async (messages)=>{
+    if (!client.config.botSwitches.automod) return;
     let text = "";
     messages.forEach((e)=>{
         text += `${e.author.tag}: ${e.content}\n`;

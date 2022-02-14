@@ -881,6 +881,7 @@ client.on("messageCreate", async (message) => {
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
 	}
 	// handle discord invite links
+	if (!client.config.botSwitches.automod) return;
 	if (message.content.includes("discord.gg/") && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) && message.guild.id === client.config.mainServer.id) {
 		message.delete()
 		client.punishments.addPunishment("warn", message.member, { reason: "Discord advertisement" }, client.user.id)
@@ -898,18 +899,21 @@ client.on("messageCreate", async (message) => {
 		message.reply(":b:ingus y u use userbenchmark");
 	}
 	// handle banned words
+	if (!client.config.botSwitches.automod) return;
 	if (client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
 		message.delete()
 		message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 });
 // handle banned words: edits
 client.on("messageUpdate", async (oldMsg, newMsg)=>{
+	if (!client.config.botSwitches.automod) return;
 	if (client.bannedWords._content.some(word => newMsg.content.toLowerCase().includes(word)) && newMsg.guild.id === client.config.mainServer.id && newMsg.channel.id !== client.config.mainServer.channels.modchat) {
 		newMsg.delete();
 }})
 
 // reaction roles add
 client.on('messageReactionAdd', async (reaction, user) => {
+	if (!client.config.botSwitches.reactionRoles) return;
 	if (reaction.message.partial) {
 		try {
 			await reaction.message.fetch();
@@ -941,6 +945,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
 // reaction roles remove
 client.on('messageReactionRemove', async (reaction, user) => {
+	if (!client.config.botSwitches.reactionRoles) return;
 	if (reaction.message.partial) {
 		try {
 			await reaction.message.fetch();

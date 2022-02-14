@@ -1,7 +1,9 @@
 {
 	"botSwitches": {
 		"fpb": true,
-		"modmail": true
+		"modmail": true,
+		"automod": true,
+		"reactionRoles": true
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",
