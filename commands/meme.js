@@ -152,7 +152,7 @@ module.exports = {
 				}
 			}
 			const query = args.slice(1).join(' ').toLowerCase();
-			const meme = memes.get(args[1]) || memes.filter(x => x.name.toLowerCase().includes(query) || x.description.toLowerCase().includes(query)).sort((a, b) => (a.name.length - query.length) - (b.name.length - query.length)).first();
+			const meme = memes.get(args[1]) || memes.filter(x => x.name.toLowerCase().includes(query)).sort((a, b) => (a.name.length - query.length) - (b.name.length - query.length)).first();
 			if (!meme) return message.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
