@@ -10,8 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord-giveaways": "^5.1.1",
+    "@androz2091/discord-invites-tracker": "^1.1.0",
     "canvas": "^2.8.0",
+    "discord-giveaways": "^5.1.1",
     "discord.js": "^13.6.0"
   }
 }
