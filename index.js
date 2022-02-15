@@ -726,6 +726,9 @@ client.on("messageCreate", async (message) => {
 	// if (message.channel.id === '925500847390097461' && message.attachments.size<1 && !message.author.bot) {
 	//  	message.delete();
 	// }
+	if (client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
+		message.delete()
+		message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 	const suggestCommand = client.commands.get("suggest");
 	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(" ")[0] === client.prefix + x) && !message.author.bot) {
 		message.channel.send(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 12000));
@@ -900,9 +903,6 @@ client.on("messageCreate", async (message) => {
 	}
 	// handle banned words
 	if (!client.config.botSwitches.automod) return;
-	if (client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id) {
-		message.delete()
-		message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 });
 // handle banned words: edits
 client.on("messageUpdate", async (oldMsg, newMsg)=>{
