@@ -55,6 +55,8 @@ module.exports = {
 				if (!client.specsDb.hasUser(member.user.id)) return message.channel.send('They haven\'t added any specs yet.');
 				const embed = client.displaySpecs(client, member);
 				if (member.user.id === '795443537356521502') {
+					developers = await message.guild.roles.fetch('914646059714768906')
+					embed.addField('Developers', `${developers.members.map(e=>`<@${e.user.id}>`).join("\n") || "None"}`)
 					embed.addField('Package', `Discord.js V${version}`)
 				}
 				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
