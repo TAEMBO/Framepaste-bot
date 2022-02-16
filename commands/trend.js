@@ -1,12 +1,12 @@
 
 module.exports = {
     run: (client, message, args) => {
-        if(!args[1]){message.reply("Send a trend"); return;}
+        if(!args[1]) return message.reply({content: 'You must include a trend to search.', allowedMentions: {repliedUser: false}});
         const embed = new client.embed()
             .setTitle('trend')
         const trend = args[1]
-        if(trend.length <3){message.channel.send("A trend must be minimum 3 letters"); return;}
-        const trendmembers = message.guild.members.cache.filter(member => member.displayName.toLowerCase().includes(trend)).map(member => member.toString()).join(", ")
+        if(trend.length <3) return message.reply({content: 'A trend must be aminimum of 3 letters.', allowedMentions: {repliedUser: false}});
+        const trendmembers = message.guild.members.cache.filter(member => member.displayName.toLowerCase().includes(trend)).map(member => member.toString()).join(" ")
         if(!trendmembers){
             embed.addField(args[1],'No users follow this trend (bozo)')
             message.reply({embeds: [embed], allowedMentions: {repliedUser: false}})
@@ -15,7 +15,7 @@ module.exports = {
                 message.reply('This trend is too big')
                 return;
             }else {
-                embed.setColor('#000fff')
+                embed.setColor(client.embedColor)
                 embed.setTitle("Trend")
                 embed.addField(args[1], trendmembers)
                 message.reply({embeds: [embed], allowedMentions: {repliedUser: false}})
@@ -23,6 +23,6 @@ module.exports = {
 
     },
     name: 'trend',
-    description: 'Trend',
-    category: 'Misc'
+    usage: ["search term"],
+    description: 'Search for users with a matching username or nickname',
 };
