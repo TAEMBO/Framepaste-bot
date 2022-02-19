@@ -70,7 +70,7 @@ client.on("ready", async () => {
     const event = require(`./events/${file}`);
     if(event.giveaway){
 	client.giveawaysManager.on(event.name, async (...args) => event.execute(...args));
-    } else if(event.invite){
+    } else if(event.tracker){
 	client.tracker.on(event.name, async (...args) => event.execute(client, ...args))
     } else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));

@@ -1,4 +1,6 @@
 {
+	"modmailBotToken": "",
+	"token": "",
 	"botSwitches": {
 		"fpb": true,
 		"modmail": true,
