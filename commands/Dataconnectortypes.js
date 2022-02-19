@@ -1,9 +1,11 @@
 module.exports = {
     run: async (client, message) => {
-        const { MessageEmbed, MessageAttachment } = require("discord.js");
-        const image = await new MessageAttachment("./media/Connectortypes.png", "dataimage.png");
-        const dataConnectorsEmbed = new MessageEmbed().setTitle("Data Connector Types").setImage(`attachment://dataimage.png`);
-        message.reply({embeds: [dataConnectorsEmbed], files: [image]})
+        const { MessageEmbed } = require("discord.js");
+
+        const dataConnectorsEmbed = new MessageEmbed()
+            .setTitle("Data Connector Types")
+            .setImage(`https://cdn.discordapp.com/attachments/940726714915495946/944680762563756082/dataimage.png`);
+        message.reply({embeds: [dataConnectorsEmbed]})
     },
     name: 'dataconnectors',
     description: 'Data connector types for hard drives',
