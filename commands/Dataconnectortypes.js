@@ -1,5 +1,3 @@
-const discord = require("discord.js")
-const path = require("path")
 module.exports = {
     run: async (client, message) => {
         const { MessageEmbed, MessageAttachment } = require("discord.js");
