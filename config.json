@@ -1,6 +1,6 @@
 {
-	"modmailBotToken": "Modmail bot token here",
-	"token": "Normal token here",
+	"modmailBotToken": "OTE0NjkzMzc2MDYwODQ2MTIx.YaQwlw.Y0AouwJuIkbGTVCVE7F7lVGvzBI",
+	"token": "Nzk1NDQzNTM3MzU2NTIxNTAy.X_JchQ.7C5_PVLNjkDoA6iHmH9qrSBC6Cw",
 	"botSwitches": {
 		"fpb": true,
 		"modmail": true,
@@ -18,7 +18,8 @@
 	"eval": {
 		"allowed": true,
 		"whitelist": [
-			"615761944154210305"
+			"615761944154210305",
+			"709960501378940939"
 		]
 	},
 	"enableAutoResponse": false,

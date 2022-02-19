@@ -104,14 +104,14 @@ module.exports = {
 		const CPUs = (() => {
 			if (manufacturer) {
 				if (manufacturer === "intel") {
-					return { intel: new client.collection(Object.entries(require("../databases/CPUlist-INTEL.json"))) };
+					return { intel: new client.collection(Object.entries(require("../databases/cpulist-INTEL.json"))) };
 				} else if (manufacturer === "amd") {
-					return { amd: new client.collection(Object.entries(require("../databases/CPUlist-AMD.json"))) };
+					return { amd: new client.collection(Object.entries(require("../databases/cpulist-AMD.json"))) };
 				}
 			} else {
 				return {
-					intel: new client.collection(Object.entries(require("../databases/CPUlist-INTEL.json"))),
-					amd: new client.collection(Object.entries(require("../databases/CPUlist-AMD.json")))
+					intel: new client.collection(Object.entries(require("../databases/cpulist-INTEL.json"))),
+					amd: new client.collection(Object.entries(require("../databases/cpulist-AMD.json")))
 				};
 			}
 		})();
