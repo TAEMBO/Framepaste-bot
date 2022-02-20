@@ -3,7 +3,6 @@ module.exports = {
     name: "interactionCreate",
     giveaway: false,
     tracker: false,
-    node: false,
     execute: async (client, interaction) => {
         const sugges = ["suggestion-decline", "suggestion-upvote"]
         if(sugges.includes(interaction.customId) && interaction.isButton()){

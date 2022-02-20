@@ -2,7 +2,6 @@ module.exports = {
     name: "voiceStateUpdate",
     tracker: false,
     giveaway: false,
-    node: false,
     execute: async (client, oldState, newState) =>{
         const memberRole = oldState.guild.roles.cache.get(client.config.mainServer.roles.VCRole);
         if (!memberRole) return;

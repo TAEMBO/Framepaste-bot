@@ -43,7 +43,13 @@ Object.assign(client, {
 // main bot login
 client.on("ready", async () => {
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
-	await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(' ')}`)})
+	await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(' ')}`)});
+	process.on("unhandledRejection", async (error)=>{
+		console.log(error)
+		await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{
+        channel.send({content: `${client.config.eval.whitelist.map(x=>`<@${x}>`).join(", ")}`, embeds: [new Discord.MessageEmbed().setTitle("Error Caught!").setColor("#420420").setDescription(`Error: \`${error.message}\`\nStack: \`${`${error.stack}`.slice(0, 2500)}\``)]})
+		})
+	})
 	setInterval(async () => {
 		await client.user.setActivity(`${client.prefix}help`, {
 			type: "LISTENING",
@@ -72,9 +78,7 @@ client.on("ready", async () => {
 	client.giveawaysManager.on(event.name, async (...args) => event.execute(...args));
     } else if(event.tracker){
 	client.tracker.on(event.name, async (...args) => event.execute(client, ...args));
-    } else if(event.node){
-		process.on("unhandledRejection", async (error) => event.execute(client, error));
-	} else {
+    } else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));
     };
   }); 

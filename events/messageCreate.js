@@ -2,7 +2,6 @@ module.exports = {
     name: "messageCreate",
     tracker: false,
     giveaway: false,
-	node: false,
     execute: async (client, message) => {
     if (process.argv[2] === "dev" && !client.config.eval.whitelist.includes(message.author.id)) return; // bot is being run in dev mode and a non eval whitelisted user sent a message. ignore the message.
 	if (message.partial) return;

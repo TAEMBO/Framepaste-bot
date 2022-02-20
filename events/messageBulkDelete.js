@@ -3,7 +3,6 @@ module.exports = {
     name: "messageBulkDelete",
     giveaway: false,
     tracker: false,
-    node: false,
     execute: async () => {
         const channel = await client.channels.fetch(require("../config.json").mainServer.channels.modlogs);
          if (!client.config.botSwitches.automod) return;
