@@ -1,5 +1,5 @@
 {
-	"modmailBotToken": "",
+    "modmailBotToken": "",
 	"token": "",
 	"botSwitches": {
 		"fpb": true,
@@ -33,7 +33,8 @@
 			"owner",
 			"administrator",
 			"moderator",
-			"trialmoderator"
+			"trialmoderator",
+			"botdeveloper"
 		],
 		"roles": {
 			"owner": "858072846248706108",
@@ -41,6 +42,7 @@
 			"moderator": "858077018732888084",
 			"trialmoderator": "922141395597262859",
 			"helper": "903534357858369576",
+			"botdev": "914646059714768906",
 			"muted": "889389102112333864",
 			"everyone": "858054240416432158",
 			"levels": {

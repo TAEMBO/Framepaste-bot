@@ -1,9 +1,10 @@
 const {MessageEmbed} = require("discord.js");
 module.exports = {
-    name: "messageBulkDelete",
+    name: "messageDeleteBulk",
     giveaway: false,
     tracker: false,
     execute: async (client, messages) => {
+        console.log("messages" + messages)
         const channel = await client.channels.fetch(require("../config.json").mainServer.channels.modlogs);
          if (!client.config.botSwitches.automod) return;
          let text = "";
