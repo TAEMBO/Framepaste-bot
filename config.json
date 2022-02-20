@@ -1,6 +1,9 @@
 {
+<<<<<<< HEAD
     "modmailBotToken": "OTE0NjkzMzc2MDYwODQ2MTIx.YaQwlw.FwsoaU9UN_ecpVaJltRrznus9N8",
 	"token": "Nzk1NDQzNTM3MzU2NTIxNTAy.X_JchQ.T1jfyg0da2lZuy8Ze6wojSGXHd0",
+=======
+>>>>>>> aea9b911ebf8315defeb41e9d2e9acde49c1d2c7
 	"botSwitches": {
 		"fpb": true,
 		"modmail": true,

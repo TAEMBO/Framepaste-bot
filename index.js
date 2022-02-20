@@ -18,6 +18,7 @@ try {
 	client.config = require("./config.json");
 	console.log("Using ./config.json");
 }
+Object.assign(client.config, require("./tokens.json"));
 client.prefix = client.config.prefix;
 client.setMaxListeners(100)
 // global properties
