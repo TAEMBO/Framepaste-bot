@@ -1,11 +1,4 @@
 {
-<<<<<<< Updated upstream
-    "modmailBotToken": "",
-	"token": "",
-=======
-	"modmailBotToken": "OTQwNjg4NjA3NDAyOTE3ODk4.YgLCiQ.4Ajkq6OS3lTqn0cC-H_BZ-VgWio",
-	"token": "OTQwNjg4NjA3NDAyOTE3ODk4.YgLCiQ.4Ajkq6OS3lTqn0cC-H_BZ-VgWio",
->>>>>>> Stashed changes
 	"botSwitches": {
 		"fpb": true,
 		"modmail": true,
