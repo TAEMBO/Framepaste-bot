@@ -1,6 +1,6 @@
 {
-    "modmailBotToken": "",
-	"token": "",
+    "modmailBotToken": "OTE0NjkzMzc2MDYwODQ2MTIx.YaQwlw.FwsoaU9UN_ecpVaJltRrznus9N8",
+	"token": "Nzk1NDQzNTM3MzU2NTIxNTAy.X_JchQ.T1jfyg0da2lZuy8Ze6wojSGXHd0",
 	"botSwitches": {
 		"fpb": true,
 		"modmail": true,
@@ -42,7 +42,7 @@
 			"moderator": "858077018732888084",
 			"trialmoderator": "922141395597262859",
 			"helper": "903534357858369576",
-			"botdev": "914646059714768906",
+			"botdeveloper": "914646059714768906",
 			"muted": "889389102112333864",
 			"everyone": "858054240416432158",
 			"levels": {
