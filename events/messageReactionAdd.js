@@ -2,6 +2,7 @@ module.exports = {
     name: "messageReactionAdd",
     giveaway: false,
     tracker: false,
+    node: false,
     execute: async (client, reaction, user) => {
         if (reaction.message.partial) {
         if (!client.config.botSwitches.reactionRoles) return;

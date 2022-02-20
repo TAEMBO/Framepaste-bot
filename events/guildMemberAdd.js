@@ -3,8 +3,8 @@ module.exports = {
     name: "guildMemberAdd",
     giveaway: false,
     tracker: true,
+    node: false,
     execute: async (client, member, type, invite) => {
-        console.log(client, member, type, invite)
         const channel = await client.channels.fetch(require("../config.json").mainServer.channels.modlogs);
         if (member.partial) return;
         const evadingCase = client.punishments._content.find(punishment => {

@@ -71,8 +71,10 @@ client.on("ready", async () => {
     if(event.giveaway){
 	client.giveawaysManager.on(event.name, async (...args) => event.execute(...args));
     } else if(event.tracker){
-	client.tracker.on(event.name, async (...args) => event.execute(client, ...args))
-    } else {
+	client.tracker.on(event.name, async (...args) => event.execute(client, ...args));
+    } else if(event.node){
+		process.on("unhandledRejection", async (error) => event.execute(client, error));
+	} else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));
     };
   }); 

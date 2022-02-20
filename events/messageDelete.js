@@ -2,6 +2,7 @@ module.exports = {
     name: "messageDelete",
     giveaway: false,
     tracker: false,
+    node: false,
     execute: async (client, msg) => {
         const channel = await client.channels.fetch(require("../config.json").mainServer.channels.modlogs);
         const dbEntry = client.starboard._content[msg.id];
