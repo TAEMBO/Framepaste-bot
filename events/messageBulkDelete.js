@@ -12,7 +12,7 @@ module.exports = {
              text += `${e.author.tag}: ${e.content}\n`;
          });
          const embed = new MessageEmbed()
-         .setDescription(`\`\`\`${text}\`\`\``.slice(0, 4100))
+         .setDescription(`\`\`\`${text}\`\`\``.slice(0, 3900))
          .setTitle(`${messages.size} Messages Were Deleted.`)
          .addField("Channel", `<#${messages.first().channel.id}>`)
          .setColor(client.embedColor)
