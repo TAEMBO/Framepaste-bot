@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.1.0",
-    "@kindl3d/reddit.js": "^1.2.4",
     "axios": "^0.26.0",
     "canvas": "^2.9.0",
     "discord-giveaways": "^5.1.1",
