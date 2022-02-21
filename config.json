@@ -31,8 +31,7 @@
 			"owner",
 			"administrator",
 			"moderator",
-			"trialmoderator",
-			"botdeveloper"
+			"trialmoderator"
 		],
 		"roles": {
 			"owner": "858072846248706108",
