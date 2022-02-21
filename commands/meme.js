@@ -2,7 +2,7 @@ const util = require('util');
 const fs = require('fs');
 const axios = require("axios");
 async function fetchPost(){
-	const body = await axios.get("https://www.reddit.com/r/memes/random.json");
+	const body = await axios.get("https://www.reddit.com/r/memes/random.json").catch((err)=>{return null});
 	return body.data[0].data.children;
 }
 module.exports = {
@@ -13,9 +13,9 @@ module.exports = {
 		const failed = () => message.reply('You failed. The `meme add` process has ended.');
 		if(!args[1]) {
 			await fetchPost().then(async (body) => {
-				if (!body[0].data.url.endsWith(".webp") && !body[0].data.url.endsWith(".jpg") && !body[0].data.url.endsWith(".png") && !body[0].data.url.endsWith(".gif")) {
+				if (!body || !body[0].data.url.endsWith(".webp") && !body[0].data.url.endsWith(".jpg") && !body[0].data.url.endsWith(".png") && !body[0].data.url.endsWith(".gif")) {
 					await fetchPost().then(async (bod) => {
-						if (!bod[0].data.url.endsWith(".webp") && !bod[0].data.url.endsWith(".jpg") && !bod[0].data.url.endsWith(".png") && !bod[0].data.url.endsWith(".gif")) {
+						if (!bod || !bod[0].data.url.endsWith(".webp") && !bod[0].data.url.endsWith(".jpg") && !bod[0].data.url.endsWith(".png") && !bod[0].data.url.endsWith(".gif")) {
 							message.channel.send("There was an error, retry the command.")
 							return;
 						}
