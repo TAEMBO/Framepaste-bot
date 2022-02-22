@@ -1,14 +1,10 @@
-const { exec } = require("child_process");
 module.exports = {
   run: (client, message) => {
-    if(!message.member.roles.cache.has("858077018732888084" || "914646059714768906")){
-      message.channel.send("You can't do that bingus")
-      return;
-    }
-
-    message.channel.send("Bot is restarting").then(async ()=> exec("pm2 restart 0"))
-
+    if (!client.hasModPerms(client, message.member) || !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)) return message.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, allowedMentions: {repliedUser: false}})
+    message.reply("Restarting...").then(async ()=> eval(process.exit(-1)))
   },
-    name: 'restart',
-    category: 'Moderation'
+    name: 'rest',
+    description: 'Restarts the bots',
+    category: 'Moderation',
+    hidden: true
 };
