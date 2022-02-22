@@ -1,9 +1,9 @@
 {
 	"botSwitches": {
 		"fpb": true,
-		"modmail": false,
-		"automod": false,
-		"reactionRoles": false
+		"modmail": true,
+		"automod": true,
+		"reactionRoles": true
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",
@@ -11,19 +11,20 @@
 		"giveawayMention": true,
 		"showMention": true,
 		"hostedBy": true
-		},
-	"prefix": "-",
+	},
+	"prefix": ",",
 	"eval": {
 		"allowed": true,
 		"whitelist": [
-			"463986224101588992"
+			"709960501378940939",
+			"615761944154210305"
 		]
 	},
 	"enableAutoResponse": false,
 	"mainServer": {
 		"id":"858054240416432158",
 		"modmailPing": [
-			"moderator"	
+			"moderator"
 		],
 		"staffRoles": [
 			"owner",
@@ -41,32 +42,32 @@
 			"muted": "889389102112333864",
 			"everyone": "858054240416432158",
 			"levels": {
-                "one": {
-                    "id": "903539767113814056",
-                    "age": 30,
-                    "messages": 500
-                },
-                "two": {
-                    "id": "903539759891243010",
-                    "age": 60,
-                    "messages": 1000
-                },
-                "three": {
-                    "id": "903539753528459295",
-                    "age": 90,
-                    "messages": 2000
-                },
-                "four": {
-                    "id": "903539742103203920",
-                    "age": 120,
-                    "messages": 4000
-                },
-                "five": {
-                    "id": "903539725611184179",
-                    "age": 150,
-                    "messages": 8000
-                }
-            }
+				"one": {
+					"id": "903539767113814056",
+					"age": 30,
+					"messages": 500
+				},
+				"two": {
+					"id": "903539759891243010",
+					"age": 60,
+					"messages": 1000
+				},
+				"three": {
+					"id": "903539753528459295",
+					"age": 90,
+					"messages": 2000
+				},
+				"four": {
+					"id": "903539742103203920",
+					"age": 120,
+					"messages": 4000
+				},
+				"five": {
+					"id": "903539725611184179",
+					"age": 150,
+					"messages": 8000
+				}
+			}
 		},
 		"channels": {
 			"caselogs": "928582214210437121",
@@ -78,4 +79,4 @@
 
 		}
 	}
-}
+} @NaH²O
