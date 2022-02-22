@@ -1,12 +1,45 @@
 const util = require('util');
 const fs = require('fs');
+const axios = require("axios");
+async function fetchPost(){
+	const body = await axios.get("https://www.reddit.com/r/memes/random.json").catch((err)=>{return null});
+	return body.data[0].data.children;
+}
 module.exports = {
 	run: async (client, message, args) => {
 		delete require.cache[require.resolve('./../databases/memes.json')];
 		const memes = new client.collection(Object.entries(require('./../databases/memes.json')));
-		const color = '#00cc99'
+		const color = '#1decaf'
 		const failed = () => message.reply('You failed. The `meme add` process has ended.');
-		if (!args[1]) {
+		if(!args[1]) {
+			await fetchPost().then(async (body) => {
+				if (!body || !body[0].data.url.endsWith(".webp") && !body[0].data.url.endsWith(".jpg") && !body[0].data.url.endsWith(".png") && !body[0].data.url.endsWith(".gif")) {
+					await fetchPost().then(async (bod) => {
+						if (!bod || !bod[0].data.url.endsWith(".webp") && !bod[0].data.url.endsWith(".jpg") && !bod[0].data.url.endsWith(".png") && !bod[0].data.url.endsWith(".gif")) {
+							message.channel.send("There was an error, retry the command.")
+							return;
+						}
+						const redditembed = new client.embed()
+							.setTitle(bod[0].data.title)
+							.setColor(color)
+							.setImage(bod[0].data.url)
+							.setFooter({text: `${bod[0].data.ups} Upvotes | ${bod[0].data.downs} Downvotes`})
+
+						message.channel.send({embeds: [redditembed]});
+					})
+					return;
+				}
+				const redditembed = new client.embed()
+					.setTitle(body[0].data.title)
+					.setColor(color)
+					.setImage(body[0].data.url)
+					.setFooter({text: `${body[0].data.ups} Upvotes | ${body[0].data.downs} Downvotes`})
+
+				message.channel.send({embeds: [redditembed]});
+			})
+
+			return;
+		} else if (args[1] === "list") {
 			const embed = new client.embed()
 				.setTitle('Browse Memes')
 				.setColor(color);
@@ -92,10 +125,10 @@ module.exports = {
 						memes.set(args[2], meme);
 
 						// define meme database location
-						let dir = __dirname.split('\\');
+						let dir = __dirname.split('/');
 						dir.pop();
-						dir = dir.join('\\');
-						dir += '\\databases\\memes.json';
+						dir = dir.join('/');
+						dir += '/databases/memes.json';
 
 						// turn collection into JS object
 						let memesJson = {};
@@ -169,7 +202,7 @@ module.exports = {
 		}
 	},
 	name: 'meme',
-	description: 'Works like xkcd, images are given a number and you can view a specific image if you know the number. This command is for memes made by the PCC community.',
+	description: 'Fetch memes from r/memes if no arguments are given, or fetch member-made memes locally.',
 	shortDescription: 'View user-generated memes.',
 	usage: ['key / "add" / "review"'],
 	alias: ['memes'],
