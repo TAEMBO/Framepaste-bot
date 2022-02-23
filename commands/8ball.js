@@ -22,6 +22,6 @@ module.exports = {
     alias: ['8ball'],
     usage: ['8ball'],
     category: 'Fun',
-    description: 'You ask a question that must end with ? and it will answer you.',
+    description: 'You ask a question and it will answer you with a premade array.',
     shortDescription: 'Answers your question.'
 }
