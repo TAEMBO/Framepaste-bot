@@ -87,7 +87,7 @@ module.exports = {
 		const args = message.content.toLowerCase().slice(client.prefix.length).replace(/\n/g, " ").split(" ");
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
-			console.log(`Running command "${commandFile.name}"`);
+			console.log(`${message.author.tag} used ,${commandFile.name} in ${message.channel.name}`);
 
 			// channel restrictions
 			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[message.channel.id]?.some(x => x.includes(commandFile.name))) {
