@@ -11,7 +11,7 @@ module.exports = {
             return;
         }
 
-        if(args[1].length <= 4){
+        if(msg.length <= 4){
             message.reply({content: 'Ask a real question dumb ass', allowedMentions: { repliedUser: false }});
             return;
         }
