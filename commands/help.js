@@ -35,7 +35,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 					await Promise.all([botMessage.edit({embeds: [helpPage(pageIndex, client, message, args, true)]})]);
 				});
 				async function onEnd() {
-					await botMessage.edit({content: '_Removed to save space._', embeds: [], components: []});
+					await botMessage.edit({content: '_Removed to save space._',allowedMentions: {repliedUser: false}, embeds: [], components: []});
 				};
 				const interval = setInterval(() => {
 					if (Date.now() > endTimestamp) {
