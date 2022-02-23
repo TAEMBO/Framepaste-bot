@@ -1,9 +1,9 @@
 {
 	"botSwitches": {
 		"fpb": true,
-		"modmail": false,
-		"automod": false,
-		"reactionRoles": false
+		"modmail": true,
+		"automod": true,
+		"reactionRoles": true
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",
@@ -12,11 +12,12 @@
 		"showMention": true,
 		"hostedBy": true
 	},
-	"prefix": "-",
+	"prefix": ",",
 	"eval": {
 		"allowed": true,
 		"whitelist": [
-			"463986224101588992"
+			"709960501378940939",
+			"615761944154210305"
 		]
 	},
 	"enableAutoResponse": false,
