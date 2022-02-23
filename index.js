@@ -467,7 +467,7 @@ for (const file of functionFiles) {
 }
 
 // assign page number to commands
-const categories = {};
+let categories = {};
 while (client.commands.some(command => !command.hidden && !command.page)) {
 	const command = client.commands.find(command => !command.hidden && !command.page);
 	if (!command.category) command.category = "Misc";
@@ -484,7 +484,7 @@ while (client.commands.some(command => !command.hidden && !command.page)) {
 client.categoryNames = Object.keys(categories);
 delete categories;
 
-// create pages without contents
+
 client.commands.pages = [];
 client.commands.filter(command => !command.hidden).forEach(command => {
 	if (!client.commands.pages.some(x => x.category === command.category && x.page === command.page)) {
