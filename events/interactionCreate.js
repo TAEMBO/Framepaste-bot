@@ -61,6 +61,14 @@ module.exports = {
         }
         // normal
         return changeProperties('#f7f7f3', 'Suggestion:');
-    }
-  }
+    } else if(interaction.customId.startsWith("reaction-") && client.config.botSwitches.reactionRoles){
+        interaction.deferUpdate();
+        const role = `${interaction.customId}`.replace("reaction-", "");
+    if(!interaction.member.roles.cache.has(role)){
+        interaction.member.roles.add(role).catch((e)=>{return});
+    } else {
+        interaction.member.roles.remove(role).catch((e)=>{return});
+        }
+   }
+}
 }
