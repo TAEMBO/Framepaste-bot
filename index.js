@@ -5,6 +5,7 @@ const modmailClient = new Discord.Client({ disableEveryone: true, intents: inten
 const fs = require("fs");
 const path = require("path");
 const database = require("./database.js");
+const backup = require("./databases/backup.js")
 const InvitesTracker = require('@androz2091/discord-invites-tracker');
 client.tracker = InvitesTracker.init(client, {
     fetchGuilds: true,
