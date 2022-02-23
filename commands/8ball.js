@@ -14,6 +14,7 @@ module.exports = {
         const eightballembed = new MessageEmbed()
             .setTitle("8Ball")
             .setDescription(`> ${msg}\n\n**${Randomanswer, answers[Randomanswer]}**`)
+            .setColor(client.embedColor)
 
             message.reply({embeds: [eightballembed], allowedMentions: { repliedUser: false }});
 },
