@@ -11,6 +11,11 @@ module.exports = {
             return;
         }
 
+        if(args[1].length < 3){
+            message.reply({content: 'Ask a real question dumb ass', allowedMentions: { repliedUser: false }});
+            return;
+        }
+
         const eightballembed = new MessageEmbed()
             .setTitle("8Ball")
             .setDescription(`> ${msg}\n\n**${Randomanswer, answers[Randomanswer]}**`)

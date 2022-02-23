@@ -5,7 +5,7 @@ module.exports = {
         const embed = new client.embed()
             .setTitle('trend')
         const trend = args[1]
-        if(trend.length <3) return message.reply({content: 'A trend must be aminimum of 3 letters.', allowedMentions: {repliedUser: false}});
+        if(trend.length <3) return message.reply({content: 'A trend must be a minimum of 3 letters.', allowedMentions: {repliedUser: false}});
         const trendmembers = message.guild.members.cache.filter(member => member.displayName.toLowerCase().includes(trend)).map(member => member.toString()).join(" ")
         if(!trendmembers){
             embed.addField(args[1],'No users follow this trend (bozo)')
