@@ -223,21 +223,18 @@ const quantities = {
 			toSelf: 'x',
 			toBase: 'x',
 			short: ['K'],
-			evalRequired: true
 		},
 		{
 			name: 'celsius',
 			toSelf: 'x-273.15',
 			toBase: 'x+273.15',
 			short: ['°C', 'c'],
-			evalRequired: true
 		},
 		{
 			name: 'fahrenheit',
 			toSelf: '((9/5)*(x-273))+32',
 			toBase: '((5/9)*(x-32))+273',
 			short: ['°F', 'fh', 'f'],
-			evalRequired: true
 		}
 	],
 	time: [
