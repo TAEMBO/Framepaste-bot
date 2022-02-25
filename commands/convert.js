@@ -220,20 +220,17 @@ const quantities = {
 	temperature: [
 		{
 			name: 'kelvin',
-			toSelf: 'x',
-			toBase: 'x',
+			value: 274.15,
 			short: ['K'],
 		},
 		{
 			name: 'celsius',
-			toSelf: 'x-273.15',
-			toBase: 'x+273.15',
+			value: 273.15,
 			short: ['°C', 'c'],
 		},
 		{
 			name: 'fahrenheit',
-			toSelf: '((9/5)*(x-273))+32',
-			toBase: '((5/9)*(x-32))+273',
+			value: 33.8,
 			short: ['°F', 'fh', 'f'],
 		}
 	],
@@ -396,7 +393,7 @@ module.exports = {
 			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}
 		if (!message.content.includes('>') && !message.content.includes('to')) return message.reply({content: 'There needs to be a greater-than sign (\`>\`) or the word "to" in your message, after the starters and before the target unit.', allowedMentions: { repliedUser: false }});
-		// lets define the > or to, that theyre using
+		// let's define the > or to, that they're using
 		const usedSeparator = message.content.includes('>') ? '>' : 'to';
 		const starters = args.slice(1, args.indexOf(args.find(x => x.includes(usedSeparator)))).join(' ').split(',').map(starter => {
 			starter = starter.trim();
