@@ -3,8 +3,8 @@ const { User } = require("discord.js");
 module.exports = {
 	run: async (client, message, args, user) => {
 		const member = args[1] ? message.mentions.members?.first() || (await client.getMember(message.guild, args.slice(1).join(' ')).catch(() => undefined)) : message.member;
-		await member.user.fetch()
 		if (!member) return message.channel.send('You failed to mention a user from this server.');
+		await member.user.fetch()
 		const embed = new client.embed()
 		    .setThumbnail(member.user.avatarURL({ format: 'png', dynamic: true, size: 2048}) || member.user.defaultAvatarURL)
 			.setTitle(`User info: ${member.user.tag}`)
