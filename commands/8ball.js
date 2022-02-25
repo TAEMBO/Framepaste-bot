@@ -16,7 +16,6 @@ module.exports = {
             return;
         }
 
-        // noinspection CommaExpressionJS
         const eightballembed = new MessageEmbed()
             .setTitle("8Ball")
             .setDescription(`> ${msg}\n\n**${Randomanswer, answers[Randomanswer]}**`)

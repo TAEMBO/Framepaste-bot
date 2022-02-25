@@ -12,7 +12,7 @@ module.exports = {
         if (!client.config.botSwitches.automod) return;
         if (msg.partial) return;
         if (msg.author.bot) return;
-        if (msg.guild.id !== client.config.mainServer.id) return;
+        if (msg.guild?.id !== client.config.mainServer.id) return;
         const embed = new client.embed()
             .setTitle("Message Deleted!")
             .setDescription(`<@${msg.author.id}>\nContent:\n\`\`\`\n${msg.content}\n\`\`\`\nChannel: <#${msg.channel.id}>`)

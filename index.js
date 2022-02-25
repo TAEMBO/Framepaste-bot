@@ -5,7 +5,6 @@ const modmailClient = new Discord.Client({ disableEveryone: true, intents: inten
 const fs = require("fs");
 const path = require("path");
 const database = require("./database.js");
-const backup = require("./databases/backup.js")
 const InvitesTracker = require('@androz2091/discord-invites-tracker');
 client.tracker = InvitesTracker.init(client, {
     fetchGuilds: true,
@@ -102,8 +101,39 @@ client.memeQueue = new client.collection();
 // cooldowns
 client.cooldowns = new client.collection();
 
-// tic tac toe statistics database
+// databases
+client.bannedWords = new database("./databases/bannedWords.json", "array");
+client.bannedWords.initLoad();
+
 client.tictactoeDb = new database("./databases/ttt.json", "array"); /* players, winner, draw, startTime, endTime */
+client.tictactoeDb.initLoad().intervalSave();
+
+client.userLevels = new database("./databases/userLevels.json", "object");
+client.userLevels.initLoad().intervalSave(15000).disableSaveNotifs();
+
+client.dmForwardBlacklist = new database("./databases/dmforwardblacklist.json", "array");
+client.dmForwardBlacklist.initLoad();
+
+client.punishments = new database("./databases/punishments.json", "array");
+client.punishments.initLoad();
+
+client.specsDb = new database("./databases/specs.json", "object");
+client.specsDb.initLoad().intervalSave(120000);
+
+client.votes = new database("./databases/suggestvotes.json", "array")
+client.votes.initLoad();
+
+client.channelRestrictions = new database("./databases/channelRestrictions.json", "object");
+client.channelRestrictions.initLoad();
+
+client.starboard = new database("./databases/starboard.json", "object");
+client.starboard.initLoad().intervalSave(60000);
+
+client.repeatedMessages = {};
+client.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
+client.repeatedMessagesContent.initLoad();
+
+// tic tac toe statistics database
 Object.assign(client.tictactoeDb, {
 	// global stats
 	getTotalGames() {
@@ -151,13 +181,11 @@ Object.assign(client.tictactoeDb, {
 		return ((player.wins / player.total) * 100).toFixed(2) + "%";
 	}
 });
-client.tictactoeDb.initLoad().intervalSave();
 
 // 1 game per channel
 client.games = new Discord.Collection();
 
 // userLevels
-client.userLevels = new database("./databases/userLevels.json", "object");
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
 	_milestone() {
@@ -179,7 +207,7 @@ Object.assign(client.userLevels, {
 		// milestone
 		const milestone = this._milestone();
 		if (milestone && milestone.total === this._milestone().next) {
-			const channel = client.channels.resolve("858073309920755774"); // #announcements
+			const channel = client.channels.resolve("858073309920755773"); // #announcements
 			if (!channel) return console.log("tried to send milestone announcement but channel wasnt found");
 			channel.send(`:tada: Milestone reached! **${milestone.next.toLocaleString("en-US")}** messages have been sent in this server and recorded by Level Roles. :tada:`);
 		}
@@ -211,10 +239,8 @@ Object.assign(client.userLevels, {
 		return { age, messages, roles };
 	},
 });
-client.userLevels.initLoad().intervalSave(15000).disableSaveNotifs();
 
 // specs
-client.specsDb = new database("./databases/specs.json", "object");
 Object.assign(client.specsDb, {
 	editSpecs(id, component, newValue) {
 		const allComponents = Object.keys(this._content[id]);
@@ -252,14 +278,7 @@ Object.assign(client.specsDb, {
 	}
 
 });
-client.specsDb.initLoad().intervalSave(120000);
 
-// dm forward blacklist
-client.dmForwardBlacklist = new database("./databases/dmforwardblacklist.json", "array");
-client.dmForwardBlacklist.initLoad();
-
-// punishments
-client.punishments = new database("./databases/punishments.json", "array");
 Object.assign(client.punishments, {
 	createId() {
 		return Math.max(...client.punishments._content.map(x => x.id), 0) + 1;
@@ -443,13 +462,6 @@ Object.assign(client.punishments, {
 		}
 	}
 });
-client.punishments.initLoad();
-client.votes = new database("./databases/suggestvotes.json", "array")
-client.votes.initLoad();
-
-// channel restrictions
-client.channelRestrictions = new database("./databases/channelRestrictions.json", "object");
-client.channelRestrictions.initLoad();
 
 // command handler
 client.commands = new Discord.Collection();
@@ -513,7 +525,6 @@ client.commands.pages.sort((a, b) => {
 });
 
 // starboard functionality
-client.starboard = new database("./databases/starboard.json", "object");
 Object.assign(client.starboard, {
 	async increment(reaction) {
 		let dbEntry = this._content[reaction?.message?.id];
@@ -629,13 +640,6 @@ Object.assign(client.starboard, {
 		});
 	},
 });
-client.starboard.initLoad().intervalSave(60000);
-
-// repeated messages
-client.repeatedMessages = {};
-client.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
-client.repeatedMessagesContent.initLoad();
-
 
 // event loop, for punishments and daily msgs
 setInterval(() => {
@@ -658,10 +662,6 @@ setInterval(() => {
 		fs.writeFileSync(__dirname + "/databases/dailyMsgs.json", JSON.stringify(dailyMsgs));
 	}
 }, 5000);
-
-// banned words
-client.bannedWords = new database("./databases/bannedWords.json", "array");
-client.bannedWords.initLoad();
 
 modmailClient.threads = new client.collection();
 modmailClient.on("messageCreate", message => {
