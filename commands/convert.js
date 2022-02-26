@@ -220,17 +220,17 @@ const quantities = {
 	temperature: [
 		{
 			name: 'kelvin',
-			value: 274.15,
+			value: 273.15,
 			short: ['K'],
 		},
 		{
 			name: 'celsius',
-			value: 273.15,
+			value: 0,
 			short: ['°C', 'c'],
 		},
 		{
 			name: 'fahrenheit',
-			value: 33.8,
+			value: 212,
 			short: ['°F', 'fh', 'f'],
 		}
 	],
