@@ -340,7 +340,7 @@ Object.assign(client.punishments, {
 					    	.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    	.addField('Reason', `\`${reason || "unspecified"}\``)
 					    	.setColor(client.embedColor)
-						return message.channel.send({embeds: embeds});
+						return message.channel.send({embeds: [embeds]});
 					}
 				}
 			case "kick":
@@ -360,7 +360,7 @@ Object.assign(client.punishments, {
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    .addField('Reason', `\`${reason || "unspecified"}\``)
 					    .setColor(client.embedColor)
-					return message.channel.send({embeds: embedk});
+					return message.channel.send({embeds: [embedk]});
 				}
 			case "mute":
 				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
