@@ -15,7 +15,7 @@ module.exports = {
         if (reaction.emoji.name !== '⭐' || user.bot) return;
 
         // starred own message
-        await client.channels.cache.get(reaction.channelId).messages.fetch(reaction.messageId).catch((e)=>{return null})
+        await client.channels.cache.get(reaction.channelId).message.fetch(reaction.messageId).catch((e)=>{return null})
         if ((message.author.id === user.id || message.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed) {
             reaction.users.remove(user.id);
             return message.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 6000));
