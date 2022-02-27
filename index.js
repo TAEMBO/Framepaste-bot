@@ -1,7 +1,7 @@
 const intents = ["GUILDS", "GUILD_MESSAGES", "GUILD_EMOJIS_AND_STICKERS", "GUILD_BANS", "DIRECT_MESSAGES", "GUILD_VOICE_STATES", "DIRECT_MESSAGE_REACTIONS", "GUILD_MESSAGE_REACTIONS", "GUILD_MEMBERS"]
 const Discord = require("discord.js");
 const client = new Discord.Client({ intents: intents, disableEveryone: true, partials: ["MESSAGE", "REACTION", "CHANNEL"] });
-const modmailClient = new Discord.Client({ disableEveryone: true, intents: intents, partials: ["CHANNEL", "REACTION", "MESSAGE"]});
+const modmailClient = new Discord.Client({ disableEveryone: true, intents: intents, partials: ["MESSAGE", "REACTION", "CHANNEL"]});
 const fs = require("fs");
 const path = require("path");
 const database = require("./database.js");
