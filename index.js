@@ -48,7 +48,7 @@ client.on("ready", async () => {
 	process.on("unhandledRejection", async (error)=>{
 		console.log(error)
 		await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{
-        channel.send({content: `${client.config.eval.whitelist.map(x=>`<@${x}>`).join(", ")}`, embeds: [new Discord.MessageEmbed().setTitle("Error Caught!").setColor("#420420").setDescription(`Error: \`${error.message}\`\nStack: \`${`${error.stack}`.slice(0, 2500)}\``)]})
+        channel.send({content: `${client.config.eval.whitelist.map(x=>`<@${x}>`).join(", ")}`, embeds: [new Discord.MessageEmbed().setTitle("Error Caught!").setColor("#420420").setDescription(`**Error:** \`${error.message}\`\n\n**Stack:** \`${`${error.stack}`.slice(0, 2500)}\``)]})
 		})
 	})
 	setInterval(async () => {
