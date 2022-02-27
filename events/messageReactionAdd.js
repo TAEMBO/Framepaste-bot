@@ -3,7 +3,7 @@ module.exports = {
     giveaway: false,
     tracker: false,
     execute: async (client, reaction, user) => {
-        const message = await client.channels.cache.get(reaction.channelId).messages.fetch(reaction.message.id).catch((e)=>{return null});
+        const message = await client.channels.cache.get(reaction.message.channelId).messages.fetch(reaction.message.id).catch((e)=>{return null});
         const channel = message.channel;
 
         // #starboard wrong emoji 
