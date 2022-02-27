@@ -531,7 +531,6 @@ Object.assign(client.starboard, {
 		if (dbEntry) dbEntry.c++;
 		else {
 			if (!reaction?.message?.author?.id) return;
-			console.log("STARBOARD: tried to increment, but failed. received reaction:", reaction);
 			this.addData(reaction.message.id, { c: 1, a: reaction.message.author.id });
 			dbEntry = this._content[reaction.message.id];
 		}
