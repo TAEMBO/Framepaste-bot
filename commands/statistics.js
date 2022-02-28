@@ -34,5 +34,6 @@ module.exports = {
 	},
 	name: 'statistics',
 	description: 'See a list of commands ordered by usage',
-	alias: ['stats', 'cmdusage']
+	alias: ['stats', 'cmdusage'],
+	category: 'Bot'
 };
