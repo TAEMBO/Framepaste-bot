@@ -54,5 +54,6 @@ module.exports = {
 		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((e)=>message.channel.send({embeds: [embed]}));
 	},
 	name: 'eval',
-	description: 'Run code for debugging purposes'
+	description: 'Run code for debugging purposes',
+	category: 'Bot'
 };

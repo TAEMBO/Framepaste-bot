@@ -1,3 +1,5 @@
+const { category } = require('./slowmode.js');
+
 module.exports = {
 	run: (client, message, args) => {
 		const timeNames = require('../timeNames.js'); // array of { name, length }
@@ -9,5 +11,6 @@ module.exports = {
 		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
 	name: 'timenames',
-	description: 'Explains time names used in moderation commands.'
+	description: 'Explains time names used in commands.',
+	category: 'Bot'
 };
