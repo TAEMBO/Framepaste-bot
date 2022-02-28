@@ -5,6 +5,5 @@ module.exports = {
   },
     name: 'restart',
     description: 'Restarts the bots',
-    category: 'Bot',
     hidden: true
 };
