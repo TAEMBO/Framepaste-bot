@@ -323,6 +323,5 @@ module.exports = {
 	usage: ['?user ID / mention / "stats" / "nerdstats"'],
 	description: 'Check your eligibility for level roles or see global stats.',
 	alias: ['lrs'],
-	category: 'Moderation',
 	cooldown: 6
 };

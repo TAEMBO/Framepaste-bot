@@ -9,6 +9,5 @@ module.exports = {
 		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
 	name: 'timenames',
-	description: 'Explains time names used in moderation commands.',
-	category: 'Moderation'
+	description: 'Explains time names used in moderation commands.'
 };
