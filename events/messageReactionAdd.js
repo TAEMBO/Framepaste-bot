@@ -2,6 +2,7 @@ module.exports = {
     name: "messageReactionAdd",
     giveaway: false,
     tracker: false,
+    frs: false,
     execute: async (client, reaction, user) => {
         const message = reaction.message;
         const channel = message.channel;

@@ -3,6 +3,7 @@ module.exports = {
     name: "messageUpdate",
     giveaway: false,
     tracker: false,
+    frs: false,
     execute: async (client, oldMsg, newMsg) => {
         const channel = await client.channels.fetch(require("../config.json").mainServer.channels.modlogs);
         if (!client.config.botSwitches.automod) return;

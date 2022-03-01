@@ -2,6 +2,7 @@ module.exports = {
     name: "messageReactionRemove",
     giveaway: false,
     tracker: false,
+    frs: false,
     execute: async (client, reaction, user) => {
             const message = reaction.message;
 

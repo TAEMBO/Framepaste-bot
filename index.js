@@ -79,7 +79,9 @@ client.on("ready", async () => {
 	client.giveawaysManager.on(event.name, async (...args) => event.execute(...args));
     } else if(event.tracker){
 	client.tracker.on(event.name, async (...args) => event.execute(client, ...args));
-    } else {
+    } else if(event.frs){
+		frs.on(event.name, async (...args) => event.execute(client, frs, ...args));
+	} else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));
     };
   }); 

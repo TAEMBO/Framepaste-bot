@@ -2,6 +2,7 @@ module.exports = {
     name: "messageCreate",
     tracker: false,
     giveaway: false,
+	frs: false,
     execute: async (client, message) => {
     if (process.argv[2] === "dev" && !client.config.eval.whitelist.includes(message.author.id)) return; // bot is being run in dev mode and a non eval whitelisted user sent a message. ignore the message.
 	if (message.partial) return;
@@ -54,7 +55,7 @@ module.exports = {
 	// }
 
 	// handle banned words
-	if (client.config.botSwitches.automod && client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id)
+	if (client.config.botSwitches.automod && !client.hasModPerms(client, message.member) && client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id)
 		return message.delete() && message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000));
 
 	const suggestCommand = client.commands.get("suggest");

@@ -3,6 +3,7 @@ module.exports = {
     name: "messageDeleteBulk",
     giveaway: false,
     tracker: false,
+    frs: false,
     execute: async (client, messages) => {
         console.log("messages" + messages)
         const channel = await client.channels.fetch(require("../config.json").mainServer.channels.modlogs);
