@@ -11,11 +11,11 @@ module.exports = {
         }
 
         let giveaway =
-            client.giveawaysManager.giveaways.find((g) => g.prize === args[1].join(' ')) ||
-            client.giveawaysManager.giveaways.find((g) => g.messageID === args[1]);
+            client.giveawaysManager.storage.find((g) => g.prize === args.slice(1).join(' ')) ||
+            client.giveawaysManager.storage.find((g) => g.messageID === args[1]);
 
         if (!giveaway) {
-            return message.channel.send(':boom: Hm. I can\'t seem to find a giveaway for `' + args[1].join(' ') + '`.');
+            return message.channel.send(':boom: Hm. I can\'t seem to find a giveaway for `' + args.slice(1).join(' ') + '`.');
         }
 
         client.giveawaysManager.reroll(giveaway.messageID)
