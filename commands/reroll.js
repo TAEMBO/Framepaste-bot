@@ -6,16 +6,16 @@ module.exports = {
         if (!client.hasModPerms(client, message.member)) {
             return message.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
         }
-        if (!args[0]) {
+        if (!args[1]) {
             return message.channel.send(':boom: Uh oh, I couldn\'t find that message! Try again!');
         }
 
         let giveaway =
-            client.giveawaysManager.giveaways.find((g) => g.prize === args.join(' ')) ||
-            client.giveawaysManager.giveaways.find((g) => g.messageID === args[0]);
+            client.giveawaysManager.storage.find((g) => g.prize === args.slice(1).join(' ')) ||
+            client.giveawaysManager.storage.find((g) => g.messageID === args[1]);
 
         if (!giveaway) {
-            return message.channel.send(':boom: Hm. I can\'t seem to find a giveaway for `' + args.join(' ') + '`.');
+            return message.channel.send(':boom: Hm. I can\'t seem to find a giveaway for `' + args.slice(1).join(' ') + '`.');
         }
 
         client.giveawaysManager.reroll(giveaway.messageID)

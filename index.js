@@ -1,7 +1,7 @@
 const intents = ["GUILDS", "GUILD_MESSAGES", "GUILD_EMOJIS_AND_STICKERS", "GUILD_BANS", "DIRECT_MESSAGES", "GUILD_VOICE_STATES", "DIRECT_MESSAGE_REACTIONS", "GUILD_MESSAGE_REACTIONS", "GUILD_MEMBERS"]
 const Discord = require("discord.js");
 const client = new Discord.Client({ intents: intents, disableEveryone: true, partials: ["MESSAGE", "REACTION", "CHANNEL"] });
-const modmailClient = new Discord.Client({ disableEveryone: true, intents: intents, partials: ["CHANNEL", "REACTION", "MESSAGE"]});
+const modmailClient = new Discord.Client({ disableEveryone: true, intents: intents, partials: ["MESSAGE", "REACTION", "CHANNEL"]});
 const fs = require("fs");
 const path = require("path");
 const database = require("./database.js");
@@ -48,7 +48,7 @@ client.on("ready", async () => {
 	process.on("unhandledRejection", async (error)=>{
 		console.log(error)
 		await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{
-        channel.send({content: `${client.config.eval.whitelist.map(x=>`<@${x}>`).join(", ")}`, embeds: [new Discord.MessageEmbed().setTitle("Error Caught!").setColor("#420420").setDescription(`Error: \`${error.message}\`\nStack: \`${`${error.stack}`.slice(0, 2500)}\``)]})
+        channel.send({content: `${client.config.eval.whitelist.map(x=>`<@${x}>`).join(", ")}`, embeds: [new Discord.MessageEmbed().setTitle("Error Caught!").setColor("#420420").setDescription(`**Error:** \`${error.message}\`\n\n**Stack:** \`${`${error.stack}`.slice(0, 2500)}\``)]})
 		})
 	})
 	setInterval(async () => {
@@ -103,8 +103,39 @@ client.memeQueue = new client.collection();
 // cooldowns
 client.cooldowns = new client.collection();
 
-// tic tac toe statistics database
+// databases
+client.bannedWords = new database("./databases/bannedWords.json", "array");
+client.bannedWords.initLoad();
+
 client.tictactoeDb = new database("./databases/ttt.json", "array"); /* players, winner, draw, startTime, endTime */
+client.tictactoeDb.initLoad().intervalSave();
+
+client.userLevels = new database("./databases/userLevels.json", "object");
+client.userLevels.initLoad().intervalSave(15000).disableSaveNotifs();
+
+client.dmForwardBlacklist = new database("./databases/dmforwardblacklist.json", "array");
+client.dmForwardBlacklist.initLoad();
+
+client.punishments = new database("./databases/punishments.json", "array");
+client.punishments.initLoad();
+
+client.specsDb = new database("./databases/specs.json", "object");
+client.specsDb.initLoad().intervalSave(120000);
+
+client.votes = new database("./databases/suggestvotes.json", "array")
+client.votes.initLoad();
+
+client.channelRestrictions = new database("./databases/channelRestrictions.json", "object");
+client.channelRestrictions.initLoad();
+
+client.starboard = new database("./databases/starboard.json", "object");
+client.starboard.initLoad().intervalSave(60000);
+
+client.repeatedMessages = {};
+client.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
+client.repeatedMessagesContent.initLoad();
+
+// tic tac toe statistics database
 Object.assign(client.tictactoeDb, {
 	// global stats
 	getTotalGames() {
@@ -152,13 +183,11 @@ Object.assign(client.tictactoeDb, {
 		return ((player.wins / player.total) * 100).toFixed(2) + "%";
 	}
 });
-client.tictactoeDb.initLoad().intervalSave();
 
 // 1 game per channel
 client.games = new Discord.Collection();
 
 // userLevels
-client.userLevels = new database("./databases/userLevels.json", "object");
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
 	_milestone() {
@@ -180,7 +209,7 @@ Object.assign(client.userLevels, {
 		// milestone
 		const milestone = this._milestone();
 		if (milestone && milestone.total === this._milestone().next) {
-			const channel = client.channels.resolve("858073309920755774"); // #announcements
+			const channel = client.channels.resolve("858073309920755773"); // #announcements
 			if (!channel) return console.log("tried to send milestone announcement but channel wasnt found");
 			channel.send(`:tada: Milestone reached! **${milestone.next.toLocaleString("en-US")}** messages have been sent in this server and recorded by Level Roles. :tada:`);
 		}
@@ -212,10 +241,8 @@ Object.assign(client.userLevels, {
 		return { age, messages, roles };
 	},
 });
-client.userLevels.initLoad().intervalSave(15000).disableSaveNotifs();
 
 // specs
-client.specsDb = new database("./databases/specs.json", "object");
 Object.assign(client.specsDb, {
 	editSpecs(id, component, newValue) {
 		const allComponents = Object.keys(this._content[id]);
@@ -253,14 +280,7 @@ Object.assign(client.specsDb, {
 	}
 
 });
-client.specsDb.initLoad().intervalSave(120000);
 
-// dm forward blacklist
-client.dmForwardBlacklist = new database("./databases/dmforwardblacklist.json", "array");
-client.dmForwardBlacklist.initLoad();
-
-// punishments
-client.punishments = new database("./databases/punishments.json", "array");
 Object.assign(client.punishments, {
 	createId() {
 		return Math.max(...client.punishments._content.map(x => x.id), 0) + 1;
@@ -322,7 +342,7 @@ Object.assign(client.punishments, {
 					    	.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    	.addField('Reason', `\`${reason || "unspecified"}\``)
 					    	.setColor(client.embedColor)
-						return message.channel.send({embeds: embeds});
+						return message.channel.send({embeds: [embeds]});
 					}
 				}
 			case "kick":
@@ -342,7 +362,7 @@ Object.assign(client.punishments, {
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    .addField('Reason', `\`${reason || "unspecified"}\``)
 					    .setColor(client.embedColor)
-					return message.channel.send({embeds: embedk});
+					return message.channel.send({embeds: [embedk]});
 				}
 			case "mute":
 				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
@@ -444,13 +464,6 @@ Object.assign(client.punishments, {
 		}
 	}
 });
-client.punishments.initLoad();
-client.votes = new database("./databases/suggestvotes.json", "array")
-client.votes.initLoad();
-
-// channel restrictions
-client.channelRestrictions = new database("./databases/channelRestrictions.json", "object");
-client.channelRestrictions.initLoad();
 
 // command handler
 client.commands = new Discord.Collection();
@@ -469,7 +482,7 @@ for (const file of functionFiles) {
 }
 
 // assign page number to commands
-const categories = {};
+let categories = {};
 while (client.commands.some(command => !command.hidden && !command.page)) {
 	const command = client.commands.find(command => !command.hidden && !command.page);
 	if (!command.category) command.category = "Misc";
@@ -486,7 +499,7 @@ while (client.commands.some(command => !command.hidden && !command.page)) {
 client.categoryNames = Object.keys(categories);
 delete categories;
 
-// create pages without contents
+
 client.commands.pages = [];
 client.commands.filter(command => !command.hidden).forEach(command => {
 	if (!client.commands.pages.some(x => x.category === command.category && x.page === command.page)) {
@@ -514,14 +527,12 @@ client.commands.pages.sort((a, b) => {
 });
 
 // starboard functionality
-client.starboard = new database("./databases/starboard.json", "object");
 Object.assign(client.starboard, {
 	async increment(reaction) {
 		let dbEntry = this._content[reaction?.message?.id];
 		if (dbEntry) dbEntry.c++;
 		else {
 			if (!reaction?.message?.author?.id) return;
-			console.log("STARBOARD: tried to increment, but failed. received reaction:", reaction);
 			this.addData(reaction.message.id, { c: 1, a: reaction.message.author.id });
 			dbEntry = this._content[reaction.message.id];
 		}
@@ -630,13 +641,6 @@ Object.assign(client.starboard, {
 		});
 	},
 });
-client.starboard.initLoad().intervalSave(60000);
-
-// repeated messages
-client.repeatedMessages = {};
-client.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
-client.repeatedMessagesContent.initLoad();
-
 
 // event loop, for punishments and daily msgs
 setInterval(() => {
@@ -659,10 +663,6 @@ setInterval(() => {
 		fs.writeFileSync(__dirname + "/databases/dailyMsgs.json", JSON.stringify(dailyMsgs));
 	}
 }, 5000);
-
-// banned words
-client.bannedWords = new database("./databases/bannedWords.json", "array");
-client.bannedWords.initLoad();
 
 modmailClient.threads = new client.collection();
 modmailClient.on("messageCreate", message => {

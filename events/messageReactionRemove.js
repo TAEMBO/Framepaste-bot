@@ -4,10 +4,10 @@ module.exports = {
     tracker: false,
     frs: false,
     execute: async (client, reaction, user) => {
-            const message = reaction.message;
+            const message = await client.channels.cache.get(reaction.message.channelId).messages.fetch(reaction.message.id).catch((e)=>{return null});
 
             // decrement only if self starring is not allowed and a person (not bot) removed reaction star. otherwise return
-            if (reaction.emoji.name !== '⭐' || user.bot || ((message.author.id === user.id || message.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed)) return;
+            if (reaction.emoji.name !== ':star:' || user.bot || ((message.author.id === user.id || message.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed)) return;
     
             // decrement
             if (message.channel.id === client.config.mainServer.channels.starboard) {

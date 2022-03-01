@@ -4,7 +4,7 @@ module.exports = {
     tracker: false,
     frs: false,
     execute: async (client, reaction, user) => {
-        const message = reaction.message;
+        const message = await client.channels.cache.get(reaction.message.channelId).messages.fetch(reaction.message.id).catch((e)=>{return null});
         const channel = message.channel;
 
         // #starboard wrong emoji 

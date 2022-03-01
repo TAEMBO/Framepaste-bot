@@ -59,32 +59,32 @@ const quantities = {
 		},
 		{
 			name: 'US Dollar :flag_us:',
-			value: 0.89,
+			value: 0.90,
 			short: ['USD', '$'],
 		},
 		{
 			name: 'pound sterling :flag_gb:',
-			value: 1.18,
+			value: 1.20,
 			short: ['GBP', '£']
 		},
 		{
 			name: 'Turkish Lira :flag_tr:',
-			value: 0.072,
+			value: 0.064,
 			short: ['TRY', 'TL', '₺']
 		},
 		{
 			name: 'Russian Ruble :flag_ru:',
-			value: 0.012,
+			value: 0.011,
 			short: ['RUB', '₽']
 		},
 		{
 			name: 'Canadian Dollar :flag_ca:',
-			value: 0.69,
+			value: 0.70,
 			short: ['CAD']
 		},
 		{
 			name: 'Australian Dollar :flag_au:',
-			value: 0.63,
+			value: 0.64,
 			short: ['AUD']
 		},
 		{
@@ -114,7 +114,7 @@ const quantities = {
 		},
 		{
 			name: 'Norwegian krone :flag_no:',
-			value: 0.099,
+			value: 0.094,
 			short: ['NOK']
 		},
 		{
@@ -124,7 +124,7 @@ const quantities = {
 		},
 		{
 			name: 'Icelandic króna :flag_is:',
-			value: 0.0068,
+			value: 0.0071,
 			short: ['ISK']
 		},
 		{
@@ -134,12 +134,12 @@ const quantities = {
 		},
 		{
 			name: 'Swiss franc :flag_sw:',
-			value: 0.96,
+			value: 0.97,
 			short: ['CFH', 'fr']
 		},
 		{
 			name: 'Ukrainian hryvnia :flag_ua:',
-			value: 0.033,
+			value: 0.03,
 			short: ['UAH', '₴', 'грн']
 		},
 		{
@@ -220,24 +220,18 @@ const quantities = {
 	temperature: [
 		{
 			name: 'kelvin',
-			toSelf: 'x',
-			toBase: 'x',
+			value: 273.15,
 			short: ['K'],
-			evalRequired: true
 		},
 		{
 			name: 'celsius',
-			toSelf: 'x-273.15',
-			toBase: 'x+273.15',
+			value: 0,
 			short: ['°C', 'c'],
-			evalRequired: true
 		},
 		{
 			name: 'fahrenheit',
-			toSelf: '((9/5)*(x-273))+32',
-			toBase: '((5/9)*(x-32))+273',
+			value: 212,
 			short: ['°F', 'fh', 'f'],
-			evalRequired: true
 		}
 	],
 	time: [
@@ -399,7 +393,7 @@ module.exports = {
 			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}
 		if (!message.content.includes('>') && !message.content.includes('to')) return message.reply({content: 'There needs to be a greater-than sign (\`>\`) or the word "to" in your message, after the starters and before the target unit.', allowedMentions: { repliedUser: false }});
-		// lets define the > or to, that theyre using
+		// let's define the > or to, that they're using
 		const usedSeparator = message.content.includes('>') ? '>' : 'to';
 		const starters = args.slice(1, args.indexOf(args.find(x => x.includes(usedSeparator)))).join(' ').split(',').map(starter => {
 			starter = starter.trim();
@@ -513,8 +507,8 @@ module.exports = {
 		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
 	name: 'convert',
-	description: '[BETA] Convert measurements. Use many starting amounts and units by attaching amounts and units of the same quantity with a comma, eg. \`convert 5ft, 8in >cm\` converts the sum of 5 feet and 8 inches into centimeters. For help, add \`help\`',
-	shortDescription: '[BETA] Convert measurements.',
+	description: 'Convert measurements. Use many starting amounts and units by attaching amounts and units of the same quantity with a comma, eg. \`convert 5ft, 8in >cm\` converts the sum of 5 feet and 8 inches into centimeters. For help, add \`help\`',
+	shortDescription: 'Convert measurements.',
 	usage: ['starting amounts and units / help', '">" target unit / ?quantity'],
 	alias: ['cv']
 }

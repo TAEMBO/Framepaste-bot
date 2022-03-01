@@ -55,7 +55,7 @@ module.exports = {
 	// }
 
 	// handle banned words
-	if (client.config.botSwitches.automod && !client.hasModPerms(client, message.member) && client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && message.channel.id !== (client.config.mainServer.channels.modchat) && message.guild.id === client.config.mainServer.id)
+	if (client.config.botSwitches.automod && client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && !client.hasModPerms(client, message.member) && message.guild.id === client.config.mainServer.id)
 		return message.delete() && message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000));
 
 	const suggestCommand = client.commands.get("suggest");
@@ -88,7 +88,7 @@ module.exports = {
 		const args = message.content.toLowerCase().slice(client.prefix.length).replace(/\n/g, " ").split(" ");
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
-			console.log(`Running command "${commandFile.name}"`);
+			console.log(`${message.author.tag} used ,${commandFile.name} in ${message.channel.name}`);
 
 			// channel restrictions
 			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[message.channel.id]?.some(x => x.includes(commandFile.name))) {

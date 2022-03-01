@@ -5,7 +5,6 @@ const axios = require("axios");
 async function fetchPost(){
 	const reddits = ["memes", "hardwarememes"];
 	const memesrandom = Math.floor(Math.random() * reddits.length);
-	console.log(memesrandom, reddits[memesrandom]);
 	const body = await axios.get(`https://www.reddit.com/r/${memesrandom, reddits[memesrandom]}/random.json`).catch((err)=>{return err});
 	return body.data[0].data.children;
 }

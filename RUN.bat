@@ -1,5 +1,6 @@
 @echo off
 cls
-color 2
+color 4
 node sharding.js
+node databases/backup.js
 pause
