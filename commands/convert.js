@@ -74,7 +74,7 @@ const quantities = {
 		},
 		{
 			name: 'Russian Ruble :flag_ru:',
-			value: 0.011,
+			value: 0.009,
 			short: ['RUB', '₽']
 		},
 		{
