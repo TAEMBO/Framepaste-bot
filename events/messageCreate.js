@@ -76,7 +76,6 @@ module.exports = {
 			console.log("received \"y\" from staff member, indicating to mute someone");
 			try {
 				const muteResult = await client.punishments.addPunishment("mute", message.member, { time: "5m", reason: "pinged staff role with no purpose" }, collected.first().author.id);
-				message.channel.send(muteResult);
 				console.log("muted with result", muteResult);
 			} catch (error) {
 				console.log("muting failed cuz", error);

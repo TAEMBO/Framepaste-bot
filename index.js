@@ -431,6 +431,7 @@ Object.assign(client.punishments, {
 					removePunishmentResult = await member
 					
 					if (typeof removePunishmentResult !== "string") {
+						member.timeout(null, `${reason || "unspecified"} | Case #${id}`)
 						removePunishmentResult.send(`You've been unmuted in ${removePunishmentResult.guild.name}.`);
 						removePunishmentResult = removePunishmentResult.user; // removing a role returns a guildmember
 					}
