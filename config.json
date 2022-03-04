@@ -12,12 +12,12 @@
 		"showMention": true,
 		"hostedBy": true
 	},
-	"prefix": ",",
+	"prefix": "-",
 	"eval": {
 		"allowed": true,
 		"whitelist": [
 			"709960501378940939",
-			"615761944154210305"
+			"1"
 		]
 	},
 	"enableAutoResponse": false,
@@ -40,6 +40,7 @@
 			"helper": "903534357858369576",
 			"botdeveloper": "914646059714768906",
 			"muted": "889389102112333864",
+			"free_games": "920049508291854336",
 			"everyone": "858054240416432158",
 			"levels": {
 				"one": {

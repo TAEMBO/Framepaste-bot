@@ -40,7 +40,11 @@ Object.assign(client, {
 	starLimit: 3,
 	selfStarAllowed: false
 });
-
+const {FreeStuffApi} = require("freestuff");
+const frs = new FreeStuffApi({
+	key: client.config.fsApiKey
+  });
+client.frs = frs;
 // main bot login
 client.on("ready", async () => {
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
@@ -50,7 +54,7 @@ client.on("ready", async () => {
 		await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{
         channel.send({content: `${client.config.eval.whitelist.map(x=>`<@${x}>`).join(", ")}`, embeds: [new Discord.MessageEmbed().setTitle("Error Caught!").setColor("#420420").setDescription(`**Error:** \`${error.message}\`\n\n**Stack:** \`${`${error.stack}`.slice(0, 2500)}\``)]})
 		})
-	})
+	});
 	setInterval(async () => {
 		await client.user.setActivity(`${client.prefix}help`, {
 			type: "LISTENING",
