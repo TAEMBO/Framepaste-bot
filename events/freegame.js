@@ -11,9 +11,10 @@ module.exports = {
             language: ["en-US"]
         });
         const gams = await Object.values(gameData);
+        const embeds = []
         await gams.forEach(async (game)=>{
-            channel.send({embeds: [new MessageEmbed().setTitle(game.title).setDescription(`~~$${game.org_price.usd}~~ • **Free** until <t:${Math.floor(new Date(game.until).getTime()/1000)}:d>`).setColor(3092790).setImage(game.thumbnail.org)], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("LINK").setURL(game.urls.org).setLabel("Open In Browser"))]});
+            embeds.push(new MessageEmbed().setTitle(game.title).setDescription(`~~$${game.org_price.usd}~~ • **Free** until <t:${Math.floor(new Date(game.until).getTime()/1000)}:d>`).setColor(3092790).setImage(game.thumbnail.org).addFields({name: "Open In Browser", value: `[link](${game.urls.org})`}, {name: `Open In ${game.store}`, value: `<${game.urls.client}>`}))
         });
-        await channel.send({content: `<@&${client.config.mainServer.roles.free_game}>`})
+        await channel.send({content: `<@&${client.config.mainServer.roles.free_games}>`, embeds: embeds});
     }
 }
