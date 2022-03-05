@@ -17,6 +17,6 @@ module.exports = {
         const embed = new MessageEmbed().setTitle("These games are currently free:").setColor(3092790).setDescription(`${boi.map(x=>x).join("\n\n")}`)
         message.reply({embeds: [embed], allowedMentions: {repliedUser: false}})
     },
-    name: "frs",
+    name: "free",
     description: "Fetch Today's Free Games!"
 };
