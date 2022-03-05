@@ -15,6 +15,6 @@ module.exports = {
         await gams.forEach(async (game)=>{
             embeds.push(new MessageEmbed().setTitle(game.title).setDescription(`~~$${game.org_price.usd}~~ • **Free** until <t:${Math.floor(new Date(game.until).getTime()/1000)}:d>`).setColor(3092790).setImage(game.thumbnail.org).addFields({name: "Open In Browser", value: `[link](${game.urls.org})`, inline: true}, {name: `Open In ${game.store}`, value: `<${game.urls.client}>`, inline: true}))
         });
-        await channel.send({content: `<@&${client.config.mainServer.roles.free_games}>`, embeds: embeds});
+        await channel.send({content: `<@&${client.config.mainServer.roles.freegames}>`, embeds: embeds});
     }
 }

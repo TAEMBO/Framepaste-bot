@@ -15,7 +15,7 @@ module.exports = {
             boi.push(`[${data.title}](${data.urls.org})\n<:blank:948403007970770994> ~~$${data.org_price.usd}~~ • **Free** until <t:${Math.floor(new Date(data.until).getTime()/1000)}:d>`)
         });
         const embed = new MessageEmbed().setTitle("These games are currently free:").setColor(3092790).setDescription(`${boi.map(x=>x).join("\n\n")}`)
-        message.reply({embeds: [embed]})
+        message.reply({embeds: [embed], allowedMentions: {repliedUser: false}})
     },
     name: "frs",
     description: "Fetch Today's Free Games!"
