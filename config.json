@@ -12,7 +12,7 @@
 		"showMention": true,
 		"hostedBy": true
 	},
-	"prefix": "-",
+	"prefix": ",",
 	"eval": {
 		"allowed": true,
 		"whitelist": [
