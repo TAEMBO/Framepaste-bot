@@ -18,6 +18,7 @@ try {
 	client.config = require("./config.json");
 	console.log("Using ./config.json");
 }
+console.log(`Bot switches\nFramepaste: ${client.config.botSwitches.fpb}\nModmail: ${client.config.botSwitches.modmail}\nCommands: ${client.config.botSwitches.commands}\nAutomod: ${client.config.botSwitches.automod}\nReaction Roles: ${client.config.botSwitches.reactionRoles}\nFree Games: ${client.config.botSwitches.freeGames}`);
 Object.assign(client.config, require("./tokens.json"));
 client.prefix = client.config.prefix;
 client.setMaxListeners(100)
