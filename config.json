@@ -3,7 +3,8 @@
 		"fpb": true,
 		"modmail": true,
 		"automod": true,
-		"reactionRoles": true
+		"reactionRoles": true,
+		"freeGames": true
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",

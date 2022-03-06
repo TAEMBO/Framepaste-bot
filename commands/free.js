@@ -3,6 +3,7 @@ const { FreeStuffApi } = require("freestuff");
 
 module.exports = {
     run: async (client, message, args) => {
+        if (!client.config.botSwitches.freeGames) return message.reply({content: 'This function is disabled.', allowedMentions: {repliedUser: false}});
         const games = await client.frs.getGameList('free');
         const gameData = await client.frs.getGameDetails(games, "info", {
             language: ["en-US"]
