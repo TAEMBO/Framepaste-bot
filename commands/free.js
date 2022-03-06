@@ -3,12 +3,12 @@ const { FreeStuffApi } = require("freestuff");
 
 module.exports = {
     run: async (client, message, args) => {
+        if (!client.config.botSwitches.freeGames) return message.reply({content: 'This function is disabled.', allowedMentions: {repliedUser: false}});
         const games = await client.frs.getGameList('free');
         const gameData = await client.frs.getGameDetails(games, "info", {
             language: ["en-US"]
         });
         const gam = await Object.values(gameData);
-        console.log(gam)
         if(!gam.length) return embed.addField("Huh!", "Looks like no free games today! (try running the command again to reload the API)") && message.reply({embeds: [embed]});
         const boi = [];
         gam.forEach((data)=>{

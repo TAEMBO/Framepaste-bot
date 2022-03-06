@@ -6,6 +6,7 @@ module.exports = {
     giveaway: false,
     tracker: false,
     execute: async (client, frs, games) => {
+        if (!client.config.botSwitches.freeGames) return;
         const channel = await client.channels.fetch(client.config.mainServer.channels.freegames);
         const gameData = await frs.getGameDetails(games, "info", {
             language: ["en-US"]

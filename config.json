@@ -2,8 +2,10 @@
 	"botSwitches": {
 		"fpb": true,
 		"modmail": true,
+		"commands": false,
 		"automod": true,
-		"reactionRoles": true
+		"reactionRoles": true,
+		"freeGames": true
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",
