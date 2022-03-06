@@ -1,10 +1,10 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 module.exports = {
     name: "interactionCreate",
     giveaway: false,
     tracker: false,
     frs: false,
     execute: async (client, interaction) => {
+if(interaction.isButton()){
         const sugges = ["suggestion-decline", "suggestion-upvote"]
         if(sugges.includes(interaction.customId) && interaction.isButton()){
         const hasVoted = client.votes._content.includes(`${interaction.user.id}: ${interaction.message.id}`)
@@ -24,8 +24,7 @@ module.exports = {
         if(hasVoted){
             interaction.reply({embeds: [new MessageEmbed().setDescription("You've already voted!").setColor("#dd2e44").setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
         } else if(interaction.message.embeds[0].author.name=== `${interaction.member.displayName} (${interaction.user.id})`){
-            interaction.reply({embeds: [new MessageEmbed().setDescription("You can't vote on your own suggestion!").setColor("#dd2e44").setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
-        } else if(interaction.customId === "suggestion-decline"){
+            interaction.reply({embeds: [new MessageEmbed().setDescription("You can't vote on your own suggestion!").setColor("#dd2e44").setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})        } else if(interaction.customId === "suggestion-decline"){
             const ee = await parseInt(interaction.component.label) + 1;
             UpdateButtons(upvotes, ee, interaction.message, interaction.user.id)
             interaction.reply({embeds: [new MessageEmbed().setDescription("❌ Downvote recorded!").setColor("#dd2e44").setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
@@ -38,8 +37,7 @@ module.exports = {
         if (interaction.message.author.id !== client.user.id && message.content.startsWith(client.prefix + 'suggest')) return message.delete();
 
         const embed = interaction.message.embeds[0];
-        async function UpdateButtons(upvotes, downvotes = Number, message, user){
-             message.edit({embeds: [message.embeds[0]], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel(`${upvotes}`), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel(`${downvotes}`))]});
+        async function UpdateButtons(upvotes, downvotes = Number, message, user){             message.edit({embeds: [message.embeds[0]], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel(`${upvotes}`), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel(`${downvotes}`))]});
              await client.votes.addData(`${user}: ${message.id}`).forceSave();
         }
         function changeProperties(newColor, newTitle) {
@@ -71,5 +69,8 @@ module.exports = {
         interaction.member.roles.remove(role).catch((e)=>{return});
         }
    }
+   } else if(interaction.isCommand()){
+             interaction.reply({content: "command received"})
+}
 }
 }
