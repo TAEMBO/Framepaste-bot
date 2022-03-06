@@ -4,7 +4,7 @@ module.exports = {
     giveaway: false,
 	frs: false,
     execute: async (client, message) => {
-    if (process.argv[2] === "dev" && !client.config.eval.whitelist.includes(message.author.id)) return; // bot is being run in dev mode and a non eval whitelisted user sent a message. ignore the message.
+    if (!client.config.botSwitches.commands && (!client.config.eval.whitelist.includes(message.author.id) || !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper))) return; // bot is being run in dev mode and a non eval whitelisted or non bot dev user sent a message. ignore the message.
 	if (message.partial) return;
 	if (message.author.bot) return;
 	if (message.channel.type === "DM") {
