@@ -2,7 +2,7 @@
 	"botSwitches": {
 		"fpb": true,
 		"modmail": true,
-		"commands": false,
+		"commands": true,
 		"automod": true,
 		"reactionRoles": true,
 		"freeGames": true
