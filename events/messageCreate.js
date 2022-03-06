@@ -76,7 +76,7 @@ module.exports = {
 		message.channel.awaitMessages({ filter, max: 1, time: 60000, errors: ["time"]}).then(async collected => {
 			console.log("received \"y\" from staff member, indicating to mute someone");
 			try {
-				const muteResult = await client.punishments.addPunishment("mute", message.member, { time: "5m", reason: "pinged staff role with no purpose" }, collected.first().author.id);
+				const muteResult = await client.punishments.addPunishment("mute", message.member, { time: "5m", reason: "pinged staff role with no purpose", message: message}, collected.first().author.id);
 				console.log("muted with result", muteResult);
 			} catch (error) {
 				console.log("muting failed cuz", error);
