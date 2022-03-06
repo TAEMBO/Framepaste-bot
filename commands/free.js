@@ -9,7 +9,6 @@ module.exports = {
             language: ["en-US"]
         });
         const gam = await Object.values(gameData);
-        console.log(gam)
         if(!gam.length) return embed.addField("Huh!", "Looks like no free games today! (try running the command again to reload the API)") && message.reply({embeds: [embed]});
         const boi = [];
         gam.forEach((data)=>{
