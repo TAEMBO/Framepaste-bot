@@ -67,8 +67,7 @@ module.exports = {
 	// useless staff ping mute
 	const punishableRoleMentions = [
 		client.config.mainServer.roles.trialmoderator,
-		client.config.mainServer.roles.moderator,
-		client.config.mainServer.roles.administrator
+		client.config.mainServer.roles.moderator
 	];
 	if (message.mentions.roles.some(mentionedRole => punishableRoleMentions.includes(mentionedRole.id))) {
 		console.log("user mentioned staff role");

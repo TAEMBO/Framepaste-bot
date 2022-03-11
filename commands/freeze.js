@@ -14,6 +14,7 @@ module.exports = {
         }
 	},
 	name: 'freeze',
+    alias: ['shut', 'lock'],
 	description: `Lock the server for casuals`,
 	category: 'Moderation'
 };
