@@ -1,12 +1,11 @@
 module.exports = {
 	run: (client, message, args) => {
 		message.delete();
-        const embed = new client.embed()
-        .setTitle(`Try asking here`)
-		.setURL('https://google.com')
-        .setColor(client.embedColor)
-        message.channel.send({embeds: [embed]})
+		if (!args[1]) return message.channel.send('You need to add something to search.').then(m => setTimeout(() => m.delete(), 6000));
+        message.channel.send(`https://www.google.com/search?q=${args.slice(1).join('+')}`)
 	},
 	name: 'google',
+	description: 'Generate a Google search URL',
+	usage: ['search term'],
 	hidden: true
 };
