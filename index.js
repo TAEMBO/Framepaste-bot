@@ -42,9 +42,10 @@ Object.assign(client, {
 	selfStarAllowed: false
 });
 const {FreeStuffApi} = require("freestuff");
-client.frs = new FreeStuffApi({
+const frs = new FreeStuffApi({
 	key: client.config.fsApiKey
   });
+client.frs = frs;
 // main bot login
 client.on("ready", async () => {
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
@@ -84,7 +85,7 @@ client.on("ready", async () => {
     } else if(event.tracker){
 	client.tracker.on(event.name, async (...args) => event.execute(client, ...args));
     } else if(event.frs){
-		client.frs.on(event.name, async (...args) => event.execute(client, frs, ...args));
+		frs.on(event.name, async (...args) => event.execute(client, frs, ...args));
 	} else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));
     };
