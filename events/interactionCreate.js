@@ -24,16 +24,16 @@ if(interaction.isButton()){
             })
         })
         if(hasVoted){
-            interaction.reply({embeds: [new MessageEmbed().setDescription("You've already voted!").setColor("#dd2e44").setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
+            interaction.reply({embeds: [new MessageEmbed().setDescription("You've already voted!").setColor(client.config.embedColorRed).setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
         } else if(interaction.message.embeds[0].author.name=== `${interaction.member.displayName} (${interaction.user.id})`){
-            interaction.reply({embeds: [new MessageEmbed().setDescription("You can't vote on your own suggestion!").setColor("#dd2e44").setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})        } else if(interaction.customId === "suggestion-decline"){
+            interaction.reply({embeds: [new MessageEmbed().setDescription("You can't vote on your own suggestion!").setColor(client.config.embedColorRed).setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})        } else if(interaction.customId === "suggestion-decline"){
             const ee = await parseInt(interaction.component.label) + 1;
             UpdateButtons(upvotes, ee, interaction.message, interaction.user.id)
-            interaction.reply({embeds: [new MessageEmbed().setDescription("❌ Downvote recorded!").setColor("#dd2e44").setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
+            interaction.reply({embeds: [new MessageEmbed().setDescription("❌ Downvote recorded!").setColor(client.config.embedColorRed).setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
         } else if(interaction.customId === "suggestion-upvote") {
             const ee = await parseInt(interaction.component.label) + 1;
             UpdateButtons(ee, downvotes, interaction.message, interaction.user.id)
-            interaction.reply({embeds: [new MessageEmbed().setDescription("✅ Upvote recorded!").setColor("#77b255").setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
+            interaction.reply({embeds: [new MessageEmbed().setDescription("✅ Upvote recorded!").setColor(client.config.embedColorGreen).setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
         }
         // delete message and dont handle reaction if message is not a suggestion, but a suggestion command
         if (interaction.message.author.id !== client.user.id && message.content.startsWith(client.prefix + 'suggest')) return message.delete();
@@ -42,26 +42,6 @@ if(interaction.isButton()){
         async function UpdateButtons(upvotes, downvotes = Number, message, user){             message.edit({embeds: [message.embeds[0]], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel(`${upvotes}`), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel(`${downvotes}`))]});
              await client.votes.addData(`${user}: ${message.id}`).forceSave();
         }
-        function changeProperties(newColor, newTitle) {
-            if (embed.hexColor === newColor.toLowerCase() && embed.title === newTitle) return;
-            embed.setColor(newColor);
-            embed.setTitle(newTitle);
-            return interaction.message.edit({embeds: [embed]});
-        }
-        if (upvotes / downvotes >= 15.1) { // breakthrough, 15.1
-            return changeProperties('#f6ff00', 'Breakthrough Suggestion:');
-        }
-        if (upvotes / downvotes >= 10.1) { // fantastic, 10.1
-            return changeProperties('#d6dd50', 'Fantastic Suggestion:');
-        }
-        if (upvotes / downvotes >= 5.1) { // good, 5.1
-            return changeProperties('#d4d494', 'Good Suggestion:');
-        }
-        if (upvotes / downvotes <= 1 / 3) { // bad, 1/3
-            return changeProperties('#4E535E', 'Controversial Suggestion:');
-        }
-        // normal
-        return changeProperties('#f7f7f3', 'Suggestion:');
     } else if(interaction.customId.startsWith("reaction-") && client.config.botSwitches.reactionRoles){
         interaction.deferUpdate();
         const role = `${interaction.customId}`.replace("reaction-", "");
