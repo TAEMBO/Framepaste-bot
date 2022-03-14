@@ -17,7 +17,7 @@ const removeUsername = (text) => {
 module.exports = {
 	run: async (client, message, args) => {
 		if (!client.config.eval.allowed) return message.reply({content: 'Eval is disabled.', allowedMentions: { repliedUser: false }});
-		if (!client.config.eval.whitelist.includes(message.author.id)) return message.reply({content: 'You\'re not allowed to use eval', allowedMentions: { repliedUser: false }});
+		if (!client.config.eval.whitelist.includes(message.author.id) && !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)) return message.reply({content: 'You\'re not allowed to use eval', allowedMentions: { repliedUser: false }});
 		const code = message.content.slice(client.prefix.length + args[0].length + 1);
 		let output = 'error';
 		let error = false;
