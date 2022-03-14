@@ -179,7 +179,7 @@ module.exports = {
 				.setTitle("Choose CPU")
 				.setDescription("Your search returned many CPU\"s." +( multipleSearch === "s" ? " Choose one and respond with the corresponding number. (20s)" : " Here is a list of them."))
 			if (manufacturer === "intel") embed.setColor(2793983);
-			else if (manufacturer === "amd") embed.setColor("13582629");
+			else if (manufacturer === "amd") embed.setColor(13582629);
 			else embed.setColor(client.embedColor);
 			let text = "";
 			const sliced = rankedCPUs.slice(0, limit);
@@ -202,9 +202,9 @@ module.exports = {
 				}
 			}
 			if (rankedCPUs.length <= limit) {
-				embed.setFooter(`Showing all ${rankedCPUs.length} CPUs.`)
+				embed.setFooter({text: `Showing all ${rankedCPUs.length} CPUs.`})
 			} else {
-				embed.setFooter(`Showing ${limit} of ${rankedCPUs.length} CPUs.`)
+				embed.setFooter({text: `Showing ${limit} of ${rankedCPUs.length} CPUs.`})
 			}
 			message.channel.send({embeds: [embed]});
 			if (multipleSearch === "s") {
