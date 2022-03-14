@@ -1,5 +1,7 @@
 {
 	"embedColor": 3092790,
+	"embedColorGreen": 4774500,
+	"embedColorRed": 15158332,
 	"botSwitches": {
 		"fpb": true,
 		"modmail": true,

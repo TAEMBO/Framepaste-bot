@@ -18,7 +18,7 @@ module.exports = {
             .setTitle("Message Deleted!")
             .setDescription(`<@${msg.author.id}>\nContent:\n\`\`\`\n${msg.content}\n\`\`\`\nChannel: <#${msg.channel.id}>`)
             .setAuthor({name: `Author: ${msg.author.tag} (${msg.author.id})`, iconURL: `${msg.author.displayAvatarURL()}`})
-            .setColor(14495300)
+            .setColor(client.config.embedColorRed)
             .setTimestamp(Date.now())
             channel.send({embeds: [embed]})
         if (msg.attachments?.first()?.width && ['png', 'jpeg', 'jpg', 'gif'].some(x => msg.attachments.first().name.endsWith(x))) {
