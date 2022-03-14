@@ -67,7 +67,7 @@ client.on("ready", async () => {
 		updateCountdownEvery: 5000,
 		default: {
 			botsCanWin: false,
-			embedColor: client.embedColor,
+			embedColor: client.config.embedColor,
 			embedColorEnd: 14495300,
 			
 			reaction: "🎉"
@@ -319,7 +319,7 @@ Object.assign(client.punishments, {
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    .addField('Reason', `\`${reason || "unspecified"}\``)
 					    .addField('Duration', `${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"}`)
-					    .setColor(client.embedColor)
+					    .setColor(client.config.embedColor)
 			    	return message.channel.send({embeds: [embedm]});
 				}
 			case "softban":
@@ -343,7 +343,7 @@ Object.assign(client.punishments, {
 					    	.setTitle(`Case #${softbanData.id}: Softban`)
 					    	.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    	.addField('Reason', `\`${reason || "unspecified"}\``)
-					    	.setColor(client.embedColor)
+					    	.setColor(client.config.embedColor)
 						return message.channel.send({embeds: [embeds]});
 					}
 				}
@@ -363,7 +363,7 @@ Object.assign(client.punishments, {
 					    .setTitle(`Case #${kickData.id}: Kick`)
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    .addField('Reason', `\`${reason || "unspecified"}\``)
-					    .setColor(client.embedColor)
+					    .setColor(client.config.embedColor)
 					return message.channel.send({embeds: [embedk]});
 				}
 			case "mute":
@@ -393,7 +393,7 @@ Object.assign(client.punishments, {
 						.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 						.addField('Reason', `\`${reason || "unspecified"}\``)
 						.addField('Duration', `${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)`)
-						.setColor(client.embedColor)
+						.setColor(client.config.embedColor)
 						.setThumbnail('https://cdn.discordapp.com/attachments/858068843570003998/942295666137370715/muted.png')
 					return message.channel.send({embeds: [embedm]});
 				}
@@ -411,7 +411,7 @@ Object.assign(client.punishments, {
 					.setTitle(`Case #${warnData.id}: Warn`)
 					.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					.addField('Reason', `\`${reason || "unspecified"}\``)
-					.setColor(client.embedColor)
+					.setColor(client.config.embedColor)
 					.setThumbnail('https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg')
 					if (moderator !== '795443537356521502') {message.channel.send({embeds: [embedw]})};
 				}

@@ -18,7 +18,7 @@ module.exports = {
             .setTitle('Forwarded DM Message')
             .setDescription(`<@${message.author.id}>`)
             .setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: message.author.displayAvatarURL({ format: 'png', dynamic: true})})
-            .setColor(client.embedColor)
+            .setColor(client.config.embedColor)
             .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b')
             .setTimestamp(Date.now());
         let messageAttachmentsText = '';
@@ -35,7 +35,7 @@ module.exports = {
             .setTitle('Forwarded DM Message')
             .setDescription(`<@${message.author.id}>`)
             .setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: message.author.displayAvatarURL({ format: 'png', dynamic: true})})
-            .setColor(client.embedColor)
+            .setColor(client.config.embedColor)
             .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b')
             .setTimestamp(Date.now());
         let messageAttachmentsText = '';

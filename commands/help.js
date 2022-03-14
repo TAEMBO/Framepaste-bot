@@ -8,7 +8,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 	});
 	const embed = new client.embed()
 		.setTitle(`__Commands: ${pageInfo.name}__`)
-		.setColor(client.embedColor)
+		.setColor(client.config.embedColor)
 		.setDescription(text);
 	if (toEdit) {
 		return embed;
@@ -70,7 +70,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle(`__Commands: ${command.name}__`)
 				.setDescription(client.commandInfo(client, command, { insertNewline: true, parts: ['name', 'usage', 'description', 'shortDescription', 'alias', 'category', 'autores', 'cooldown'], titles: ['name', 'usage', 'shortDescription', 'alias', 'category', 'autores', 'cooldown'] }))
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		} 
 		// if run() still hasnt been returned, send category 0 page 1

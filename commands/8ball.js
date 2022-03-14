@@ -19,7 +19,7 @@ module.exports = {
 
         const eightballembed = new MessageEmbed()
             .setTitle("8Ball")
-            .setColor(client.embedColor)
+            .setColor(client.config.embedColor)
 
         if(args[1] === "possibleanswers"){
             let possibleanswers = "";

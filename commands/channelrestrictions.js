@@ -52,7 +52,7 @@ module.exports = {
 					.setTitle('Acceptable command and category names')
 					.setDescription(client.categoryNames.join(', '))
 					.setFooter({text: 'Or any bot command name.'})
-					.setColor(client.embedColor)
+					.setColor(client.config.embedColor)
 				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else if (['how', 'why', 'what'].includes(args[1])) {
 				const embed = new client.embed()
@@ -61,7 +61,7 @@ module.exports = {
 					.addField(':small_blue_diamond: Try a different channel instead.', '<#902524214718902332> is a channel dedicated to using bot commands.')
 					.addField(':small_blue_diamond: This phenomenon is called _channel restrictions._', `<@&${client.config.mainServer.roles.moderator}>s restrict certain categories of commands from being used in different channels. Active restrictions are available for everyone to see with \`${client.prefix}channelrestrictions\`.`)
 					.addField(':small_blue_diamond: How come _you_ can use restricted commands?', `Anyone with the <@&${client.config.mainServer.roles.levels.three.id}> role can bypass channel restrictions.`)
-					.setColor(client.embedColor)
+					.setColor(client.config.embedColor)
 				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		 	} else {
 
@@ -144,7 +144,7 @@ module.exports = {
 					const embed = new client.embed()
 						.setTitle('Active channel restrictions')
 						.setDescription(displayCr([channelId], client))
-						.setColor(client.embedColor)
+						.setColor(client.config.embedColor)
 					if (embed.description.length === 0) embed.setDescription(`<#${channelId}> has no active channel restrictions.`);
 					return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 				}
@@ -153,7 +153,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('Active channel restrictions')
 				.setDescription(displayCr(Object.keys(client.channelRestrictions._content), client))
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			if (embed.description.length === 0) embed.setDescription('None');
 			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}

@@ -13,7 +13,7 @@ module.exports = {
 				.setTitle('__Tic Tac Toe Statistics__')
 				.setDescription(`A total of ${db.getTotalGames()} games have been played.`)
 				.setFooter({text: `Do "${client.prefix}ttt stats [username]" for player stats.`})
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			await message.channel.send({embeds: [embed]});
 			await message.channel.send(`Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], db.calcWinPercentage(x[1])]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``);
 			return;
@@ -41,7 +41,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle(`__Tic Tac Toe Statistics: ${username}__`)
 				.setDescription(`This user has played a total of ${playerStats.total} games.\n${playerStats.wins} of those were wins.\n${playerStats.losses} of those were losses.\n${playerStats.draws} of those were draws.\nThis user has a win percentage of \`${db.calcWinPercentage(playerStats)}\``)
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			return message.channel.send({embeds: [embed]});
 		}
 		if (client.games.has(message.channel.id)) {

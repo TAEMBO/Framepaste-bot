@@ -15,7 +15,7 @@ module.exports = {
                 message.reply('This trend is too big')
                 return;
             }else {
-                embed.setColor(client.embedColor)
+                embed.setColor(client.config.embedColor)
                 embed.setTitle("Trend")
                 embed.addField(args[1], trendmembers)
                 message.reply({embeds: [embed], allowedMentions: {repliedUser: false}})

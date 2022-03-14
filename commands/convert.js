@@ -380,12 +380,12 @@ module.exports = {
 				const embed = new client.embed()
 					.setTitle('Convert help: ' + wantedQuantity)
 					.setDescription(`This quantity comprises ${units.length} units, which are:\n\n${units.sort((a, b) => a.name.localeCompare(b.name)).map(unit => `**${unit.name[0].toUpperCase() + unit.name.slice(1)}** (${unit.short.map(x => `\`${x}\``).join(', ')})`).join('\n')}`)
-					.setColor(client.embedColor)
+					.setColor(client.config.embedColor)
 				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			}
 			const embed = new client.embed()
 				.setTitle('Convert help')
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 				.setDescription(`To convert something, you add **amount** and **unit** combinations to the end of the command. The syntax for an amount and unit combination is \`[amount][unit symbol]\`. Amount and unit combinations are called **arguments**. Arguments are divided into **starters** and a **target unit**. Starters are the starting values that you want to convert to the target unit. A conversion command consists of one or many starters, separated with a comma (\`,\`) in case there are many. After starters comes the target unit, which must have a greater-than sign (\`>\`) or the word "to" before it. The argument(s) after the \`>\` (or "to"), called the target unit, must not include an amount. It is just a **unit symbol**. Because you cannot convert fruits into lengths, all starters and the target unit must be of the same **quantity**.`)
 				.addField('Supported Quantities', Object.keys(quantities).map(x => x[0].toUpperCase() + x.slice(1)).join(', ') + `\n\nTo learn more about a quantity and its units and unit symbols,\ndo \`${client.prefix}convert help [quantity]\``)
 				.addField('Examples', `An amount: "5", "1200300", "1.99"\nA unit: metre, kelvin, Euro\nA unit symbol: "fh", "cm^3", "$", "fl oz"\nAn argument: "180cm", "12.99€", "5km", "16fl oz"\nA target unit: ">km", ">c", ">m2"\nA complete conversion command: "\`${client.prefix}convert 5ft, 8in to cm\`", "\`${client.prefix}convert 300kelvin >celsius\`", "\`${client.prefix}convert 57mm, 3.3cm, 0.4m >cm\`", "\`${client.prefix}convert 2dl, 0.2l to fl oz\`"`)
@@ -503,7 +503,7 @@ module.exports = {
 			.setTitle(quantity[0].toUpperCase() + quantity.slice(1) + ' conversion')
 			.addField('Starting amount', starters.map(x => `${x.amount.toLocaleString('en-US')} ${x.unit.short[0]}`).join(', '), true)
 			.addField('Converted amount', amountInTarget.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' ' + target.unit.short[0], true)
-			.setColor(client.embedColor)
+			.setColor(client.config.embedColor)
 		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
 	name: 'convert',

@@ -14,7 +14,7 @@ module.exports = {
 				.addField(':small_blue_diamond: Moderator', `<@${punishment.moderator}> \`${punishment.moderator}\``, true)
 				.addField('\u200b', '\u200b', true)
 				.addField(':small_blue_diamond: Reason', `\`${punishment.reason || 'unspecified'}\``, true)
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 				.setTimestamp(punishment.time)
 			if (punishment.duration) {
 				embed
@@ -41,7 +41,7 @@ module.exports = {
 				.setTitle('Punishments given to ' + args[1])
 				.setDescription(`User: <@${args[1]}>`)
 				.setFooter({text: `${userPunishments.length} total punishments. Viewing page ${pageNumber} out of ${Math.ceil(userPunishments.length / 25)}.`})
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			embed.addFields(userPunishments.slice((pageNumber - 1) * 25, pageNumber * 25));
 			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}

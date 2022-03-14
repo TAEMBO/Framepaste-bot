@@ -50,7 +50,7 @@ module.exports = {
 			.setTitle('__Eval__')
 			.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
 			.addField('Output', `\`\`\`${removeUsername(output).slice(0, 1016)}\n\`\`\``)
-			.setColor(client.embedColor);
+			.setColor(client.config.embedColor);
 		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((e)=>message.channel.send({embeds: [embed]}));
 	},
 	name: 'eval',

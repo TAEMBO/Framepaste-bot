@@ -4,7 +4,7 @@ module.exports = {
         .setTitle(`Bandwidth calculator`)
 		.setURL('https://k.kramerav.com/support/bwcalculator.asp')
 		.setImage('https://media.discordapp.net/attachments/873056491660263454/940345417143578724/unknown.png')
-        .setColor(client.embedColor)
+        .setColor(client.config.embedColor)
         message.reply({embeds: [embed], allowedMentions: { repliedUser: false }})
 	},
 	name: 'cable',

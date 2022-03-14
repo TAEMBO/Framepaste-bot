@@ -23,7 +23,7 @@ module.exports = {
 		if (args[1].toLowerCase() === "help" && args.length === 2) {
 			const embed = new client.embed()
 			.setTitle("Chipset Command Help [BETA]")
-			.setColor(client.embedColor)
+			.setColor(client.config.embedColor)
 			.setDescription("This command searches a list of real life chipsets and supplies you with technical information about them. This guide explains how to use this command properly.")
 			.addField("Search Terms", "Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.")
 			.addField("Manufacturer Search", "Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `INTEL`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.")
@@ -179,7 +179,7 @@ module.exports = {
 				.setDescription("Your search returned many chipset\"s." +( multipleSearch === "s" ? " Choose one and respond with the corresponding number. (20s)" : " Here is a list of them."))
 			if (manufacturer === "intel") embed.setColor(2793983);
 			else if (manufacturer === "amd") embed.setColor(13582629);
-			else embed.setColor(client.embedColor);
+			else embed.setColor(client.config.embedColor);
 			let text = "";
 			const sliced = rankedChipsets.slice(0, limit);
 			if (filters.length === 0) sliced.sort((a, b) => a[0] < b[0]);

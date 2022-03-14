@@ -71,7 +71,7 @@ module.exports = async (message, modmailClient, client) => {
 				.setDescription(`\`Case ID: ${caseId}\`\nR: Recipient: ${message.author.toString()} (${message.author.tag}), M: Moderator - Time Elapsed: ${client.formatTime(Date.now() - modmailClient.threads.get(message.author.id).startTime, 2)} - Times are in UTC\n\`\`\`\n${modmailClient.threads.get(message.author.id).messages.join('\n')}\n\`\`\``)
 				.setFooter({text: 'Starting Time'})
 				.setTimestamp(modmailClient.threads.get(message.author.id).startTime)
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			modmailChannel.send({embeds: [embed]});
 			// remove from threads collection
 			if (!modmailClient.threads.get(message.author.id).messages.some(x => x.includes('] M ('))) {
@@ -88,7 +88,7 @@ module.exports = async (message, modmailClient, client) => {
 			.addField(':small_blue_diamond: How?', 'Send me a Direct Message on Discord. Moderators will then solve your problem.', true)
 			.addField(':small_blue_diamond: Don\'ts', 'Do not spam ModMail.\nDo not use ModMail unnecessarily.', true)
 			.addField(':small_blue_diamond: Small Things', 'If your concern is not urgent, start your ModMail message with "[Unimportant]". This way the moderators know that they don\'t need to rush.', true)
-			.setColor(client.embedColor)
+			.setColor(client.config.embedColor)
 		message.channel.send({embeds: [embed]});
 	}
 };

@@ -2,7 +2,7 @@ module.exports = {
 	run: async (client, message, args) => {
 		const embed = new client.embed()
 			.setTitle('__Starboard Statistics__')
-			.setColor(client.embedColor)
+			.setColor(client.config.embedColor)
 		const containsEmbed = Object.entries(client.starboard._content).filter(x => x[1].e);
 		const starboardChannel = client.channels.resolve(client.config.mainServer.channels.starboard);
 		const promises = containsEmbed.sort((a, b) => b[1].c - a[1].c).slice(0, 5).map(async x => {

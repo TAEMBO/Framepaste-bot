@@ -3,7 +3,7 @@ module.exports = (client, member) => {
 		.setAuthor({name: `${member.displayName} (${member.user.id})`, iconURL: member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })})
 		.setTitle(`Specs`)
 		.setDescription(`These are their computer specs. Use \`${client.prefix}specifications help\` to learn more about this command.`)
-		.setColor(client.embedColor)
+		.setColor(client.config.embedColor)
 	const specs = client.specsDb.getUser(member.user.id);
 	Object.entries(specs).forEach(spec => {
 		embed.addField(spec[0], spec[1]);

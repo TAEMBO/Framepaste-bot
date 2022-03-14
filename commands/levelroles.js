@@ -150,7 +150,7 @@ module.exports = {
 				.setDescription(`Level Roles was created ${timeActive} days ago. Since then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been recorded in this server.`)
 				.addField('Top Users by Messages Sent', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map((x, i) => `\`${i + 1}.\` <@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n') + `\n\Messages per day in ${client.guilds.cache.get(client.config.mainServer.id).name}:`)
 				.setImage('attachment://dailymsgs.png')
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			const yeahok = new d.MessageAttachment(img.toBuffer(), "dailymsgs.png")
 			message.reply({embeds: [embed], files: [yeahok], allowedMentions: { repliedUser: false }});
 			return;
@@ -159,7 +159,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('Level Roles: Perks')
 				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Bypassing Channel Restrictions & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			return;
 
@@ -223,7 +223,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats')
 				.setDescription(`A total of ${messageCountsTotal.toLocaleString('en-US')} messages have been recorded in this server by ${userCount.toLocaleString('en-US')} users.\n\nIn the last ${actualDataLength} days, on average, ${averageMsgsPerDay.toLocaleString('en-US', { maximumFractionDigits: 2 })} messages have been sent every day.\n\nAn average user has sent ${average.toFixed(2)} messages.\n\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more than or as many messages as an average user.\n\nThe median user has sent ${median} messages.\n\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}% of messages while Level Roles has existed.\n\nThe next message milestone ${milestone.next ? `is ${milestone.next.toLocaleString('en-US')} messages and the progress from the previous milestone (${milestone.previous.toLocaleString('en-US')}) to the next is ${(milestone.progress * 100).toFixed(2)}%.\n\nAt the current rate, reaching the next milestone would ${(!serverHalted ? 'take ' : `never happen. The server would grind to a halt in `) + client.formatTime(millisecondsToMilestone, 2, { commas: true, longNames: true })}.` : `doesn\'t exist.`}`)
-				.setColor(client.embedColor)
+				.setColor(client.config.embedColor)
 			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			return;
 		}

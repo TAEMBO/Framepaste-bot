@@ -8,7 +8,7 @@ module.exports = (data, client) => {
 		.addField(':small_blue_diamond: Moderator', `<@${data.moderator}> \`${data.moderator}\``, true)
 		.addField('\u200b', '\u200b', true)
 		.addField(':small_blue_diamond: Reason', `\`${data.reason || 'unspecified'}\``, true)
-		.setColor(client.embedColor)
+		.setColor(client.config.embedColor)
 		.setTimestamp(data.time)
 	if (data.duration) {
 		embed

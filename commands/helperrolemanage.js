@@ -21,7 +21,7 @@ module.exports = {
             });
         } else {
             member.roles.add(client.config.mainServer.roles.helper);
-            message.channel.send({embeds: [new client.embed().setDescription(`Ok, I have Given <@${member.user.id}> The Helper Role!`).setColor(client.embedColor)]});
+            message.channel.send({embeds: [new client.embed().setDescription(`Ok, I have Given <@${member.user.id}> The Helper Role!`).setColor(client.config.embedColor)]});
         }
 	},
 	name: 'helperrolemanage',

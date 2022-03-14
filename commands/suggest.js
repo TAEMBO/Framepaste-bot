@@ -18,7 +18,7 @@ module.exports = {
             .setDescription(message.content.slice(message.content.indexOf(' ') + 1))
             .setFooter({text: 'Read pins for more info'})
             .setTimestamp()
-            .setColor(client.embedColor)
+            .setColor(client.config.embedColor)
         if (message.attachments?.first()?.width && ['png', 'jpeg', 'jpg', 'gif'].some(x => message.attachments.first().name.endsWith(x))) {
             const suggestion = await message.channel.send({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel("1"), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel("1"))], files: [message.attachments?.first()]});
         } else {

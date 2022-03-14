@@ -17,7 +17,7 @@ module.exports = {
         const embed = new MessageEmbed()
             .setTitle('__Staff Members__')
             .setDescription(`<@&${client.config.mainServer.roles.administrator}>\n${admin}\n\n<@&${client.config.mainServer.roles.moderator}>\n${mod}\n\n<@&${client.config.mainServer.roles.trialmoderator}>\n${tm}\n\n<@&${client.config.mainServer.roles.helper}>\n${helper}`)
-            .setColor(client.embedColor)
+            .setColor(client.config.embedColor)
         message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
     },
     name: 'staff',
