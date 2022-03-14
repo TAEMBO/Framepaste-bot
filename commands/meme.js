@@ -26,7 +26,7 @@ module.exports = {
 							.setTitle(bod[0].data.title)
 							.setColor(color)
 							.setImage(bod[0].data.url)
-							.setFooter({text: `${bod[0].data.ups} Upvotes | ${bod[0].data.downs} Downvotes`})
+							.setFooter({text: `${bod[0].data.ups} Upvotes`})
 
 						message.channel.send({embeds: [redditembed]});
 					})
@@ -36,7 +36,7 @@ module.exports = {
 					.setTitle(body[0].data.title)
 					.setColor(color)
 					.setImage(body[0].data.url)
-					.setFooter({text: `${body[0].data.ups} Upvotes | ${body[0].data.downs} Downvotes`})
+					.setFooter({text: `${body[0].data.ups} Upvotes`})
 
 				message.channel.send({embeds: [redditembed]});
 			})
