@@ -11,7 +11,7 @@ async function fetchPost(){
 module.exports = {
 	run: async (client, message, args) => {
 		delete require.cache[require.resolve('./../databases/memes.json')];
-		const memes = new client.collection(Object.entries(require('./../databases/memes.json')));
+		const memes = new client.collection(Object.entries(require('../databases/memes.json')));
 		const color = '#1decaf'
 		const failed = () => message.reply('You failed. The `meme add` process has ended.');
 		if(!args[1]) {
