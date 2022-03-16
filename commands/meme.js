@@ -130,8 +130,8 @@ module.exports = {
 						// define meme database location
 						let dir = __dirname.split('/');
 						dir.pop();
-						dir = dir.join('/');
-						dir += '/databases/memes.json';
+						dir = dir.join('\\');
+						dir += '\\databases/memes.json';
 
 						// turn collection into JS object
 						let memesJson = {};
