@@ -22,5 +22,5 @@ module.exports = {
             interaction.reply({embeds: [new client.embed().setDescription(`Ok, I have Given <@${member.user.id}> The Helper Role!`).setColor(client.config.embedColor)]});
         }
 	},
-    data: new SlashCommandBuilder().setName("helper_role_manage").setDescription("Adds or removes the helper role from a user").addUserOption((opt)=>opt.setName("member").setDescription("The member to add or remove the role from").setRequired(true))
+    data: new SlashCommandBuilder().setName("helper").setDescription("Adds or removes the helper role from a user").addUserOption((opt)=>opt.setName("member").setDescription("The member to add or remove the role from").setRequired(true))
 };

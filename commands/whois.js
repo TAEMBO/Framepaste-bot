@@ -16,5 +16,5 @@ module.exports = {
 			.setImage(member.user.bannerURL({ format: 'png', dynamic: true, size: 1024}))
 		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
-	data: new SlashCommandBuilder().setName("userinfo").setDescription("Gets info on a user.").addUserOption((opt)=>opt.setName("member").setDescription("The member to get info on.").setRequired(true))
+	data: new SlashCommandBuilder().setName("whois").setDescription("Gets info on a user.").addUserOption((opt)=>opt.setName("member").setDescription("The member to get info on.").setRequired(true))
 };

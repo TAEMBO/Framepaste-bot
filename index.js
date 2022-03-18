@@ -15,7 +15,7 @@ client.tracker = InvitesTracker.init(client, {
 });
 console.log("Using ./config.json");
 
-console.log(`Bot switches\nFramepaste: ${client.config.botSwitches.fpb}\nModmail: ${client.config.botSwitches.modmail}\nCommands: ${client.config.botSwitches.commands}\nAutomod: ${client.config.botSwitches.automod}\nReaction Roles: ${client.config.botSwitches.reactionRoles}\nFree Games: ${client.config.botSwitches.freeGames}`);
+console.log(client.config.botSwitches)
 
 // global properties
 client.on("ready", async () => {
@@ -34,7 +34,7 @@ client.on("ready", async () => {
 			type: "LISTENING",
 		})
 	}, 60000);
-	console.log(`Bot active as ${client.user.tag} using slash commands.`);
+	console.log("\x1b[36m", `Bot active as ${client.user.tag}.`);
 
 	const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
     eventFiles.forEach((file)=>{
