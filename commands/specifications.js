@@ -51,7 +51,7 @@ module.exports = {
 					return interaction.reply(`Successfully deleted all your specs.`);
 				}
 			} else {
-				const member = interaction.options.getUser("member");
+				const member = interaction.options.getMember("member");
 				if (member){
 				if (!client.specsDb.hasUser(member.user.id)) return interaction.reply('They haven\'t added any specs yet.');
 				const embed = client.displaySpecs(client, member);
