@@ -15,7 +15,7 @@ module.exports = {
 		delete require.cache[require.resolve('../databases/memes.json')];
 		const memes = new client.collection(Object.entries(require('../databases/memes.json')));
 		const color = '#1decaf'
-		const failed = () => interaction.reply('You failed. The `meme add` process has ended.');
+		const failed = () => interaction.followUp('You failed. The `meme add` process has ended.');
 		const subCmd = interaction.options.getSubcommand();
 		if(subCmd === "random") {
 			await fetchPost().then(async (body) => {
