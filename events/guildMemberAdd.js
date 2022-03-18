@@ -22,7 +22,7 @@ module.exports = {
         if (member.guild.id !== client.config.mainServer.id) return;
         const oldInvites = client.invites;
         const newInvites = await member.guild.invites.fetch();
-        const usedInvite = newInvites.find(inv => oldInvites.get(inv.code)?.uses ?? 0 < inv.uses);
+        const usedInvite = newInvites.find(inv => oldInvites.get(inv.code)?.uses < inv.uses);
         newInvites.forEach(inv => client.invites.set(inv.code, {uses: inv.uses, creator: inv.inviter.id}));
         if (!usedInvite) {
  
