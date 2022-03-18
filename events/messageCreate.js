@@ -158,7 +158,7 @@ module.exports = {
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
 	// handle discord invite links
 	if (!client.config.botSwitches.automod) return;
-	if (message.content.includes("discord.gg/") && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) && message.guild.id === client.config.mainServer.id) {
+	if (message.content.includes("discord.gg/") && !message.member.roles.cache.has(client.config.mainServer.roles.moderator) && !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)&& message.guild.id === client.config.mainServer.id) {
 		message.delete()
 		client.punishments.addPunishment("warn", message.member, { reason: "Discord advertisement" }, client.user.id)
 		message.channel.send("No advertising other Discord servers.").then(x => setTimeout(() => x.delete(), 10000))
