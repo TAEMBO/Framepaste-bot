@@ -67,6 +67,13 @@ class YClient extends Client {
         this.channelRestrictions.initLoad();
         this.starboard.initLoad().intervalSave(60000);
         this.repeatedMessagesContent.initLoad();
+        const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+        for (const file of commandFiles) {
+	        const command = require(`./commands/${file}`);
+	        this.commands.set(command.data.name, command);
+	        this.registery.push(command.data.toJSON())
+           }
+           this.commands.get("ping").spammers = new this.collection();
         if (this.config.botSwitches.modmail) {
             this.modmailClient.login(this.tokens.modmailBotToken);
         }
