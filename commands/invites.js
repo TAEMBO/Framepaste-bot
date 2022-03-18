@@ -1,7 +1,7 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
 module.exports = {
 	run: async (client, interaction) => {
-		// /if(interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: "This command dosen't work here", ephemeral: true});
+		if(interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: "This command dosen't work here", ephemeral: true});
 		const user = interaction.options.getUser("member") ?? interaction.user;
 		const invitz = await interaction.guild.invites.fetch();
 		const invitez = invitz.filter(x=>x.inviterId===user.id).map(x=>x.uses);
