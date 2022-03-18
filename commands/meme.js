@@ -184,7 +184,7 @@ module.exports = {
 				}
 			} else if(subCmd === "view"){
 			const query = interaction.options.getInteger("number")
-			const meme = memes.get(query)
+			const meme = memes.get(`${query}`)
 			if (!meme) return interaction.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
