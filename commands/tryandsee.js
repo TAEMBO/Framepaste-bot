@@ -1,8 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-    run: (client, message, args) => {
-        message.delete()
-        message.channel.send("https://tryitands.ee/")
+    run: (client, interaction) => {
+        interaction.reply("https://tryitands.ee/")
     },
-    name: 'tryandsee',
-    hidden: true
+    data: new SlashCommandBuilder().setName("tryitandsee").setDescription("Try it and see.")
 };

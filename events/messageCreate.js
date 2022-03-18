@@ -4,7 +4,7 @@ module.exports = {
     giveaway: false,
 	frs: false,
     execute: async (client, message) => {
-    if (!client.config.botSwitches.commands && (!client.config.eval.whitelist.includes(message.author.id) || !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper))) return; // bot is being run in dev mode and a non eval whitelisted or non bot dev user sent a message. ignore the message.
+    if (!client.config.botSwitches.commands && (!client.config.eval.whitelist.includes(message.author.id) || !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper))) return; // bot is being run in dev mode and a non eval whitelisted or non bot dev user sent a interaction. ignore the interaction.
 	if (message.partial) return;
 	if (message.author.bot) return;
 	if (message.channel.type === "DM") {
@@ -43,7 +43,7 @@ module.exports = {
             if (!embed.image && ['png', 'jpg', 'webp', 'gif', 'jpeg'].some(x => attachment.name.endsWith(x))) embed.setImage(attachment.url);
             else messageAttachmentsText += `[${attachment.name}](${attachment.url})\n`;
         });
-        if (messageAttachmentsText.length > 0) embed.addField('Message Attachments', messageAttachmentsText.trim());
+        if (messageAttachmentsText.length > 0) embed.addField('message Attachments', messageAttachmentsText.trim());
         channel.send({content: client.config.eval.whitelist.map(x => `<@${x}>`).join(', '), embeds: [embed]});
     }
     }
@@ -58,11 +58,6 @@ module.exports = {
 	if (client.config.botSwitches.automod && client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && !client.hasModPerms(client, message.member) && message.guild.id === client.config.mainServer.id)
 		return message.delete() && message.channel.send("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000));
 
-	const suggestCommand = client.commands.get("suggest");
-	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(" ")[0] === client.prefix + x) && !message.author.bot) {
-		message.channel.send(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 12000));
-		return message.delete();
-	}
 
 	// useless staff ping mute
 	const punishableRoleMentions = [
@@ -81,54 +76,6 @@ module.exports = {
 			}
 		}).catch(() => console.log("failed to collect \"y\" from staff"));
 	}
-	if (message.content.startsWith(client.prefix)) {
-		const args = message.content.toLowerCase().slice(client.prefix.length).replace(/\n/g, " ").split(" ");
-		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
-		if (commandFile) {
-			console.log(`${message.author.tag} used ,${commandFile.name} in ${message.channel.name}`);
-
-			// channel restrictions
-			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[message.channel.id]?.some(x => x.includes(commandFile.name))) {
-				if (!client.hasModPerms(client, message.member) && !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id) && !message.member.roles.cache.has(client.config.mainServer.roles.helper))
-				return (message.delete() && message.channel.send('Command is restricted in this channel, use <#902524214718902332>').then(m => setTimeout(() => m.delete(), 7000)));
-			}
-
-			// cooldown
-			if (commandFile.cooldown) {
-				const member = client.cooldowns.get(message.author.id);
-				if (member) {
-					if (client.cooldowns.get(message.author.id).get(commandFile.name) > Date.now()) {
-						const commandCooldownForUser = client.cooldowns.get(message.author.id).get(commandFile.name);
-						const cooldownMention = await message.channel.send(`You need to wait ${Math.ceil((commandCooldownForUser - Date.now()) / 1000)} seconds until you can use this command again.`);
-						if (message.channel.id === client.config.mainServer.channels.suggestions) {
-							setTimeout(async () => {
-								await cooldownMention.delete();
-								await message.delete().catch(err => console.log("could not delete ,suggest message (on cooldown) because", err.message));
-							}, 20000);
-						}
-						return;
-					} else {
-						client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
-					}
-				} else {
-					if (!client.config.eval.whitelist.includes(message.author.id)) {
-						client.cooldowns.set(message.author.id, new client.collection())
-						client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
-					}
-				}
-			}
-
-			// do the command
-			try {
-				commandFile.run(client, message, args);
-				commandFile.uses ? commandFile.uses++ : commandFile.uses = 1;
-				return;
-			} catch (error) {
-				console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
-				return message.channel.send("An error occured while executing that command.");
-			}
-		}
-	} else {
 
 		function onTimeout() {
 			if (client.repeatedMessages[message.author.id]?.nicknameChanged) message.member.setNickname(null, "repeated messages; false alarm");
@@ -183,12 +130,11 @@ module.exports = {
 					// timestamp of first spammed message
 					const spamOriginTimestamp = client.repeatedMessages[message.author.id].firstKey();
 
-					// store args in json
 					client.repeatedMessagesContent.addData(message.content.split(' ')).forceSave();
 					const index = client.repeatedMessagesContent._content.length - 1;
 
 					// send info about this user and their spamming
-					client.channels.cache.get(client.config.mainServer.channels.caselogs).send({content: `Anti-spam triggered, here's the details:\n\`https://\` ${message.content.toLowerCase().includes("https://") ? ":white_check_mark:" : ":x:"}\n\`http://\` ${message.content.toLowerCase().includes("http://") ? ":white_check_mark:" : ":x:"}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes("@everyone") || message.content.toLowerCase().includes("@here")) ? ":white_check_mark:" : ":x:"}\n\`top-level domain\` ${[".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join("\n")}\nThreshold: ${threshold}ms\nLRS Message Count: ${client.userLevels.getUser(message.author.id)}`});
+					client.channels.cache.get(client.config.mainServer.channels.caselogs).send({content: `Anti-spam triggered, here's the details:\n\`https://\` ${message.content.toLowerCase().includes("https://") ? ":white_check_mark:" : ":x:"}\n\`http://\` ${message.content.toLowerCase().includes("http://") ? ":white_check_mark:" : ":x:"}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes("@everyone") || message.content.toLowerCase().includes("@here")) ? ":white_check_mark:" : ":x:"}\n\`top-level domain\` ${[".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join("\n")}\nThreshold: ${threshold}ms\nLRS message Count: ${client.userLevels.getUser(message.author.id)}`});
 
 					// and clear their list of long messages
 					delete client.repeatedMessages[message.author.id];
@@ -210,7 +156,6 @@ module.exports = {
 		];
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
-	}
 	// handle discord invite links
 	if (!client.config.botSwitches.automod) return;
 	if (message.content.includes("discord.gg/") && (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) && message.guild.id === client.config.mainServer.id) {
@@ -235,5 +180,5 @@ module.exports = {
 	if (message.content.toLowerCase().includes("userbenchmark.com")) {
 		message.reply(":b:ingus y u use userbenchmark");
 	}
-    }
+}
 }

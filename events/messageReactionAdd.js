@@ -15,12 +15,11 @@ module.exports = {
         // non star emoji or bot
         if (reaction.emoji.name !== '⭐' || user.bot) return;
 
-        // starred own message
+        // starred own interaction
         if ((message.author.id === user.id || message.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed) {
             reaction.users.remove(user.id);
             return message.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 6000));
         }
-
         // star increment
         if (channel.id === client.config.mainServer.channels.starboard) {
             if (!message.embeds[0]) return;

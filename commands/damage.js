@@ -1,10 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		message.delete();
-		message.channel.send("https://c.tenor.com/mm6gNAyiobUAAAAC/emotional-damage.gif");
+	run: (client, interaction) => {
+		interaction.reply("https://c.tenor.com/mm6gNAyiobUAAAAC/emotional-damage.gif");
 	},
-	name: 'EMOTIONALDAMAGE',
-	alias: ['emotionaldamage', 'damage'],
-	description: `Made by ItzDihan7674 (for real)`,
-	hidden: true
+	data: new SlashCommandBuilder().setName("damage").setDescription("Made by ItzDihan7674 (for real)"),
 };

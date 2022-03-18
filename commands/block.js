@@ -1,14 +1,10 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`);
-		if (!args[1]) return message.channel.send('You need to add a user or user ID.');
-		const userid = message.mentions.users.first()?.id || args[1];
-		client.dmForwardBlacklist.addData(userid).forceSave();
-		message.reply({content: `Successfully blocked user ${userid}`, allowedMentions: { repliedUser: false }});
+	run: (client, interaction) => {
+		if (!client.hasModPerms(client, interaction.member)) return interaction.reply(`You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`);
+		client.dmForwardBlacklist.addData(interaction.options.getUser("user").id).forceSave();
+		interaction.reply({content: `Successfully blocked user ${interaction.options.getUser("user").id}`, allowedMentions: { repliedUser: false }});
 	},
-	name: 'block',
-	usage: ['user id / mention'],
-	description: 'Block user from sending DMs to the bot or ModMail. Used as a punishment for users who abuse the aforementioned features.',
-	shortDescription: 'Block user from DMing bot.',
-	category: 'Moderation'
+	data: new SlashCommandBuilder().setName("block").setDescription("Block user from sending DMs to the bot or ModMail.").addUserOption((opt)=>opt.setName("user").setDescription("The user to block from DMing the bot.").setRequired(true)),
 };

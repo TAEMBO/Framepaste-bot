@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const util = require('util');
 const removeUsername = (text) => {
 	let matchesLeft = true;
@@ -15,10 +16,10 @@ const removeUsername = (text) => {
 	return array.join('\\');
 };
 module.exports = {
-	run: async (client, message, args) => {
-		if (!client.config.eval.allowed) return message.reply({content: 'Eval is disabled.', allowedMentions: { repliedUser: false }});
-		if (!client.config.eval.whitelist.includes(message.author.id) && !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)) return message.reply({content: 'You\'re not allowed to use eval', allowedMentions: { repliedUser: false }});
-		const code = message.content.slice(client.prefix.length + args[0].length + 1);
+	run: async (client, interaction) => {
+		if (!client.config.eval.allowed) return interaction.reply({content: 'Eval is disabled.', allowedMentions: { repliedUser: false }});
+		if (!client.config.eval.whitelist.includes(interaction.user.id) && !interaction.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)) return interaction.reply({content: 'You\'re not allowed to use eval', allowedMentions: { repliedUser: false }});
+		const code = interaction.options.getString("code")
 		let output = 'error';
 		let error = false;
 		try {
@@ -30,9 +31,9 @@ module.exports = {
 				.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
 				.addField('Output', `\`\`\`\n${err}\n\`\`\``)
 				.setColor('ff0000');
-			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((e)=>message.channel.send({embeds: [embed]})).then(errorEmbedMessage => {
-				const filter = x => x.content === 'stack' && x.author.id === message.author.id
-				const messagecollector = message.channel.createMessageCollector({ filter, max: 1, time: 60000 });
+			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((e)=>interaction.channel.send({embeds: [embed]})).then(errorEmbedMessage => {
+				const filter = x => x.content === 'stack' && x.author.id === interaction.user.id
+				const messagecollector = interaction.channel.createMessageCollector({ filter, max: 1, time: 60000 });
 				messagecollector.on('collect', collected => {
 					collected.reply({content: `\`\`\`\n${removeUsername(err.stack)}\n\`\`\``, allowedMentions: { repliedUser: false }});
 				});
@@ -51,9 +52,7 @@ module.exports = {
 			.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
 			.addField('Output', `\`\`\`${removeUsername(output).slice(0, 1016)}\n\`\`\``)
 			.setColor(client.config.embedColor);
-		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((e)=>message.channel.send({embeds: [embed]}));
+		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((e)=>interaction.channel.send({embeds: [embed]}));
 	},
-	name: 'eval',
-	description: 'Run code for debugging purposes',
-	category: 'Bot'
+	data: new SlashCommandBuilder().setName("eval").setDescription("Evaluates some code!").addStringOption((opt)=>opt.setName("code").setDescription("The code to eval!").setRequired(true))
 };

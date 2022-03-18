@@ -1,6 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		let words = args.slice(1);
+	run: (client, interaction) => {
+		let words = interaction.options.getString("text").split(" ");
 		const vowels = 'aeiouy';
 		const punctuation = '"\'`´.,;:?!()';
 		if (words.every(x => x.toLowerCase().split('').filter(x => !punctuation.includes(x)).join('').endsWith('ay'))) {
@@ -23,8 +25,8 @@ module.exports = {
 					}
 				}
 			});
-			if (words.join(' ').length === 0) return message.reply('Sorry, I can\'t translate your text because the result would be nothing.');
-			return message.reply(words.join(' '));
+			if (words.join(' ').length === 0) return interaction.reply('Sorry, I can\'t translate your text because the result would be nothing.');
+			return interaction.reply(words.join(' '));
 		}
 		words = words.map(word => {
 			// if word begins with a vowel
@@ -53,12 +55,8 @@ module.exports = {
 				return text;
 			}
 		});
-		if (words.join(' ').length === 0) return message.reply('Sorry, I can\'t translate your text because the result would be nothing.');
-		message.reply(words.join(' ').toLowerCase());
+		if (words.join(' ').length === 0) return interaction.reply('Sorry, I can\'t translate your text because the result would be nothing.');
+		interaction.reply(words.join(' ').toLowerCase());
 	},
-	name: 'piglatin',
-	description: 'Translates text into Pig Latin or Pig Latin to english if the text is already in Pig Latin. Pig Latin to english sucks because the bot is stupid.',
-	shortDescription: 'Translates Pig Latin.',
-	usage: ['text'],
-	category: 'Fun'
+	data: new SlashCommandBuilder().setName("piglatin").setDescription("Translates text into Pig Latin or Pig Latin to english if the text is already in Pig Latin.").addStringOption((opt)=>opt.setName("text").setDescription("Text to translate into piglatin.").setRequired(true)),
 };

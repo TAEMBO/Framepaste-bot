@@ -1,11 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		message.delete();
-		if (!args[1]) return message.channel.send('You need to add something to search.').then(m => setTimeout(() => m.delete(), 6000));
-        message.channel.send(`https://www.google.com/search?q=${args.slice(1).join('+')}`)
+	run: (client, interaction) => {
+        interaction.reply(`https://www.google.com/search?q=${new URLSearchParams(interaction.options.getString("query")).toString()}`)
 	},
-	name: 'google',
-	description: 'Generate a Google search URL',
-	usage: ['search term'],
-	hidden: true
+	data: new SlashCommandBuilder().setName("google").setDescription("Googles something.").addStringOption((opt)=>opt.setName("query").setDescription("What to search for.").setRequired(true))
 };

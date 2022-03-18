@@ -1,9 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		client.punish(client, message, args, 'warn');
+	run: (client, interaction) => {
+		client.punish(client, interaction, 'warn');
 	},
-	name: 'warn',
-	description: 'Add a warning to a member.',
-	usage: ['user mention or id', '?reason'],
-	category: 'Moderation'
+	data: new SlashCommandBuilder().setName("warn").setDescription("Warns a user.").addUserOption((opt)=>opt.setName("member").setDescription("The member to warn.").setRequired(true)).addStringOption((opt)=>opt.setName("reason").setDescription("The reason to warn the user.").setRequired(false))
 };

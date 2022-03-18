@@ -1,11 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		if (!args[1]) return message.channel.send('You need to add a word to ban.');
-		message.reply({content: `https://cdn.discordapp.com/emojis/${args[1]}.png`, allowedMentions: { repliedUser: false }});
+	run: (client, interaction) => {
+		interaction.reply({content: `https://cdn.discordapp.com/emojis/${interaction.options.getString("emoji")}.png`, allowedMentions: { repliedUser: false }});
 	},
-	name: 'semojilink',
-    alias: ['sel'],
-	usage: ['emoji ID'],
-	description: 'Convert an static emoji to a png link',
-    hidden: true
+	data: new SlashCommandBuilder().setName("semojilink").setDescription("Converts a static emoji to a png.").addStringOption((opt)=>opt.setName("emoji").setDescription("The emoji to convert.").setRequired(true))
 };

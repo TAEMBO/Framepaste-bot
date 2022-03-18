@@ -1,7 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		const role = message.guild.roles.cache.find(x => x.id === args[1] || x.id === message.mentions.roles?.first()?.id) || message.guild.roles.everyone;
-		if (!role) return message.reply({content: 'Role not found.', allowedMentions: { repliedUser: false }});
+	run: (client, interaction) => {
+		const role = interaction.options.getRole("role");
 		const keyPermissions = ['ADMINISTRATOR', 'KICK_MEMBERS', 'BAN_MEMBERS', 'MANAGE_CHANNELS', 'MANAGE_GUILD', 'VIEW_AUDIT_LOG', 'MANAGE_MESSAGES', 'MENTION_EVERYONE', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES', 'MANAGE_EMOJIS_AND_STICKERS', 'MODERATE_MEMBERS'];
 		const permissions = role.permissions.toArray();
 		const embed = new client.embed()
@@ -15,10 +16,7 @@ module.exports = {
 			}).join(', ') || 'None')
 			.setColor(role.color || '#fefefe')
 			.setThumbnail(role?.iconURL())
-		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
-	name: 'roleinfo',
-	alias: ['role'],
-	description: 'Information about a role.',
-	usage: ['role name / id / mention']
+	data: new SlashCommandBuilder().setName("roleinfo").setDescription("Get's information about a role.").addRoleOption((opt)=>opt.setName("role").setDescription("The role to get information on.").setRequired(true))
 }

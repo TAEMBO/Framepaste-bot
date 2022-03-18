@@ -1,10 +1,9 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
+	run: (client, interaction) => {
 		// 20% of the time responds with a ping
-		if (Math.random() < 0.2) message.reply(message.member.toString() + (Math.random() < 0.2 ? ' is a :b:ingus' : ' is sus!'));
+		if (Math.random() < 0.2){ interaction.reply(interaction.member.toString() + (Math.random() < 0.2 ? ' is a :b:ingus' : ' is sus!')); } else { interaction.deferReply({ephemeral: true}); };
 	},
-	name: 'sus',
-	description: 'GuildMember deserialization with binary tree inversion.',
-	alias: ['amogus'],
-	usage: ['go', 'bend', 'CPU', 'pins']
+	data: new SlashCommandBuilder().setName("sus").setDescription("GuildMember deserialization with binary tree inversion.")
 };

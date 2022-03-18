@@ -1,9 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		client.punish(client, message, args, 'softban');
+	run: (client, interaction) => {
+		client.punish(client, interaction, 'softban');
 	},
-	name: 'softban',
-	description: 'Ban a member, delete their messages from the last 7 days and unban them.',
-	usage: ['user mention or id', '?reason'],
-	category: 'Moderation'
+	data: new SlashCommandBuilder().setName("softban").setDescription("Bans a member, delete their messages from the last 7 days and unbans them.").addUserOption((opt)=>opt.setName("member").setRequired(true).setDescription("The member to softban.")).addStringOption((opt)=>opt.setName("reason").setDescription("The reason for softbanning this user."))
 };

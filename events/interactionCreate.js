@@ -6,7 +6,7 @@ module.exports = {
     tracker: false,
     frs: false,
     execute: async (client, interaction) => {
-if(interaction.isButton()){
+        if(interaction.isButton()){
         const sugges = ["suggestion-decline", "suggestion-upvote"]
         if(sugges.includes(interaction.customId) && interaction.isButton()){
         const hasVoted = client.votes._content.includes(`${interaction.user.id}: ${interaction.message.id}`)
@@ -35,12 +35,10 @@ if(interaction.isButton()){
             UpdateButtons(ee, downvotes, interaction.message, interaction.user.id)
             interaction.reply({embeds: [new MessageEmbed().setDescription("✅ Upvote recorded!").setColor(client.config.embedColorGreen).setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
         }
-        // delete message and dont handle reaction if message is not a suggestion, but a suggestion command
-        if (interaction.message.author.id !== client.user.id && message.content.startsWith(client.prefix + 'suggest')) return message.delete();
 
-        const embed = interaction.message.embeds[0];
-        async function UpdateButtons(upvotes, downvotes = Number, message, user){             message.edit({embeds: [message.embeds[0]], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel(`${upvotes}`), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel(`${downvotes}`))]});
-             await client.votes.addData(`${user}: ${message.id}`).forceSave();
+        async function UpdateButtons(upvotes, downvotes = Number, message, user){
+            message.edit({embeds: [message.embeds[0]], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel(`${upvotes}`), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel(`${downvotes}`))]});
+            await client.votes.addData(`${user}: ${message.id}`).forceSave();
         }
     } else if(interaction.customId.startsWith("reaction-") && client.config.botSwitches.reactionRoles){
         interaction.deferUpdate();
@@ -52,7 +50,24 @@ if(interaction.isButton()){
         }
    }
    } else if(interaction.isCommand()){
-             interaction.reply({content: "command received"})
-}
-}
+    const commandFile = client.commands.get(interaction.commandName);
+    if (commandFile) {
+        console.log(`${interaction.user.tag} used /${interaction.commandName} in ${interaction.channel.name}`);
+
+        // channel restrictions
+        if (client.channelRestrictions._content[interaction.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[interaction.channel.id]?.some(x => x.includes(commandFile.name))) {
+            if (!client.hasModPerms(client, interaction.member) && !interaction.member.roles.cache.has(client.config.mainServer.roles.levels.three.id) && !interaction.member.roles.cache.has(client.config.mainServer.roles.helper))
+            return interaction.reply({content: 'Command is restricted in this channel, use <#902524214718902332>', ephemeral: true})
+        }
+        try {
+            commandFile.run(client, interaction);
+            commandFile.uses ? commandFile.uses++ : commandFile.uses = 1;
+            return;
+        } catch (error) {
+            console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
+            return interaction.reply("An error occured while executing that command.");
+        }
+    }
+   }
+   }
 }

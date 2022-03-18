@@ -1,8 +1,7 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
-	run: (client, message, args) => {
-		message.reply({content: 'https://www.hwinfo.com/', allowedMentions: { repliedUser: false }});
+	run: (client, interaction) => {
+		interaction.reply({content: 'https://www.hwinfo.com/', allowedMentions: { repliedUser: false }});
 	},
-	name: 'hwinfo',
-	description: 'HWiNFO download link',
-	category: 'Real Computers'
+	data: new SlashCommandBuilder().setName("hwinfo").setDescription("Gives a download link for HWiNFO"),
 };

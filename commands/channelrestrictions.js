@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
 function displayCr(channels = [], client) {
 	// channels is an array of channel ids
 	// returns an embed description
@@ -45,36 +46,40 @@ function displayCr(channels = [], client) {
 	return description;
 }
 module.exports = {
-	run: (client, message, args) => {
-		if (args[1]) {
-			if (args[1] === 'categorynames') {
+	run: (client, interaction) => {
+		const subCmd = interaction.options.getSubcommand();
+		if (subCmd === "category_names") {
 				const embed = new client.embed()
 					.setTitle('Acceptable command and category names')
 					.setDescription(client.categoryNames.join(', '))
 					.setFooter({text: 'Or any bot command name.'})
 					.setColor(client.config.embedColor)
-				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-			} else if (['how', 'why', 'what'].includes(args[1])) {
+				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			} else if (subCmd === "why") {
 				const embed = new client.embed()
 					.setTitle('Why can I not do bot commands?')
 					.addField(':small_blue_diamond: The command you tried to do is restricted in this channel.', 'This is to reduce spam and clutter.')
 					.addField(':small_blue_diamond: Try a different channel instead.', '<#902524214718902332> is a channel dedicated to using bot commands.')
-					.addField(':small_blue_diamond: This phenomenon is called _channel restrictions._', `<@&${client.config.mainServer.roles.moderator}>s restrict certain categories of commands from being used in different channels. Active restrictions are available for everyone to see with \`${client.prefix}channelrestrictions\`.`)
+					.addField(':small_blue_diamond: This phenomenon is called _channel restrictions._', `<@&${client.config.mainServer.roles.moderator}>s restrict certain categories of commands from being used in different channels. Active restrictions are available for everyone to see with \`/channelrestrictions\`.`)
 					.addField(':small_blue_diamond: How come _you_ can use restricted commands?', `Anyone with the <@&${client.config.mainServer.roles.levels.three.id}> role can bypass channel restrictions.`)
 					.setColor(client.config.embedColor)
-				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-		 	} else {
+				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+		 	} else if(subCmd === "view") {
+				const channelId = interaction.options.getChannel("channel").id;
+				const embed = new client.embed()
+					.setTitle('Active channel restrictions')
+					.setDescription(displayCr([channelId], client))
+					.setColor(client.config.embedColor)
+				if (embed.description.length === 0) embed.setDescription(`<#${channelId}> has no active channel restrictions.`);
+				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			} else {
 
-				if (!message.mentions.channels.first()) return message.reply('You must mention a channel.');
-
-				const channelId = message.mentions.channels.first().id;
-
-				if (args[2]) {
-					if (!client.hasModPerms(client, message.member)) return message.reply(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
+				const channelId = interaction.options.getChannel("channel");
+				const categoryOrCommandName = interaction.options.getString("category_or_command_name").toLowerCase();
+				if (categoryOrCommandName) {
+					if (!client.hasModPerms(client, interaction.member)) return interaction.reply(`You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 
 					let restrictionsForThisChannel = client.channelRestrictions._content[channelId];
-
-					const categoryOrCommandName = args.slice(2).join(' ').toLowerCase();
 
 					if (client.categoryNames.some(x => categoryOrCommandName === x.toLowerCase())) {
 						// toggle categoryname
@@ -82,13 +87,13 @@ module.exports = {
 							const removed = restrictionsForThisChannel.splice(restrictionsForThisChannel.map(x => x.toLowerCase()).indexOf(categoryOrCommandName), 1)[0];
 							if (restrictionsForThisChannel.length === 0) client.channelRestrictions.removeData(channelId);
 							client.channelRestrictions.forceSave();
-							return message.reply({content: `Successfully removed restriction of ${removed} commands in <#${channelId}>`, allowedMentions: { repliedUser: false }});
+							return interaction.reply({content: `Successfully removed restriction of ${removed} commands in <#${channelId}>`, allowedMentions: { repliedUser: false }});
 						} else {
 							const added = client.categoryNames.find(x => x.toLowerCase() === categoryOrCommandName);
 							if (restrictionsForThisChannel) restrictionsForThisChannel.push(added);
 							else client.channelRestrictions._content[channelId] = [added];
 							client.channelRestrictions.forceSave();
-							return message.reply({content: `Successfully added restriction of ${added} commands in <#${channelId}>`, allowedMentions: { repliedUser: false }});
+							return interaction.reply({content: `Successfully added restriction of ${added} commands in <#${channelId}>`, allowedMentions: { repliedUser: false }});
 						}
 					} else if (client.commands.some(x => x.name === categoryOrCommandName)) {
 						// categoryOrCommandName is a command
@@ -112,7 +117,7 @@ module.exports = {
 							}
 
 							client.channelRestrictions.forceSave();
-							return message.reply({content: `Successfully removed restriction of \`${categoryOrCommandName}\` command in <#${channelId}>`, allowedMentions: { repliedUser: false }});
+							return interaction.reply({content: `Successfully removed restriction of \`${categoryOrCommandName}\` command in <#${channelId}>`, allowedMentions: { repliedUser: false }});
 						} else {
 							// restrict command
 							if (!restrictionsForThisChannel) {
@@ -135,34 +140,15 @@ module.exports = {
 							}
 							// save
 							client.channelRestrictions.forceSave();
-							return message.reply({content: `Successfully added restriction of \`${categoryOrCommandName}\` command in <#${channelId}>`, allowedMentions: { repliedUser: false }});
+							return interaction.reply({content: `Successfully added restriction of \`${categoryOrCommandName}\` command in <#${channelId}>`, allowedMentions: { repliedUser: false }});
 						}
 					} else {
-						return message.reply({content: 'You must enter an acceptable category or command name.', allowedMentions: { repliedUser: false }});
+						return interaction.reply({content: 'You must enter an acceptable category or command name.', allowedMentions: { repliedUser: false }});
 					}
-				} else {
-					const embed = new client.embed()
-						.setTitle('Active channel restrictions')
-						.setDescription(displayCr([channelId], client))
-						.setColor(client.config.embedColor)
-					if (embed.description.length === 0) embed.setDescription(`<#${channelId}> has no active channel restrictions.`);
-					return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 				}
 			}
-		} else {
-			const embed = new client.embed()
-				.setTitle('Active channel restrictions')
-				.setDescription(displayCr(Object.keys(client.channelRestrictions._content), client))
-				.setColor(client.config.embedColor)
-			if (embed.description.length === 0) embed.setDescription('None');
-			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-		}
-	},
-	name: 'channelrestrictions',
-	alias: ['cr'],
-	description: 'Toggle or view restrictions of entire categories of commands or individual commands from being used in a text channel. Restrictions are overridden by moderators and members who have the Level 3 role. Only moderators are allowed to edit channel restrictions.\n\nUsage:\nDon\'t add anything for a complete list of active restrictions.\nAdd a channel mention to view active restrictions for that channel.\nAdd "categorynames" to view a list of acceptable category names.\nAdd a channel mention and category name to toggle the restriction of that category in that channel.',
-	shortDescription: 'Toggle channel-specific command usage restrictions.',
-	usage: ['?channel mention / "categorynames" / "how"', '?category name'],
+		},
+	data: new SlashCommandBuilder().setName("channel_restrictions").setDescription("View, Add, Remove, Or Get An Explanation For Channel Restrictions").addSubcommand((optt)=>optt.setName("view").setDescription("View all channel restrictions").addChannelOption((opt)=>opt.setName("channel").setDescription("The channel to retreive restrictions for.").setRequired(true))).addSubcommand((optt)=>optt.setName("why").setDescription("An explanation why.")).addSubcommand((optt)=>optt.setName("category_names").setDescription("A short category view.")).addSubcommand((optt)=>optt.setName("change").setDescription("Add or remove channel restrictions").addChannelOption((opt)=>opt.setName("channel").setDescription("The channel to change restrictions for.").setRequired(true)).addStringOption((opt)=>opt.setName("category_or_command_name").setDescription("The cateogry ot command name.").setRequired(true))),
 	category: 'Moderation',
 	cooldown: 6
-};
+	};

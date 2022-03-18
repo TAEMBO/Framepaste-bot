@@ -1,13 +1,11 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`);
-		if (!args[1]) return message.channel.send('You need to add a word to ban.');
-		client.bannedWords.addData(args.slice(1).join(' ')).forceSave();
-		message.reply({content: `Successfully added \`${args.slice(1).join(' ')}\` to bannedWords list`, allowedMentions: { repliedUser: false }});
+	run: (client, interaction) => {
+		if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, ephemeral: true});
+		client.bannedWords.addData(interaction.options.getString("word")).forceSave();
+		interaction.reply({content: `Successfully added \`${interaction.options.getString("word")}\` to bannedWords list`, allowedMentions: { repliedUser: false }});
 	},
-	name: 'addbannedword',
-    alias: ['abw', 'bannedword'],
-	usage: ['word/phrase'],
-	description: 'Add a word to the bannedWords database',
+	data: new SlashCommandBuilder().setName("addbannedword").setDescription("Add a word to the bannedWords database").addStringOption((opt)=>opt.setName("word").setDescription("The word you would like to add to the bannedWords database!").setRequired(true)),
 	category: 'Moderation'
 };

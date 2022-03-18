@@ -1,38 +1,32 @@
-module.exports = {
-    run: async (client, message, args) => {
-        if (message.guild.id !== client.config.mainServer.id) {
-            return message.reply({content: 'Wrong server.', allowedMentions: { repliedUser: false }})
-        }
-        if (!client.hasModPerms(client, message.member)) {
-            return message.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
-        }
-        if (!args[1]) {
-            return message.channel.send(':boom: Uh oh, I couldn\'t find that message! Try again!');
-        }
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
-        let giveaway =
-            client.giveawaysManager.storage.find((g) => g.prize === args.slice(1).join(' ')) ||
-            client.giveawaysManager.storage.find((g) => g.messageID === args[1]);
+module.exports = {
+    run: async (client, interaction) => {
+        if (interaction.guild.id !== client.config.mainServer.id) {
+            return interaction.reply({content: 'Wrong server.', allowedMentions: { repliedUser: false }})
+        }
+        if (!client.hasModPerms(client, interaction.member)) {
+            return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
+        }
+        
+        const giveaway = client.giveawaysManager.giveaways.find(x=>x.id===interaction.options.getString("message_id"));
 
         if (!giveaway) {
-            return message.channel.send(':boom: Hm. I can\'t seem to find a giveaway for `' + args.slice(1).join(' ') + '`.');
+            return interaction.reply(':boom: Hm. I can\'t seem to find a giveaway for `' + interaction.options.getString("message_id") + '`.');
         }
 
         client.giveawaysManager.reroll(giveaway.messageID)
             .then(() => {
-                message.channel.send('Giveaway rerolled!');
+                interaction.reply('Giveaway rerolled!');
             })
             .catch((e) => {
-                if (e.startsWith(`Giveaway with message ID ${giveaway.messageID} has not ended.`)) {
-                    message.channel.send('This giveaway has not ended!');
+                if (e.startsWith(`Giveaway with interaction ID ${giveaway.messageID} has not ended.`)) {
+                    interaction.followUp('This giveaway has not ended!');
                 } else {
                     console.error(e);
-                    message.channel.send('An error occurred...');
+                    interaction.followUp('An error occurred...');
                 }
             });
     },
-    name: "reroll",
-    description: "Rerolls a giveaway.",
-    usage: ['message ID'],
-    category: "Giveaways",
+    data: new SlashCommandBuilder().setDescription("Rerolls a giveaway").setName("reroll").addStringOption((opt)=>opt.setName("message_id").setDescription("The ID of the Giveaway Message.").setRequired(true))
 }

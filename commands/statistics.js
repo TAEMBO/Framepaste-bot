@@ -1,13 +1,14 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
-	run: (client, message, args) => {
+	run: (client, interaction) => {
 		const colunms = ['Command Name', 'Count'];
 		const includedCommands = client.commands.filter(x => x.uses).sort((a, b) => b.uses - a.uses);
-		if (includedCommands.size === 0) return message.reply({content: `No commands have been used yet.\nUptime: ${client.formatTime(client.uptime, 2, { commas: true, longNames: true })}`, allowedMentions: {repliedUser: false}}); 
-		const nameLength = Math.max(...includedCommands.map(x => x.name.length), colunms[0].length) + 2;
+		if (includedCommands.size === 0) return interaction.reply({content: `No commands have been used yet.\nUptime: ${client.formatTime(client.uptime, 2, { commas: true, longNames: true })}`, allowedMentions: {repliedUser: false}}); 
+		const nameLength = Math.max(...includedCommands.map(x => x.data.name.length), colunms[0].length) + 2;
 		const amountLength = Math.max(...includedCommands.map(x => x.uses.toString().length), colunms[1].length) + 1;
 		const rows = [`${colunms[0] + ' '.repeat(nameLength - colunms[0].length)}|${' '.repeat(amountLength - colunms[1].length) + colunms[1]}\n`, '-'.repeat(nameLength) + '-'.repeat(amountLength) + '\n'];
 		includedCommands.forEach(command => {
-			const name = command.name;
+			const name = command.data.name;
 			const count = command.uses.toString();
 			rows.push(`${name + '.'.repeat(nameLength - name.length)}${'.'.repeat(amountLength - count.length) + count}\n`);
 		});
@@ -30,10 +31,7 @@ module.exports = {
 		} else {
 			embed.addField('\u200b', '```\n' + rows.join('') + '```');
 		}
-		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
-	name: 'statistics',
-	description: 'See a list of commands ordered by usage',
-	alias: ['stats', 'cmdusage'],
-	category: 'Bot'
+	data: new SlashCommandBuilder().setName("statistics").setDescription("See a list of commands ordered by usage.")
 };

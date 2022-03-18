@@ -1,52 +1,28 @@
 const intents = ["GUILDS", "GUILD_MESSAGES", "GUILD_EMOJIS_AND_STICKERS", "GUILD_BANS", "DIRECT_MESSAGES", "GUILD_VOICE_STATES", "DIRECT_MESSAGE_REACTIONS", "GUILD_MESSAGE_REACTIONS", "GUILD_MEMBERS"]
 const Discord = require("discord.js");
-const client = new Discord.Client({ intents: intents, disableEveryone: true, partials: ["MESSAGE", "REACTION", "CHANNEL"] });
-const modmailClient = new Discord.Client({ disableEveryone: true, intents: intents, partials: ["MESSAGE", "REACTION", "CHANNEL"]});
+const YClient = require("./client");
+const client = new YClient();
+client.init();
 const fs = require("fs");
-const path = require("path");
-const database = require("./database.js");
+if (client.config.botSwitches.modmail) {
+	client.modmailClient.login(client.tokens.modmailBotToken);
+}
 const InvitesTracker = require('@androz2091/discord-invites-tracker');
 client.tracker = InvitesTracker.init(client, {
     fetchGuilds: true,
     fetchVanity: true,
     fetchAuditLogs: true
 });
-client.config = require("./config.json");
 console.log("Using ./config.json");
 
 console.log(`Bot switches\nFramepaste: ${client.config.botSwitches.fpb}\nModmail: ${client.config.botSwitches.modmail}\nCommands: ${client.config.botSwitches.commands}\nAutomod: ${client.config.botSwitches.automod}\nReaction Roles: ${client.config.botSwitches.reactionRoles}\nFree Games: ${client.config.botSwitches.freeGames}`);
 
-Object.assign(client.config, require("./tokens.json"));
-client.prefix = client.config.prefix;
-client.setMaxListeners(100)
 // global properties
-Object.assign(client, {
-	embed: Discord.MessageEmbed,
-	messageCollector: Discord.MessageCollector,
-	collection: Discord.Collection,
-	messageattachment: Discord.MessageAttachment,
-	cpulist: {
-		INTEL: JSON.parse(fs.readFileSync(__dirname + "/databases/cpulist-INTEL.json")),
-		AMD: JSON.parse(fs.readFileSync(__dirname + "/databases/cpulist-AMD.json")),
-	},
-	memberCount_LastGuildFetchTimestamp: 0,
-	helpDefaultOptions: {
-		parts: ["name", "usage", "shortDescription", "alias"],
-		titles: ["alias"]
-	},
-	embedColor: 14014681,
-	starLimit: 3,
-	selfStarAllowed: false
-});
-const {FreeStuffApi} = require("freestuff");
-const frs = new FreeStuffApi({
-	key: client.config.fsApiKey
-  });
-client.frs = frs;
-// main bot login
 client.on("ready", async () => {
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
 	await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(' ')}`)});
+	setInterval(()=>{client.guilds.cache.get(client.config.mainServer.id).invites.fetch().then((invs)=>{invs.forEach(async(inv)=>{client.invites.set(inv.code, {uses: inv.uses, creator: inv.inviter.id})})})}, 500000)
+	if(client.config.botSwitches.registerCommands) client.application.commands.set(client.registery).catch((e)=>{console.log(`Couldn't register commands bcuz: ${e}`)});
 	process.on("unhandledRejection", async (error)=>{
 		console.log(error)
 		await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{
@@ -54,25 +30,11 @@ client.on("ready", async () => {
 		})
 	});
 	setInterval(async () => {
-		await client.user.setActivity(`${client.prefix}help`, {
+		await client.user.setActivity(`/help`, {
 			type: "LISTENING",
 		})
 	}, 60000);
-	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
-
-	// giveaways
-	const { GiveawaysManager } = require('discord-giveaways');
-	client.giveawaysManager = new GiveawaysManager(client, {
-		storage: "./databases/giveaways.json",
-		updateCountdownEvery: 5000,
-		default: {
-			botsCanWin: false,
-			embedColor: client.config.embedColor,
-			embedColorEnd: 14495300,
-			
-			reaction: "🎉"
-		}
-	});
+	console.log(`Bot active as ${client.user.tag} using slash commands.`);
 
 	const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
     eventFiles.forEach((file)=>{
@@ -82,7 +44,7 @@ client.on("ready", async () => {
     } else if(event.tracker){
 	client.tracker.on(event.name, async (...args) => event.execute(client, ...args));
     } else if(event.frs){
-		frs.on(event.name, async (...args) => event.execute(client, frs, ...args));
+		client.frs.on(event.name, async (...args) => event.execute(client, frs, ...args));
 	} else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));
     };
@@ -90,52 +52,14 @@ client.on("ready", async () => {
 });
 
 // modmail bot login
-modmailClient.on("ready", async () => {
+client.modmailClient.on("ready", async () => {
 	setInterval(async () => {
-		await modmailClient.user.setActivity("DMs", {
+		await client.modmailClient.user.setActivity("DMs", {
 			type: "LISTENING",
 		});
 	}, 60000);
-	console.log(`Modmail Bot active as ${modmailClient.user.tag}`);
+	console.log(`Modmail Bot active as ${client.modmailClient.user.tag}`);
 });
-
-// meme approval queue
-client.memeQueue = new client.collection();
-
-// cooldowns
-client.cooldowns = new client.collection();
-
-// databases
-client.bannedWords = new database("./databases/bannedWords.json", "array");
-client.bannedWords.initLoad();
-
-client.tictactoeDb = new database("./databases/ttt.json", "array"); /* players, winner, draw, startTime, endTime */
-client.tictactoeDb.initLoad().intervalSave();
-
-client.userLevels = new database("./databases/userLevels.json", "object");
-client.userLevels.initLoad().intervalSave(15000).disableSaveNotifs();
-
-client.dmForwardBlacklist = new database("./databases/dmforwardblacklist.json", "array");
-client.dmForwardBlacklist.initLoad();
-
-client.punishments = new database("./databases/punishments.json", "array");
-client.punishments.initLoad();
-
-client.specsDb = new database("./databases/specs.json", "object");
-client.specsDb.initLoad().intervalSave(120000);
-
-client.votes = new database("./databases/suggestvotes.json", "array")
-client.votes.initLoad();
-
-client.channelRestrictions = new database("./databases/channelRestrictions.json", "object");
-client.channelRestrictions.initLoad();
-
-client.starboard = new database("./databases/starboard.json", "object");
-client.starboard.initLoad().intervalSave(60000);
-
-client.repeatedMessages = {};
-client.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
-client.repeatedMessagesContent.initLoad();
 
 // tic tac toe statistics database
 Object.assign(client.tictactoeDb, {
@@ -185,9 +109,6 @@ Object.assign(client.tictactoeDb, {
 		return ((player.wins / player.total) * 100).toFixed(2) + "%";
 	}
 });
-
-// 1 game per channel
-client.games = new Discord.Collection();
 
 // userLevels
 Object.assign(client.userLevels, {
@@ -304,7 +225,7 @@ Object.assign(client.punishments, {
 				const banResult = await member.ban({ reason: `${reason || "unspecified"} | Case #${banData.id}` }).catch(err => err.message);
 				if (typeof banResult === "string") {
 					dm1.delete();
-					return message.channel.send(`Ban was unsuccessful: ${banResult}`);
+					return `Ban was unsuccessful: ${banResult}`;
 				} else {
 					if (timeInMillis) {
 						banData.endTime = now + timeInMillis;
@@ -320,7 +241,7 @@ Object.assign(client.punishments, {
 					    .addField('Reason', `\`${reason || "unspecified"}\``)
 					    .addField('Duration', `${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"}`)
 					    .setColor(client.config.embedColor)
-			    	return message.channel.send({embeds: [embedm]});
+			    	return embedm
 				}
 			case "softban":
 				const guild = member.guild;
@@ -329,7 +250,7 @@ Object.assign(client.punishments, {
 				const softbanResult = await member.ban({ days: 7, reason: `${reason || "unspecified"} | Case #${softbanData.id}` }).catch(err => err.message);
 				if (typeof softbanResult === "string") {
 					dm2.delete();
-					return message.channel.send(`Softan was unsuccessful: ${softbanResult}`);
+					return `Softan was unsuccessful: ${softbanResult}`;
 				} else {
 					const unbanResult = guild.members.unban(softbanData.member, `${reason || "unspecified"} | Case #${softbanData.id}`).catch(err => err.message);
 					if (typeof unbanResult === "string") {
@@ -344,7 +265,7 @@ Object.assign(client.punishments, {
 					    	.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    	.addField('Reason', `\`${reason || "unspecified"}\``)
 					    	.setColor(client.config.embedColor)
-						return message.channel.send({embeds: [embeds]});
+						return embeds
 					}
 				}
 			case "kick":
@@ -353,7 +274,7 @@ Object.assign(client.punishments, {
 				const kickResult = await member.kick(`${reason || "unspecified"} | Case #${kickData.id}`).catch(err => err.message);
 				if (typeof kickResult === "string") {
 					dm3.delete();
-					return message.channel.send(`Kick was unsuccessful: ${kickResult}`);
+					return `Kick was unsuccessful: ${kickResult}`;
 				} else {
 					if (reason) kickData.reason = reason;
 					client.makeModlogEntry(kickData, client);
@@ -364,7 +285,7 @@ Object.assign(client.punishments, {
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 					    .addField('Reason', `\`${reason || "unspecified"}\``)
 					    .setColor(client.config.embedColor)
-					return message.channel.send({embeds: [embedk]});
+					return embedk
 				}
 			case "mute":
 				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
@@ -378,7 +299,7 @@ Object.assign(client.punishments, {
 				}
 				if (typeof muteResult === "string") {
 					dm4.delete();
-					return message.channel.send(`Mute was unsuccessful: ${muteResult}`);
+					return `Mute was unsuccessful: ${muteResult}`;
 				} else {
 					if (timeInMillis) {
 						muteData.endTime = now + timeInMillis;
@@ -395,13 +316,13 @@ Object.assign(client.punishments, {
 						.addField('Duration', `${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)`)
 						.setColor(client.config.embedColor)
 						.setThumbnail('https://cdn.discordapp.com/attachments/858068843570003998/942295666137370715/muted.png')
-					return message.channel.send({embeds: [embedm]});
+					return embedm
 				}
 			case "warn":
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => setTimeout(() => message.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
 				if (typeof warnResult === "string") {
-					return message.channel.send(`Warn was unsuccessful: ${warnResult}`);
+					return `Warn was unsuccessful: ${warnResult}`;
 				} else {
 					if (reason) warnData.reason = reason;
 					client.makeModlogEntry(warnData, client);
@@ -413,7 +334,7 @@ Object.assign(client.punishments, {
 					.addField('Reason', `\`${reason || "unspecified"}\``)
 					.setColor(client.config.embedColor)
 					.setThumbnail('https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg')
-					if (moderator !== '795443537356521502') {message.channel.send({embeds: [embedw]})};
+					if (moderator !== '795443537356521502') {return embedw};
 				}
 		}
 	},
@@ -469,20 +390,13 @@ Object.assign(client.punishments, {
 });
 
 // command handler
-client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+	client.commands.set(command.data.name, command);
+	client.registery.push(command.data.toJSON())
 }
 client.commands.get("ping").spammers = new client.collection();
-
-// load functions
-const functionFiles = fs.readdirSync("./functions").filter(file => file.endsWith(".js"));
-for (const file of functionFiles) {
-	const func = require(`./functions/${file}`);
-	client[file.slice(0, -3)] = func;
-}
 
 // assign page number to commands
 let categories = {};
@@ -501,33 +415,6 @@ while (client.commands.some(command => !command.hidden && !command.page)) {
 }
 client.categoryNames = Object.keys(categories);
 delete categories;
-
-
-client.commands.pages = [];
-client.commands.filter(command => !command.hidden).forEach(command => {
-	if (!client.commands.pages.some(x => x.category === command.category && x.page === command.page)) {
-		client.commands.pages.push({
-			name: `${command.category} - Page ${command.page}/${Math.max(...client.commands.filter(x => x.category === command.category).map(x => x.page))}`,
-			category: command.category,
-			page: command.page
-		});
-	}
-});
-client.commands.pages.sort((a, b) => {
-	if (a.name < b.name) {
-		return -1;
-	} else if (a.name > b.name) {
-		return 1;
-	} else {
-		return 0;
-	}
-}).sort((a, b) => {
-	if (a.category.toLowerCase() === "pc creator" && b.category.toLowerCase() !== "pc creator") {
-		return -1;
-	} else {
-		return 1;
-	}
-});
 
 // starboard functionality
 Object.assign(client.starboard, {
@@ -667,13 +554,6 @@ setInterval(() => {
 	}
 }, 5000);
 
-modmailClient.threads = new client.collection();
-modmailClient.on("messageCreate", message => {
-	require("./modmailMessage.js")(message, modmailClient, client);
+client.modmailClient.on("messageCreate", message => {
+	require("./modmailMessage.js")(message, client.modmailClient, client);
 });
-if (client.config.botSwitches.fpb) {
-	client.login(client.config.token);
-}
-if (client.config.botSwitches.modmail) {
-	modmailClient.login(client.config.modmailBotToken);
-}

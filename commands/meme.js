@@ -1,6 +1,8 @@
 const util = require('util');
 const fs = require('fs');
 const axios = require("axios");
+const { MessageActionRow, MessageButton } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 async function fetchPost(){
 	const reddits = ["memes", "hardwarememes"];
@@ -9,17 +11,18 @@ async function fetchPost(){
 	return body.data[0].data.children;
 }
 module.exports = {
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		delete require.cache[require.resolve('../databases/memes.json')];
 		const memes = new client.collection(Object.entries(require('../databases/memes.json')));
 		const color = '#1decaf'
-		const failed = () => message.reply('You failed. The `meme add` process has ended.');
-		if(!args[1]) {
+		const failed = () => interaction.reply('You failed. The `meme add` process has ended.');
+		const subCmd = interaction.options.getSubcommand();
+		if(subCmd === "random") {
 			await fetchPost().then(async (body) => {
 				if (!body || !body[0].data.url.endsWith(".webp") && !body[0].data.url.endsWith(".jpg") && !body[0].data.url.endsWith(".png") && !body[0].data.url.endsWith(".gif")) {
 					await fetchPost().then(async (bod) => {
 						if (!bod || !bod[0].data.url.endsWith(".webp") && !bod[0].data.url.endsWith(".jpg") && !bod[0].data.url.endsWith(".png") && !bod[0].data.url.endsWith(".gif")) {
-							message.channel.send("There was an error, retry the command.")
+							interaction.reply("There was an error, retry the command.")
 							return;
 						}
 						const redditembed = new client.embed()
@@ -28,7 +31,7 @@ module.exports = {
 							.setImage(bod[0].data.url)
 							.setFooter({text: `${bod[0].data.ups} Upvotes`})
 
-						message.channel.send({embeds: [redditembed]});
+						interaction.reply({embeds: [redditembed]});
 					})
 					return;
 				}
@@ -38,11 +41,11 @@ module.exports = {
 					.setImage(body[0].data.url)
 					.setFooter({text: `${body[0].data.ups} Upvotes`})
 
-				message.channel.send({embeds: [redditembed]});
+				interaction.reply({embeds: [redditembed]});
 			})
 
 			return;
-		} else if (args[1] === "list") {
+		} else if (subCmd === "list") {
 			const embed = new client.embed()
 				.setTitle('Browse Memes')
 				.setColor(color);
@@ -56,49 +59,48 @@ module.exports = {
 					}
 				}
 			} else embed.setDescription('No memes have been added yet.');
-			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-		} else {
-			if (args[1] === 'add') {
-				await message.reply('Creating your own meme...\nWhat is the name of your meme? (60s)');
-				const meme = { adder: `${message.author.tag} (${message.author.id})`, timestamp: Date.now() };
-				const filililil = x => x.author.id === message.author.id;
-				meme.name = (await message.channel.awaitMessages({ filter: filililil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+			return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+		} else if (subCmd === 'add') {
+				await interaction.reply('Creating your own meme...\nWhat is the name of your meme? (60s)');
+				const meme = { adder: `${interaction.user.tag} (${interaction.user.id})`, timestamp: Date.now() };
+				const filililil = x => x.author.id === interaction.user.id;
+				meme.name = (await interaction.channel.awaitMessages({ filter: filililil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!meme.name) return failed();
 
-				await message.reply('Write a description for your meme. (120s)');
-				const fililili = x => x.author.id === message.author.id;
-				meme.description = (await message.channel.awaitMessages({ filter: fililili, max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+				await interaction.followUp('Write a description for your meme. (120s)');
+				const fililili = x => x.author.id === interaction.user.id;
+				meme.description = (await interaction.channel.awaitMessages({ filter: fililili, max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!meme.description) return failed();
 
-				await message.reply('Send a permanent URL to the meme image. (60s)');
-				const fililil = x => x.author.id === message.author.id;
-				const urlMessage = (await message.channel.awaitMessages({ filter: fililil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first();
+				await interaction.followUp('Send a permanent URL to the meme image. (60s)');
+				const fililil = x => x.author.id === interaction.user.id;
+				const urlMessage = (await interaction.channel.awaitMessages({ filter: fililil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first();
 				if (urlMessage.content) {
 					if (!['jpg', 'png', 'webp', 'gif', 'jpeg'].some(x => urlMessage.content.endsWith(x))) {
-						return message.reply('Your log-headed ass didn\'t notice that that\'s not an image url. Your mishap has terminated the `meme add` process. Thanks.');
+						return interaction.reply('Your log-headed ass didn\'t notice that that\'s not an image url. Your mishap has terminated the `meme add` process. Thanks.');
 					}
 					meme.url = urlMessage.content;
 				} else meme.url = urlMessage.attachments.first()?.url;
 				if (!meme.url) return failed();
 
-				await message.reply('Is the creator of this meme a member of the Framepaste Discord server? Answer with y/n. (30s)');
-				const filili = x => x.author.id === message.author.id;
-				const onDiscord = (await message.channel.awaitMessages({ filter: filili, max: 1, time: 30000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+				await interaction.followUp('Is the creator of this meme a member of the Framepaste Discord server? Answer with y/n. (30s)');
+				const filili = x => x.author.id === interaction.user.id;
+				const onDiscord = (await interaction.channel.awaitMessages({ filter: filili, max: 1, time: 30000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!onDiscord) return failed();
 
 				meme.author = {};
 				if (onDiscord.toLowerCase() === 'y') {
 					meme.author.onDiscord = true;
-					await message.reply('What is the user ID of the creator of this meme? (60s)');
-					const filil = x => x.author.id === message.author.id;
-					meme.author.name = (await message.channel.awaitMessages({ filter: filil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+					await interaction.followUp('What is the user ID of the creator of this meme? (60s)');
+					const filil = x => x.author.id === interaction.user.id;
+					meme.author.name = (await interaction.channel.awaitMessages({ filter: filil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 					if (meme.author.name.startsWith('<')) return failed();
-					if (meme.author.name === message.author.id) meme.adder = 'Self';
+					if (meme.author.name === interaction.user.id) meme.adder = 'Self';
 				} else if (onDiscord.toLowerCase() === 'n') {
 					meme.author.onDiscord = false;
-					await message.reply('Supply a name for the creator of this meme, e.g. their username on the platform that you found this meme on. (90s)');
-					const fili = x => x.author.id === message.author.id && ['y', 'n', 'cancel'].some(y => x.content.toLowerCase().startsWith(y));
-					meme.author.name = (await message.channel.awaitMessages({ filter: fili, max: 1, time: 90000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+					await interaction.followUp('Supply a name for the creator of this meme, e.g. their username on the platform that you found this meme on. (90s)');
+					const fili = x => x.author.id === interaction.user.id && ['y', 'n', 'cancel'].some(y => x.content.toLowerCase().startsWith(y));
+					meme.author.name = (await interaction.channel.awaitMessages({ filter: fili, max: 1, time: 90000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				} else {
 					return failed();
 				}
@@ -117,15 +119,16 @@ module.exports = {
 					.setTitle('A meme with the following info has been created:')
 					.setDescription('```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\nInform one of the following people so they can approve your meme:\n' + client.config.eval.whitelist.map(x => '<@' + x + '>').join('\n') + '\nWith the following information: ":clap: meme :clap: review ' + key + '"')
 					.setColor(color)
-				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-			} else if (args[1] === 'review') {
-				if (!client.config.eval.whitelist.includes(message.author.id)) return message.reply('You\'re not allowed to do that.');
-				if (args[2]) {
-					const meme = client.memeQueue.get(args[2]);
+				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			} else if (subCmd === 'review') {
+				if (!client.config.eval.whitelist.includes(interaction.user.id)) return interaction.reply('You\'re not allowed to do that.');
+				const memeNumber = interaction.options.getInteger("meme")
+				if (memeNumber) {
+					const meme = client.memeQueue.get(memeNumber);
 
 					const approve = () => {
 						// add this meme to the collection
-						memes.set(args[2], meme);
+						memes.set(memeNumber, meme);
 
 						// define meme database location
 						let dir = __dirname.split('\\');
@@ -146,50 +149,43 @@ module.exports = {
 						fs.writeFileSync(dir, json);
 
 						// remove this meme from the queue
-						client.memeQueue.delete(args[2]);
+						client.memeQueue.delete(memeNumber);
 
 						// inform user
-						message.reply({content: ':clap: Meme :clap: Approved!', allowedMentions: { repliedUser: false }});
+						interaction.reply({content: ':clap: Meme :clap: Approved!', allowedMentions: { repliedUser: false }});
 						return;
 					};
 
 					const decline = () => {
 						// remove this meme from the queue
-						client.memeQueue.delete(args[2]);
+						client.memeQueue.delete(memeNumber);
 
 						// inform user
-						message.reply({content: 'The submission has been declined and removed from the queue.', allowedMentions: { repliedUser: false }});
+						interaction.reply({content: 'The submission has been declined and removed from the queue.', allowedMentions: { repliedUser: false }});
 						return;
 					};
 
 
-					if (!meme) return message.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
-					if (args[3] && ['y', 'n'].includes(args[3].toLowerCase())) {
-						if (args[3].toLowerCase() === 'y') approve()
-						else decline();
-						return;
-					}
-					await message.reply({content: ':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. Type "cancel" to leave this meme in the queue. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n' + (Math.random() < (1 / 3) ? '\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' : '') + meme.url, allowedMentions: { repliedUser: false }});
-					const fil = x => x.author.id === message.author.id && ['y', 'n', 'cancel'].some(y => x.content.toLowerCase().startsWith(y));
-					const approval = (await message.channel.awaitMessages({ filter: fil, max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
-					if (!approval) return failed();
-
-					if (approval.toLowerCase().startsWith('y'))
-						approve();
-					else if (approval.toLowerCase().startsWith('n'))
-						decline();
-					else if (approval.toLowerCase().startsWith('cancel'))
-						message.reply({content: 'The review process has ended and the unapproved meme remains in the queue.', allowedMentions: { repliedUser: false }});
-					else
-						failed();
-					return;
+					if (!meme) return interaction.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
+					await interaction.reply({content: ':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. Type "cancel" to leave this meme in the queue. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n' + (Math.random() < (1 / 3) ? '\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' : '') + meme.url, allowedMentions: { repliedUser: false }, components: [new MessageActionRow().addComponents(new MessageButton().setLabel("Approve").setStyle("SUCCESS").setCustomId(`accept-${interaction.user.id}`), new MessageButton().setStyle("DANGER").setLabel("Decline").setCustomId(`decline-${interaction.user.id}`))]});
+					const fil = x => x.user.id === interaction.user.id && [`accept-${interaction.user.id}`, `decline-${interaction.user.id}`].includes(i.customId);
+					const approval = await interaction.channel.createMessageComponentCollector({filter: fil, max: 1, time: 30000});
+					approval.on("collect", async (inter)=>{
+					if (inter.customId === `accept-${interaction.user.id}`)
+					approve();
+				else if (inter.customId === `decline-${interaction.user.id}`)
+					decline();
+					})
+					approval.on("end", async (colled, reason)=>{
+						if(reason === "time") return interaction.editReply({content: "Process cancelled"}); 
+					})
 				} else {
-					return message.reply({content: 'Memes pending review:\n```\n' + (client.memeQueue.size >= 1 ? client.memeQueue.map((meme, key) => `${key}. ${meme.name}`).join('\n') : 'None') + '\n```', allowedMentions: { repliedUser: false }});
+					return interaction.reply({content: 'Memes pending review:\n```\n' + (client.memeQueue.size >= 1 ? client.memeQueue.map((meme, key) => `${key}. ${meme.name}`).join('\n') : 'None') + '\n```', allowedMentions: { repliedUser: false }});
 				}
-			}
-			const query = args.slice(1).join(' ').toLowerCase();
-			const meme = memes.get(args[1]) || memes.filter(x => x.name.toLowerCase().includes(query)).sort((a, b) => (a.name.length - query.length) - (b.name.length - query.length)).first();
-			if (!meme) return message.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
+			} else if(subCmd === "view"){
+			const query = interaction.options.getInteger("number")
+			const meme = memes.get(query)
+			if (!meme) return interaction.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
 				.setTitle(meme.name)
@@ -201,13 +197,14 @@ module.exports = {
 			} else {
 				embed.setAuthor({name: 'By ' + meme.author.name})
 			}
-			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}
 	},
-	name: 'meme',
-	description: 'Fetch memes from r/memes if no arguments are given, or fetch member-made memes locally.',
-	shortDescription: 'View user-generated memes.',
-	usage: ['key / "add" / "review"'],
-	alias: ['memes'],
+	data: new SlashCommandBuilder().setName("meme").setDescription("Fetch memes from r/memes if selected, or fetch member-made memes locally.")
+	.addSubcommand((optt)=>optt.setName("list").setDescription("Lists all locally stored memes"))
+	.addSubcommand((optt)=>optt.setName("random").setDescription("Fetches a random meme from reddit."))
+	.addSubcommand((optt)=>optt.setName("add").setDescription("Add your own meme to our locally stored list."))
+	.addSubcommand((optt)=>optt.setName("review").setDescription("Reviews a meme in queue.").addIntegerOption((opt)=>opt.setName("meme").setDescription("The number of the meme in queue").setRequired(false)))
+	.addSubcommand((optt)=>optt.setName("view").setDescription("Views a local meme.").addIntegerOption((opt)=>opt.setName("number").setDescription("The number of the meme to view.").setRequired(true))),
 	category: 'Fun'
 };

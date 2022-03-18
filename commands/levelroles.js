@@ -1,7 +1,8 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const d = require("discord.js")
 module.exports = {
-	run: async (client, message, args) => {
-		if (message.guild.id !== client.config.mainServer.id) return message.reply({content: 'This command doesn\'t work in this server.', allowedMentions: { repliedUser: false }});
+	run: async (client, interaction) => {
+		if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: 'This command doesn\'t work in this server.', allowedMentions: { repliedUser: false }});
 
 		// dailymsgs.json
 		const dailyMsgs = require('../databases/dailyMsgs.json');
@@ -11,9 +12,8 @@ module.exports = {
 
 		// total amount of messages sent
 		const messageCountsTotal = messageCounts.reduce((a, b) => a + b, 0);
-
-		// if args[1] is "stats", show stats
-		if (args[1] === 'stats') {
+		const subCmd = interaction.options.getSubcommand();
+		if (subCmd === "stats") {
 
         // days since nov 28, 2021 when userlevels was created
             const timeActive = Math.floor((Date.now() - 1638138120305) / 1000 / 60 / 60 / 24);
@@ -152,18 +152,18 @@ module.exports = {
 				.setImage('attachment://dailymsgs.png')
 				.setColor(client.config.embedColor)
 			const yeahok = new d.MessageAttachment(img.toBuffer(), "dailymsgs.png")
-			message.reply({embeds: [embed], files: [yeahok], allowedMentions: { repliedUser: false }});
+			interaction.reply({embeds: [embed], files: [yeahok], allowedMentions: { repliedUser: false }});
 			return;
-		} else if (args[1] ==='perks') {
+		} else if (subCmd ==='perks') {
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Perks')
 				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Bypassing Channel Restrictions & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
 				.setColor(client.config.embedColor)
-			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			return;
 
-		} else if (args[1] === 'nerdstats' || args[1] === 'nsts') {
+		} else if (subCmd === "nerd_stats") {
 			
 			// amount of users in messageCounts
 			const userCount = messageCounts.length;
@@ -172,7 +172,7 @@ module.exports = {
 			const average = messageCountsTotal / userCount;
 			// messages sent by median user
 			const median = messageCounts.sort((a, b) => a - b)[Math.round(userCount / 2) - 1];
-			// next message count milestone
+			// next interaction count milestone
 			const milestone = client.userLevels._milestone();
 
 			// days to get average from
@@ -222,17 +222,17 @@ module.exports = {
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats')
-				.setDescription(`A total of ${messageCountsTotal.toLocaleString('en-US')} messages have been recorded in this server by ${userCount.toLocaleString('en-US')} users.\n\nIn the last ${actualDataLength} days, on average, ${averageMsgsPerDay.toLocaleString('en-US', { maximumFractionDigits: 2 })} messages have been sent every day.\n\nAn average user has sent ${average.toFixed(2)} messages.\n\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more than or as many messages as an average user.\n\nThe median user has sent ${median} messages.\n\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}% of messages while Level Roles has existed.\n\nThe next message milestone ${milestone.next ? `is ${milestone.next.toLocaleString('en-US')} messages and the progress from the previous milestone (${milestone.previous.toLocaleString('en-US')}) to the next is ${(milestone.progress * 100).toFixed(2)}%.\n\nAt the current rate, reaching the next milestone would ${(!serverHalted ? 'take ' : `never happen. The server would grind to a halt in `) + client.formatTime(millisecondsToMilestone, 2, { commas: true, longNames: true })}.` : `doesn\'t exist.`}`)
+				.setDescription(`A total of ${messageCountsTotal.toLocaleString('en-US')} messages have been recorded in this server by ${userCount.toLocaleString('en-US')} users.\n\nIn the last ${actualDataLength} days, on average, ${averageMsgsPerDay.toLocaleString('en-US', { maximumFractionDigits: 2 })} messages have been sent every day.\n\nAn average user has sent ${average.toFixed(2)} messages.\n\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more than or as many messages as an average user.\n\nThe median user has sent ${median} messages.\n\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}% of messages while Level Roles has existed.\n\nThe next interaction milestone ${milestone.next ? `is ${milestone.next.toLocaleString('en-US')} messages and the progress from the previous milestone (${milestone.previous.toLocaleString('en-US')}) to the next is ${(milestone.progress * 100).toFixed(2)}%.\n\nAt the current rate, reaching the next milestone would ${(!serverHalted ? 'take ' : `never happen. The server would grind to a halt in `) + client.formatTime(millisecondsToMilestone, 2, { commas: true, longNames: true })}.` : `doesn\'t exist.`}`)
 				.setColor(client.config.embedColor)
-			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			return;
-		}
+		} else if(subCmd === "view"){
 
-		// fetch user or user message sender
-		const member = args[1] ? message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => { })) : message.member;
+		// fetch user or user interaction sender
+		const member = interaction.options.getMember("member") ?? interaction.member;
 
 		// if no user could be specified, error
-		if (!member) return message.reply({content: 'You failed to mention a user from this server.', allowedMentions: { repliedUser: false }});
+		if (!member) return interaction.reply({content: 'You failed to mention a user from this server.', allowedMentions: { repliedUser: false }});
 
 		// information about users progress on level roles
 		const eligiblity = await client.userLevels.getEligible(member);
@@ -244,10 +244,10 @@ module.exports = {
 		const nextRoleReq = eligiblity.roles[nextRoleKey];
 
 		// next <Role> in level roles that user is going to get 
-		const nextRole = nextRoleReq ? message.guild.roles.cache.get(nextRoleReq.role.id) : undefined;
+		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id) : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
-		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => '**' + message.guild.roles.cache.get(x.role.id).name + '**');
+		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => '**' + interaction.guild.roles.cache.get(x.role.id).name + '**');
 		achievedRoles = achievedRoles.map((x, i) => {
 			if (i === achievedRoles.length - 2) return x + ' and ';
 			else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
@@ -270,7 +270,7 @@ module.exports = {
 		}
 		
 		const pronounBool = (you, they) => { // takes 2 words and chooses which to use based on if user did this command on themself
-			if (message.author.id === member.user.id) return you || true;
+			if (interaction.user.id === member.user.id) return you || true;
 			else return they || false;
 		};
 		
@@ -289,7 +289,7 @@ module.exports = {
 				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => message.reply('You\'ve received the **' + nextRole.name + '** role.')).catch(() => message.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => interaction.followUp('You\'ve received the **' + nextRole.name + '** role.')).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
 						// and inform user of outcome
 					}, 500);
 				}
@@ -302,7 +302,7 @@ module.exports = {
 		}
 
 		if (pronounBool()) {
-			const index = Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).map(x => x[0]).indexOf(message.author.id) + 1;
+			const index = Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).map(x => x[0]).indexOf(interaction.user.id) + 1;
 			const suffix = ((index) => {
 				const numbers = index.toString().split('').reverse(); // eg. 1850 -> [0, 5, 8, 1]
 				if (numbers[1] === '1') { // this is some -teen
@@ -314,14 +314,11 @@ module.exports = {
 					else return 'th';
 				}
 			})(index);
-			messageContents.push(`You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles message count.`);
+			messageContents.push(`You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles interaction count.`);
 		}
 
-		message.reply({content: messageContents.join('\n'), allowedMentions: { repliedUser: false }}); // compile message and send
+		interaction.reply({content: messageContents.join('\n'), allowedMentions: { repliedUser: false }}); // compile interaction and send
+	 }
 	},
-	name: 'levelroles',
-	usage: ['?user ID / mention / "stats" / "nerdstats"'],
-	description: 'Check your eligibility for level roles or see global stats.',
-	alias: ['lrs'],
-	cooldown: 6
+	data: new SlashCommandBuilder().setName("rank").setDescription("View your, another user, or stats about ranking").addSubcommand((optt)=>optt.setName("view").setDescription("View your or another user's ranking information").addUserOption((opt)=>opt.setName("member").setDescription("Views a members ranking statistics.").setRequired(false))).addSubcommand((optt)=>optt.setName("stats").setDescription("Views ranking statistics.")).addSubcommand((optt)=>optt.setName("perks").setDescription("Views ranking perks.")).addSubcommand((optt)=>optt.setName("nerd_stats").setDescription("Views more formal statistics."))
 };

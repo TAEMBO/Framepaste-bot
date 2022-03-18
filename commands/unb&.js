@@ -1,23 +1,12 @@
+const {SlashCommandBuilder} = require("@discordjs/builders");
 module.exports = {
-    run: (client, message, args) => {
-        message.delete().catch(err => console.log('couldnt delete message when doing b& because', err.message));
-        let member = message.content.split(" ")[1]
-        let    member2 = member.toString().replace(/[\<>@#&!]/g, "")
-        console.log(member2)
-
-        if (!args[1]) {
-            message.channel.send('Your honorary ban has been revoked!')
-            return;
-        }
-        if(isNaN(member2)){
-            message.channel.send(`Your honorary ban has been revoked!`)
-            return;
-        }
-        if (args[1]) {
-            message.channel.send(`<@${member2.toString()}> had their honorary ban revoked!`)}
-        return;
+    run: (client, interaction) => {        
+        const member = interaction.options.getUser("member");
+        interaction.reply({content: "ok", ephemeral: true})
+        if(!member){
+            return interaction.channel.send({content: `Your honorary ban has been revoked!`});
+        } else {
+            return interaction.channel.send({content: `<@${member.id}> had their honorary ban revoked!`})}
     },
-    name: 'unb&',
-    usage: ['userID'],
-    hidden: true
+    data: new SlashCommandBuilder().setName("unband").setDescription("Revokes an honorary ban.").addUserOption((opt)=>opt.setName("member").setDescription("The member whom will get their honorary ban revoked.").setRequired(false))
 };

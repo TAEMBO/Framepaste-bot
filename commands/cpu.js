@@ -1,3 +1,5 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 function CPUEmbed(client, CPU, manufacturer) {
 	let color;
 	if (manufacturer.toLowerCase() === "intel") color = 2793983;
@@ -17,11 +19,10 @@ function CPUEmbed(client, CPU, manufacturer) {
 }
 
 module.exports = {
-	run: (client, message, args) => {
-		// if no CPU was searched, tell user to do CPU help
-		if (!args[1]) return message.channel.send("You need to search for a CPU. For help, do `" + client.prefix + "CPU help`");
+	run: (client, interaction) => {
+		const subCmd = interaction.options.getSubcommand();
 		// if they did help and didnt put anything else in the command, get help embed and send it
-		if (args[1].toLowerCase() === "help" && args.length === 2) {
+		if (subCmd === "help") {
 			const embed = new client.embed()
 			.setTitle("CPU Command Help")
 			.setColor(client.config.embedColor)
@@ -29,9 +30,9 @@ module.exports = {
 			.addField("Search Terms", "Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.")
 			.addField("Manufacturer Search", "Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `intel`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.")
 			.addField("i dont want to write this", "so here are examples\n\`,CPU intel 9900k, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = intel (only intel CPUs will be searched)\nname search = 9900k (CPU name must include \"9900k\")\nfilter: price > 1000 (CPU msrp must be more than 1000 usd)\n\n\`,CPU 11900k\`\n1 search term\nno manufacturer, no filters\nnamesearch = 5700x (CPU name must include \"5700x\")\n\n\`,CPU intel -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = intel\nmultiple search: list is active (\`-s\` also works)")
-			return message.channel.send({embeds: [embed]});
-		}
-		const searchTerms = args.slice(1).join(" ").split(",");
+			return interaction.channel.send({embeds: [embed]});
+		} else if(subCmd === "search"){
+		const searchTerms = interaction.options.getString("query").split(",");
 
 		const multipleSearch = (() => {
 			const lastArg = searchTerms[searchTerms.length - 1];
@@ -78,20 +79,20 @@ module.exports = {
 			const property = filter.slice(0, operatorStartIndex).trim();
 			const value = filter.slice(operatorStartIndex + 1).trim().toLowerCase();
 			if (!operator) {
-				message.channel.send(`Invalid operator in \`${property + operator + value}\``);
+				interaction.channel.send(`Invalid operator in \`${property + operator + value}\``);
 				return false;
 			}
 			if (!property || !["cores", "threads", "base", "boost", "price", "socket", "tdp"].includes(property.toLowerCase())) {
-				message.channel.send(`Invalid property in \`${property + operator + value}\``);
+				interaction.channel.send(`Invalid property in \`${property + operator + value}\``);
 				return false;
 			}
 			if (!value) {
-				message.channel.send(`Invalid value in \`${property + operator + value}\``);
+				interaction.channel.send(`Invalid value in \`${property + operator + value}\``);
 				return false;
 			}
 			if (property === "threads" || property === "cores" || property === "base" || property === "boost" || property === "price" || property === "socket" || property === "tdp") {
 				if (operator !== "=") {
-					message.channel.send(`Invalid operator in \`${property + operator + value}\` because that property only works with \`=\` operator`);
+					interaction.channel.send(`Invalid operator in \`${property + operator + value}\` because that property only works with \`=\` operator`);
 					return false;
 				} else {
 					return { property, operator, value };
@@ -206,14 +207,14 @@ module.exports = {
 			} else {
 				embed.setFooter({text: `Showing ${limit} of ${rankedCPUs.length} CPUs.`})
 			}
-			message.channel.send({embeds: [embed]});
+			interaction.channel.send({embeds: [embed]});
 			if (multipleSearch === "s") {
-				const filter = x => x.author.id === message.author.id && parseInt(x.content)
-				return message.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ["time"]}).then(responses => {
+				const filter = x => x.author.id === interaction.user.id && parseInt(x.content)
+				return interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ["time"]}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
-					if (isNaN(index)) return message.channel.send("That\"s not a valid number.");
-					message.channel.send({embeds: [CPUEmbed(client, rankedCPUs[index][1], manufacturer || getManufacturer(rankedCPUs[index][0]))]});
-				}).catch(() => message.channel.send("You failed."))
+					if (isNaN(index)) return interaction.channel.send("That\"s not a valid number.");
+					interaction.channel.send({embeds: [CPUEmbed(client, rankedCPUs[index][1], manufacturer || getManufacturer(rankedCPUs[index][0]))]});
+				}).catch(() => interaction.channel.send("You failed."))
 			}
 		} else {
 			Object.entries(CPUs).forEach(CPUList => {
@@ -240,13 +241,10 @@ module.exports = {
 				matches.amd = CPUs.amd.filter(x => x.name).find(x => CPUs.amd.filter(z => z.name).every(y => y.score <= x.score));
 			}
 			const bestMatch = Object.entries(matches).find((x, index) => (typeof x[1]?.score === "number" ? x[1]?.score : -1) >= (typeof Object.entries(matches)[(!index) + 0][1]?.score === "number" ? Object.entries(matches)[(!index) + 0][1]?.score : -1));
-			if (!bestMatch[1] || bestMatch[1].score < 0) return message.channel.send("That query returned `0` results.");
-			message.channel.send({embeds: [CPUEmbed(client, bestMatch[1], bestMatch[0])]});
+			if (!bestMatch[1] || bestMatch[1].score < 0) return interaction.channel.send("That query returned `0` results.");
+			interaction.reply({embeds: [CPUEmbed(client, bestMatch[1], bestMatch[0])]});
 		}
+	}
 	},
-	name: "cpu",
-	description: "Info about IRL CPUs.",
-	usage: ["help / manufacturer", "name", "filter", "-s / -sl"],
-	category: "Real Computers",
-	cooldown: 7
+	data: new SlashCommandBuilder().setName("cpu").setDescription("Finds a CPU.").addSubcommand((optt)=>optt.setName("help").setDescription("Shows you how to use the command.")).addSubcommand((optt)=>optt.setName("search").setDescription("Searches the db for the queried CPU.").addStringOption((opt)=>opt.setName("query").setDescription("The CPU to query for.").setRequired(true)))
 }

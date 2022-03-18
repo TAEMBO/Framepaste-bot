@@ -1,16 +1,13 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: async (client, message, args) => {
-		if (message.guild.id !== client.config.mainServer.id) return message.reply('Wrong server.');
-		const amount = parseInt(args[1]);
-		if (!client.hasModPerms(client, message.member)) return message.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
-		if (!amount) return message.reply({content: 'You need to specify an amount of messages to delete.', allowedMentions: { repliedUser: false }});
-		message.delete().catch();
-		if (amount > 100) return message.reply({content: 'You can only delete 100 messages at once. This is a Discord API limitation.', allowedMentions: { repliedUser: false }});
-		const deleted = await message.channel.bulkDelete(amount + 1).catch(err => message.channel.send('Something went wrong while deleting messages.' + err.message));
-		message.channel.send(`Deleted **${deleted.size - 1}** messages.`).then(x => setTimeout(() => x.delete(), 4000));
+	run: async (client, interaction) => {
+		if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply('Wrong server.');
+		const amount = interaction.options.getInteger("amount");
+		if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
+		if (amount > 100) return interaction.reply({content: 'You can only delete 100 messages at once. This is a Discord API limitation.', allowedMentions: { repliedUser: false }});
+		const deleted = await interaction.channel.bulkDelete(amount + 1).catch(err => interaction.reply('Something went wrong while deleting messages.' + err.interaction));
+		interaction.reply(`Deleted **${deleted.size - 1}** messages.`).then(x => setTimeout(() => interaction.deleteReply(), 4000));
 	},
-	name: 'purge',
-	description: 'Delete many messages from a channel.',
-	category: 'Moderation',
-	usage: ['amount']
+	data: new SlashCommandBuilder().setName("purge").setDescription("Purges messages in a channel.").addIntegerOption((opt)=>opt.setName("amount").setDescription("The amount of messages to purge.").setRequired(true))
 };

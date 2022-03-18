@@ -1,9 +1,9 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = { 
-    run: async (client, message, args) => {
-        const msg = await message.reply({content: "Ping:", allowedMentions: {repliedUser: false}});
-        const time = msg.createdTimestamp - message.createdTimestamp; msg.edit({content: `Ping: \`${time}\`ms`, allowedMentions: {repliedUser: false}});
+    run: async (client, interaction) => {
+        const msg = await interaction.reply({content: "Pinging...", allowedMentions: {repliedUser: false}, fetchReply: true});
+        const time = msg.createdTimestamp - interaction.createdTimestamp; interaction.followUp({content: `Ping: \`${time}\`ms`});
     },
-    name: 'ping',
-    description: 'Bot\'s latency',
-    category: 'Bot'
+    data: new SlashCommandBuilder().setName("ping").setDescription("Get's the bot's latency.")
 };

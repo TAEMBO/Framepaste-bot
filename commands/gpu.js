@@ -1,3 +1,5 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
 function gpuEmbed(client, gpu, manufacturer) {
 	let color;
 	if (manufacturer.toLowerCase() === 'nvidia') color = 7715072;
@@ -17,11 +19,9 @@ function gpuEmbed(client, gpu, manufacturer) {
 }
 
 module.exports = {
-	run: (client, message, args) => {
-		// if no gpu was searched, tell user to do gpu help
-		if (!args[1]) return message.reply({content: 'You need to search for a GPU. For help, do `' + client.prefix + 'gpu help`', allowedMentions: { repliedUser: false }});
-		// if they did help and didnt put anything else in the command, get help embed and send it
-		if (args[1].toLowerCase() === 'help' && args.length === 2) {
+	run: (client, interaction) => {
+		const subCmd = interaction.options.getSubcommand();
+		if (subCmd === "help") {
 			const embed = new client.embed()
 			.setTitle('GPU Command Help')
 			.setColor(client.config.embedColor)
@@ -29,9 +29,9 @@ module.exports = {
 			.addField('Search Terms', 'Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.')
 			.addField('Manufacturer Search', 'Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `nvidia`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.')
 			.addField('i dont want to write this', 'so here are examples\n\`,gpu nvidia 3080, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = nvidia (only nvidia gpus will be searched)\nname search = 3080 (gpu name must include "3080")\nfilter: price > 1000 (gpu msrp must be more than 1000 usd)\n\n\`,gpu 6900\`\n1 search term\nno manufacturer, no filters\nnamesearch = 6900 (gpu name must include "6900")\n\n\`,gpu nvidia -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = nvidia\nmultiple search: list is active (\`-s\` also works)')
-			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-		}
-		const searchTerms = args.slice(1).join(' ').split(',');
+			return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+		} else if(subCmd === "search"){
+		const searchTerms = interaction.options.getString("query").split(",");
 
 		const multipleSearch = (() => {
 			const lastArg = searchTerms[searchTerms.length - 1];
@@ -78,20 +78,20 @@ module.exports = {
 			const property = filter.slice(0, operatorStartIndex).trim();
 			const value = filter.slice(operatorStartIndex + 1).trim().toLowerCase();
 			if (!operator) {
-				message.reply({content: `Invalid operator in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
+				interaction.reply({content: `Invalid operator in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
 				return false;
 			}
 			if (!property || !['name', 'price', 'memoryinterface', 'vram', 'vramtype', 'powerconnectors', 'tdp'].includes(property.toLowerCase())) {
-				message.reply({content: `Invalid property in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
+				interaction.reply({content: `Invalid property in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
 				return false;
 			}
 			if (!value) {
-				message.reply({content: `Invalid value in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
+				interaction.reply({content: `Invalid value in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
 				return false;
 			}
 			if (property === 'vramtype' || property === 'powerconnectors') {
 				if (operator !== '=') {
-					message.reply({content: `Invalid operator in \`${property + operator + value}\` because that property only works with \`=\` operator`, allowedMentions: { repliedUser: false }});
+					interaction.reply({content: `Invalid operator in \`${property + operator + value}\` because that property only works with \`=\` operator`, allowedMentions: { repliedUser: false }});
 					return false;
 				} else {
 					return { property, operator, value };
@@ -206,14 +206,14 @@ module.exports = {
 			} else {
 				embed.setFooter({text: `Showing ${limit} of ${rankedGpus.length} GPUs.`})
 			}
-			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			if (multipleSearch === 's') {
-				const filter = x => x.author.id === message.author.id && parseInt(x.content)
-				return message.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ['time']}).then(responses => {
+				const filter = x => x.author.id === interaction.user.id && parseInt(x.content)
+				return interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ['time']}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
-					if (isNaN(index)) return message.reply('That\'s not a valid number.');
-					message.reply({embeds: [gpuEmbed(client, rankedGpus[index][1], manufacturer || getManufacturer(rankedGpus[index][0]))], allowedMentions: { repliedUser: false }});
-				}).catch(() => message.reply({content: 'You failed.', allowedMentions: { repliedUser: false }}))
+					if (isNaN(index)) return interaction.reply('That\'s not a valid number.');
+					interaction.reply({embeds: [gpuEmbed(client, rankedGpus[index][1], manufacturer || getManufacturer(rankedGpus[index][0]))], allowedMentions: { repliedUser: false }});
+				}).catch(() => interaction.reply({content: 'You failed.', allowedMentions: { repliedUser: false }}))
 			}
 		} else {
 			Object.entries(gpus).forEach(gpuList => {
@@ -240,13 +240,10 @@ module.exports = {
 				matches.amd = gpus.amd.filter(x => x.name).find(x => gpus.amd.filter(z => z.name).every(y => y.score <= x.score));
 			}
 			const bestMatch = Object.entries(matches).find((x, index) => (typeof x[1]?.score === 'number' ? x[1]?.score : -1) >= (typeof Object.entries(matches)[(!index) + 0][1]?.score === 'number' ? Object.entries(matches)[(!index) + 0][1]?.score : -1));
-			if (!bestMatch[1] || bestMatch[1].score < 0) return message.reply({content: 'That query returned `0` results.', allowedMentions: { repliedUser: false }});
-			message.reply({embeds: [gpuEmbed(client, bestMatch[1], bestMatch[0])], allowedMentions: { repliedUser: false }});
+			if (!bestMatch[1] || bestMatch[1].score < 0) return interaction.reply({content: 'That query returned `0` results.', allowedMentions: { repliedUser: false }});
+			interaction.reply({embeds: [gpuEmbed(client, bestMatch[1], bestMatch[0])], allowedMentions: { repliedUser: false }});
 		}
+	}
 	},
-	name: 'gpu',
-	description: 'Info about IRL GPUs.',
-	usage: ['"help" / manufacturer', 'name', 'filter', '?"-s" / "-sl"'],
-	category: 'Real Computers',
-	cooldown: 7
+	data: new SlashCommandBuilder().setName("gpu").setDescription("Finds a GPU.").addSubcommand((optt)=>optt.setName("help").setDescription("Shows you how to use the command.")).addSubcommand((optt)=>optt.setName("search").setDescription("Searches the db for the queried GPU.").addStringOption((opt)=>opt.setName("query").setDescription("The GPU to query for.").setRequired(true)))
 }

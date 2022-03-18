@@ -1,5 +1,6 @@
+const {SlashCommandBuilder} = require("@discordjs/builders");
 module.exports = {
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		const embed = new client.embed()
 			.setTitle('__Starboard Statistics__')
 			.setColor(client.config.embedColor)
@@ -7,7 +8,7 @@ module.exports = {
 		const starboardChannel = client.channels.resolve(client.config.mainServer.channels.starboard);
 		const promises = containsEmbed.sort((a, b) => b[1].c - a[1].c).slice(0, 5).map(async x => {
 			const starboardMessage = await starboardChannel.messages.fetch(x[1].e).catch(err => {
-				console.log('STARBOARD: could not find message in #starboard with ID ' + x[1].e);
+				console.log('STARBOARD: could not find interaction in #starboard with ID ' + x[1].e);
 				return false;
 			});
 			if (!starboardMessage) {
@@ -27,11 +28,7 @@ module.exports = {
 		})()]);
 		const bestUsersText = bestUsers.filter(x => typeof x[1] === 'number' && !isNaN(x[1])).sort((a, b) => b[1] - a[1]).slice(0, 5).map(x => `**${x[1]}** :star: <@${x[0]}>`);
 		embed.addField('Most Starred Users', bestUsersText.join('\n'));
-		message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
-	name: 'starboardstats',
-	description: 'See statistics from starboard',
-	alias: ['sbs'],
-	cooldown: 30,
-	category: 'Fun'
+	data: new SlashCommandBuilder().setName("starboard_stats").setDescription("Views starboard statistics.")
 };

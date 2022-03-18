@@ -1,9 +1,7 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
-	run: (client, message, args) => {
-		client.cpuCommand(client, message, args);
+	run: (client, interaction) => {
+		client.cpuCommand(client, interaction, "amd");
 	},
-	name: 'cpuamd',
-	description: 'Info about IRL AMD CPUs',
-	category: 'Real Computers',
-	cooldown: 7
+	data: new SlashCommandBuilder().setName("cpuamd").setDescription("Finds a AMD CPU.").addSubcommand((optt)=>optt.setName("help").setDescription("Shows you how to use the command.")).addSubcommand((optt)=>optt.setName("search").setDescription("Searches the db for the queried AMD CPU.").addStringOption((opt)=>opt.setName("query").setDescription("The AMD CPU to query for.").setRequired(true)))
 };

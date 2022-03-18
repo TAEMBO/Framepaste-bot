@@ -1,9 +1,7 @@
+const {SlashCommandBuilder} = require("@discordjs/builders")
 module.exports = {
-	run: (client, message, args) => {
-		client.punish(client, message, args, 'kick');
+	run: (client, interaction) => {
+		client.punish(client, interaction, 'kick');
 	},
-	name: 'kick',
-	description: 'Kick a member.',
-	usage: ['user mention or id', '?reason'],
-	category: 'Moderation'
+	data: new SlashCommandBuilder().setDescription("Kicks a user from the server.").setName("kick").addUserOption((opt)=>opt.setName("member").setDescription("The user to kick from the server.").setRequired(true)).addStringOption((opt)=>opt.setName("reason").setDescription("The reason for kicking the user.").setRequired(false))
 };

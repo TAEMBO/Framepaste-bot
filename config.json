@@ -8,7 +8,8 @@
 		"commands": true,
 		"automod": true,
 		"reactionRoles": true,
-		"freeGames": true
+		"freeGames": true,
+		"registerCommands": false
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",
@@ -22,7 +23,7 @@
 		"allowed": true,
 		"whitelist": [
 			"709960501378940939",
-			"615761944154210305"
+			""
 		]
 	},
 	"enableAutoResponse": false,
@@ -35,7 +36,8 @@
 			"owner",
 			"administrator",
 			"moderator",
-			"trialmoderator"
+			"trialmoderator",
+			"botdeveloper"
 		],
 		"roles": {
 			"owner": "858072846248706108",

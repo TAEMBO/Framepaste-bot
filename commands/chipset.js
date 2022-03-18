@@ -1,3 +1,5 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 async function chipsetEmbed(client, chipset, manufacturer) {
 	let color;
 	if (manufacturer.toLowerCase() === "intel") color = 2793983;
@@ -16,11 +18,9 @@ async function chipsetEmbed(client, chipset, manufacturer) {
 }
 
 module.exports = {
-	run: async (client, message, args) => {
-		// if no chipset was searched, tell user to do chipset help
-		if (!args[1]) return message.reply({content: 'You need to search for a chipset. For help, do `" + client.prefix + "chipset help`', allowedMentions: { repliedUser: false }});
-		// if they did help and didnt put anything else in the command, get help embed and send it
-		if (args[1].toLowerCase() === "help" && args.length === 2) {
+	run: async (client, interaction) => {
+		const subCmd = interaction.options.getSubcommand();
+		if (subCmd === "help") {
 			const embed = new client.embed()
 			.setTitle("Chipset Command Help [BETA]")
 			.setColor(client.config.embedColor)
@@ -28,9 +28,9 @@ module.exports = {
 			.addField("Search Terms", "Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.")
 			.addField("Manufacturer Search", "Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `INTEL`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.")
 			.addField("I don\"t want to write this", "so here are examples\n\`,chipset INTEL z490\`\n2 search terms, separated with a comma\nmanufacturer = INTEL (only INTEL chipsets will be searched)\nname search = z490\n\n\`,chipset z490\`\n1 search term\nno manufacturer, no filters\nnamesearch = z490\n\n\`,chipset INTEL -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = INTEL\nmultiple search: list is active (\`-s\` also works(\`,s\` allows you to choose a cpu based on numbering, \`,sl` just shows the list))")
-			return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-		}
-		const searchTerms = args.slice(1).join(" ").split(",");
+			return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+		} else {
+		const searchTerms = interaction.options.getString("query").split(",");
 
 		const multipleSearch = (() => {
 			const lastArg = searchTerms[searchTerms.length - 1];
@@ -77,20 +77,20 @@ module.exports = {
 			const property = filter.slice(0, operatorStartIndex).trim();
 			const value = filter.slice(operatorStartIndex + 1).trim().toLowerCase();
 			if (!operator) {
-				message.reply({content: `Invalid operator in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
+				interaction.reply({content: `Invalid operator in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
 				return false;
 			}
 			if (!property || !["name", "supported", "coreoc", "memoc", "memorychannels", "pcielanes", "pciegen"].includes(property.toUpperCase())) {
-				message.reply({content: `Invalid property in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
+				interaction.reply({content: `Invalid property in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
 				return false;
 			}
 			if (!value) {
-				message.reply({content: `Invalid value in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
+				interaction.reply({content: `Invalid value in \`${property + operator + value}\``, allowedMentions: { repliedUser: false }});
 				return false;
 			}
 			if (property === "" || property === "socket") {
 				if (operator !== "=") {
-					message.reply({content: `Invalid operator in \`${property + operator + value}\` because that property only works with \`=\` operator`, allowedMentions: { repliedUser: false }});
+					interaction.reply({content: `Invalid operator in \`${property + operator + value}\` because that property only works with \`=\` operator`, allowedMentions: { repliedUser: false }});
 					return false;
 				} else {
 					return { property, operator, value };
@@ -205,15 +205,15 @@ module.exports = {
 			} else {
 				embed.setFooter({text: `Showing ${limit} of ${rankedChipsets.length} chipsets.`})
 			}
-			message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			if (multipleSearch === "s") {
-				const filter = x => x.author.id === message.author.id && parseInt(x.content)
-				return message.replytMessages({ filter, max: 1, time: 20000, errors: ["time"]}).then(async responses => {
+				const filter = x => x.author.id === interaction.user.id && parseInt(x.content)
+				return interaction.replytMessages({ filter, max: 1, time: 20000, errors: ["time"]}).then(async responses => {
 					const index = parseInt(responses.first()?.content) - 1;
-					if (isNaN(index)) return message.channel.send("That\"s not a valid number.");
+					if (isNaN(index)) return interaction.channel.send("That\"s not a valid number.");
 					const embeddo = await chipsetEmbed(client, rankedChipsets[index][1], manufacturer || getManufacturer(rankedChipsets[index][0]));
-					message.reply({embeds: [embeddo], allowedMentions: { repliedUser: false }});
-				}).catch(() => message.channel.send("You failed."))
+					interaction.reply({embeds: [embeddo], allowedMentions: { repliedUser: false }});
+				}).catch(() => interaction.channel.send("You failed."))
 			}
 		} else {
 			Object.entries(chipsets).forEach(chipsetList => {
@@ -240,17 +240,16 @@ module.exports = {
 				matches.amd = chipsets.amd.filter(x => x.name).find(x => chipsets.amd.filter(z => z.name).every(y => y.score <= x.score));
 			}
 			const bestMatch = Object.entries(matches).find((x, index) => (typeof x[1]?.score === "number" ? x[1]?.score : -1) >= (typeof Object.entries(matches)[(!index) + 0][1]?.score === "number" ? Object.entries(matches)[(!index) + 0][1]?.score : -1));
-			if (!bestMatch[1] || bestMatch[1].score < 0) return message.reply({content: "That query returned `0` results.", allowedMentions: { repliedUser: false }});
+			if (!bestMatch[1] || bestMatch[1].score < 0) return interaction.reply({content: "That query returned `0` results.", allowedMentions: { repliedUser: false }});
 			let color;
 	if (bestMatch[0].toLowerCase() === "intel") color = 2793983;
 	else if (bestMatch[0].toLowerCase() === "amd") color = 13582629;
 	const embeddo = await chipsetEmbed(client, bestMatch[1], bestMatch[0])
-			message.reply({embeds: [embeddo], allowedMentions: { repliedUser: false }});
+			interaction.reply({embeds: [embeddo], allowedMentions: { repliedUser: false }});
 		}
+	   }
 	},
-	name: "chipset",
-	description: "Info about IRL chipsets",
-	usage: ["help / manufacturer", 'name', 'filter', "-s / -sl"],
+	data: new SlashCommandBuilder().setName("chipset").setDescription("Gets info on a chipset.").addSubcommand((optt)=>optt.setName("help").setDescription("Gives information on the command.")).addSubcommand((optt)=>optt.setName("info").setDescription("Gets info on the requested chipset.").addStringOption((opt)=>opt.setName("query").setDescription("Querys the json for info on the chipset.").setRequired(true))),
 	category: "Real Computers",
 	cooldown: 7
 }

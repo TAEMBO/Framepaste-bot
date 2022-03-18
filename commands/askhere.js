@@ -1,13 +1,13 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: (client, message, args) => {
-		message.delete();
+	run: (client, interaction) => {
         const embed = new client.embed()
         .setTitle(`Try asking here`)
 		.setURL('https://google.com')
         .setColor(client.config.embedColor)
-        message.channel.send({embeds: [embed]})
+        interaction.reply({embeds: [embed]})
 	},
-	name: 'askhere',
-    alias: ['ah'],
+    data: new SlashCommandBuilder().setName("askhere").setDescription("Try asking here!"),
 	hidden: true
 };

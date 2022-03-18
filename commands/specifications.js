@@ -1,76 +1,72 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const { version } = require("discord.js");
 
 module.exports = {
-	run: async (client, message, args) => {
-		if (args[1]) {
-			if (args[1].toLowerCase() === 'help') {
+	run: async (client, interaction) => {
+		const subCmd = interaction.options.getSubcommand()
+			if (subCmd === 'help') {
 				const embed = new client.embed()
-					.setTitle(`Help: ${client.prefix}specifications`)
+					.setTitle(`Help: /specifications`)
 					.setDescription('This command makes it possible to store and view user-generated information about your or someone else\'s computer specs.')
 					.setColor(client.config.embedColor)
-					.addField('Adding your own specs', `To add your own specs, you can do \`${client.prefix}specifications add [component]: [name]\`. The component should be a universally known term, such as "CPU", "RAM" or "Video Card". The name should contain the name of the part that you own, and some additional info, for example "AMD Ryzen 5 5600x 6-core 12-thread Socket AM4". Make sure that the capitalization on both, the component and name, is correct. It is important to separate the component and name with a colon \`:\`.`)
-					.addField('Viewing specs', `To view your own specs, you can do \`${client.prefix}specifications\`. To view specs of other people, you can do \`${client.prefix}specifications [user]\`. User can be a mention, id or username.`)
-					.addField('Editing specs', `To edit your own specs, you can do \`${client.prefix}specifications edit [component]: [new name]\`. Component capitalization doesn't matter. The old name will be overwritten by the new name. You cannot edit the component part, only the name.`)
-					.addField('Deleting specs', `To delete all your specs, you can do \`${client.prefix}specifications delete\`. To delete a single component from your specs you can do \`${client.prefix}specifications delete [component]\`. Component capitalization doesn't matter.`)
-				message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-			} else if (args[1].toLowerCase() === 'add') {
-				const endPart = args.slice(2).join(' ');
+					.addField('Adding your own specs', `To add your own specs, you can do \`/specifications add [component]: [name]\`. The component should be a universally known term, such as "CPU", "RAM" or "Video Card". The name should contain the name of the part that you own, and some additional info, for example "AMD Ryzen 5 5600x 6-core 12-thread Socket AM4". Make sure that the capitalization on both, the component and name, is correct. It is important to separate the component and name with a colon \`:\`.`)
+					.addField('Viewing specs', `To view your own specs, you can do \`/specifications\`. To view specs of other people, you can do \`/specifications [user]\`. User can be a mention, id or username.`)
+					.addField('Editing specs', `To edit your own specs, you can do \`/specifications edit [component]: [new name]\`. Component capitalization doesn't matter. The old name will be overwritten by the new name. You cannot edit the component part, only the name.`)
+					.addField('Deleting specs', `To delete all your specs, you can do \`/specifications delete\`. To delete a single component from your specs you can do \`/specifications delete [component]\`. Component capitalization doesn't matter.`)
+				interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			} else if (subCmd === 'add') {
+				const endPart = interaction.options.getString("info")
 				const colonIndex = endPart.indexOf(':') >= 0 ? endPart.indexOf(':') : endPart.indexOf(' ');
-				if (!endPart) return message.channel.send('You need to add a component.');
-				if (endPart.length > 256) return message.channel.send('The component or name is too long.');
+				if (!endPart) return interaction.reply('You need to add a component.');
+				if (endPart.length > 256) return interaction.reply('The component or name is too long.');
 				const component = endPart.slice(0, colonIndex).trim();
-				if (!component) return message.channel.send('You need to add a colon.');
+				if (!component) return interaction.reply('You need to add a colon.');
 				const name = endPart.slice(colonIndex + 1).trim();
-				if (!name) return message.channel.send('You need to add a name.');
-				if (!client.specsDb.hasUser(message.author.id)) client.specsDb.addData(message.author.id, {});
-				client.specsDb.addSpec(message.author.id, component, name);
-				return message.channel.send(`Successfully added "${component}: ${name}" to your specs.`);
-			} else if (args[1].toLowerCase() === 'edit') {
-				if (!client.specsDb.hasUser(message.author.id)) return message.channel.send('You haven\'t added any specs.');
-				const endPart = args.slice(2).join(' ');
+				if (!name) return interaction.reply('You need to add a name.');
+				if (!client.specsDb.hasUser(interaction.user.id)) client.specsDb.addData(interaction.user.id, {});
+				client.specsDb.addSpec(interaction.user.id, component, name);
+				return interaction.reply(`Successfully added "${component}: ${name}" to your specs.`);
+			} else if (subCmd === 'edit') {
+				if (!client.specsDb.hasUser(interaction.user.id)) return interaction.reply('You haven\'t added any specs.');
+				const endPart = interaction.options.getString("info");
 				const colonIndex = endPart.indexOf(':') >= 0 ? endPart.indexOf(':') : endPart.indexOf(' ');
-				if (!endPart) return message.channel.send('You need to add a component.');
-				if (endPart.length > 256) return message.channel.send('The component or name is too long.');
+				if (!endPart) return interaction.reply('You need to add a component.');
+				if (endPart.length > 256) return interaction.reply('The component or name is too long.');
 				const component = endPart.slice(0, colonIndex).trim();
-				if (!component) return message.channel.send('You need to add a colon.');
+				if (!component) return interaction.reply('You need to add a colon.');
 				const name = endPart.slice(colonIndex + 1).trim();
-				if (!name) return message.channel.send('You need to add a name.');
-				if (!client.specsDb.hasSpec(message.author.id, component)) return message.channel.send('You haven\'t added that spec.');
-				client.specsDb.editSpecs(message.author.id, component, name);
-				return message.channel.send(`Successfully edited "${component}", new value is "${name}".`);
-			} else if (args[1].toLowerCase() === 'delete') {
-				if (!client.specsDb.hasUser(message.author.id)) return message.channel.send('You haven\'t added any specs.');
-				if (args[2]) {
-					const component = args.slice(2).join(' ')
-					if (!client.specsDb.hasSpec(message.author.id, args[2])) return message.channel.send('You haven\'t added that spec.');
-					client.specsDb.deleteSpec(message.author.id, args[2]);
-					return message.channel.send(`Successfully deleted "${args[2]}" from your specs.`);
+				if (!name) return interaction.reply('You need to add a name.');
+				if (!client.specsDb.hasSpec(interaction.user.id, component)) return interaction.reply('You haven\'t added that spec.');
+				client.specsDb.editSpecs(interaction.user.id, component, name);
+				return interaction.reply(`Successfully edited "${component}", new value is "${name}".`);
+			} else if (subCmd === 'delete') {
+				if (!client.specsDb.hasUser(interaction.user.id)) return interaction.reply('You haven\'t added any specs.');
+				const component = interaction.options.getString("component");
+				if (component) {
+					if (!client.specsDb.hasSpec(interaction.user.id, component)) return interaction.reply('You haven\'t added that spec.');
+					client.specsDb.deleteSpec(interaction.user.id, component);
+					return interaction.reply(`Successfully deleted "${component}" from your specs.`);
 				} else {
-					client.specsDb.deleteData(message.author.id);
-					return message.channel.send(`Successfully deleted all your specs.`);
+					client.specsDb.deleteData(interaction.user.id);
+					return interaction.reply(`Successfully deleted all your specs.`);
 				}
 			} else {
-				const member = message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => {}));
-				if (!member) return message.channel.send('You failed to mention a user from this server.');
-				if (!client.specsDb.hasUser(member.user.id)) return message.channel.send('They haven\'t added any specs yet.');
+				const member = interaction.options.getUser("member");
+				if (member){
+				if (!client.specsDb.hasUser(member.user.id)) return interaction.reply('They haven\'t added any specs yet.');
 				const embed = client.displaySpecs(client, member);
 				if (member.user.id === '795443537356521502') {
-					developers = await message.guild.roles.fetch('914646059714768906')
+					developers = await interaction.guild.roles.fetch('914646059714768906')
 					embed.addField('Developers', `${developers.members.map(e=>`<@${e.user.id}>`).join("\n") || "None"}`)
 					embed.addField('Package', `Discord.js V${version}`)
 				}
-				return message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+			} else {
+				if (!client.specsDb.hasUser(interaction.user.id)) return interaction.reply({content: `You haven\'t added any specs yet. Do \`/specifications help\` to learn more.`, allowedMentions: { repliedUser: false }});
+				const embed = client.displaySpecs(client, interaction.member);
+				interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			}
-		} else {
-			if (!client.specsDb.hasUser(message.author.id)) return message.reply({content: `You haven\'t added any specs yet. Do \`${client.prefix}specifications help\` to learn more.`, allowedMentions: { repliedUser: false }});
-			const embed = client.displaySpecs(client, message.member);
-			 message.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
-		}
+			}
 	},
-	name: 'specifications',
-	description: 'View computer parts of other people.',
-	usage: ['?help / add / edit / delete / user'],
-	alias: ['specs'],
-	cooldown: 10,
-	category: 'Fun'
+	data: new SlashCommandBuilder().setName("specs").setDescription("View, edit, add, or delete your specs").addSubcommand((optt)=>optt.setName("help").setDescription("Shows you how to use the command")).addSubcommand((optt)=>optt.setName("add").setDescription("Adds a component to your specs.").addStringOption((opt)=>opt.setName("info").setDescription("The info to add.").setRequired(true))).addSubcommand((optt)=>optt.setName("edit").setDescription("Edits a component in your specs.").addStringOption((opt)=>opt.setName("info").setDescription("The info to edit.").setRequired(true))).addSubcommand((optt)=>optt.setName("delete").setDescription("Deletes a component to your specs, or all your specs if no component is provided.")).addSubcommand((optt)=>optt.setName("view").setDescription("Views a user's specs.").addUserOption((opt)=>opt.setName("member").setDescription("The member to view specs of.").setRequired(false)))
 };

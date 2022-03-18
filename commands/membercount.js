@@ -1,13 +1,12 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		if (client.memberCount_LastGuildFetchTimestamp < Date.now() - 60000) {
-			await message.guild.fetch();
+			await interaction.guild.fetch();
 			client.memberCount_LastGuildFetchTimestamp = Date.now();
 		}
-		message.reply({content: `**${message.guild.name}** has **${message.guild.approximateMemberCount.toLocaleString()}** members.`, allowedMentions: { repliedUser: false }});
+		interaction.reply({content: `**${interaction.guild.name}** has **${interaction.guild.memberCount.toLocaleString()}** members.`, allowedMentions: { repliedUser: false }});
 	},
-	name: 'membercount',
-	alias: ['mc'],
-	description: 'Displays the amount of members on this server',
-	cooldown: 10
+	data: new SlashCommandBuilder().setName("member_count").setDescription("View the guilds member count!")
 };

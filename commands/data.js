@@ -1,7 +1,7 @@
+const {SlashCommandBuilder} = require("@discordjs/builders");
 module.exports = {
-	run: (client, message, args) => {
-		message.reply({content: 'https://dontasktoask.com', allowedMentions: { repliedUser: false }});
+	run: (client, interaction) => {
+		interaction.reply({content: 'https://dontasktoask.com', allowedMentions: { repliedUser: false }});
 	},
-	name: 'data',
-	alias: ['dontasktoask']
+	data: new SlashCommandBuilder().setName("data").setDescription("Don't ask to ask.")
 };

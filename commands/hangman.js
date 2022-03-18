@@ -1,18 +1,14 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
 module.exports = {
-	run: async (client, message, args) => {
-		if (client.games.has(message.channel.id)) {
-			return message.channel.send(`There is already an ongoing game in this channel created by ${client.games.get(message.channel.id)}`);
+	run: async (client, interaction) => {
+		if (client.games.has(interaction.channel.id)) {
+			return interaction.reply(`There is already an ongoing game in this channel created by ${client.games.get(interaction.channel.id)}`);
 		}
-		client.games.set(message.channel.id, message.author.tag);
-		await message.channel.send(`A hangman game has started. ${message.member.toString()}, DM me with the word(s) that you would like your opponents to guess. (60s)`);
-		const dmChannel = await message.member.createDM();
-		const collectedMessages = await dmChannel.awaitMessages({ errors: ['time'], max: 1, time: 60000 })
-			.catch(error => {
-				message.channel.send(`${message.member.toString()} failed to provide a word for me. The hangman game has been cancelled.`);
-				client.games.delete(message.channel.id);
-			});
-		if (!collectedMessages) return;
-		const word = collectedMessages.first().content.toLowerCase();
+		client.games.set(interaction.channel.id, interaction.user.tag);
+		await interaction.reply({content: `Game started!`, ephemeral: true});
+		const ea = await interaction.followUp({content: `A hangman game has started!\nAnyone can guess letters or the full word by doing \`guess [letter or word]\`\nThe word is:\n\`\`\`\n${hideWord()}\n\`\`\``, fetchReply: true});
+		const word = interaction.options.getString("word");
 		const guessedWordsIndices = [];
 		const guesses = [];
 		let fouls = 0;
@@ -23,9 +19,9 @@ module.exports = {
 			let winText = '';
 			if (!hiddenLetters) {
 				winText = `\nThe whole word has been revealed. The hangman game ends. The word was:\n\`\`\`\n${word}\n\`\`\``;
-				client.games.delete(message.channel.id);
+				client.games.delete(interaction.channel.id);
 			}
-			message.channel.send(`A part of the word has been revealed. This what the word looks like now:\n\`\`\`\n${hideWordResult}\n\`\`\`` + winText);
+			ea.reply(`A part of the word has been revealed. This what the word looks like now:\n\`\`\`\n${hideWordResult}\n\`\`\`` + winText);
 		}
 		function hideWord() {
 			hiddenLetters = false;
@@ -40,7 +36,7 @@ module.exports = {
 		}
 		function guessLetter(letter) {
 			latestActivity = Date.now();
-			if (guesses.includes(letter)) return message.channel.send('That letter has been guessed already.');
+			if (guesses.includes(letter)) return interaction.channel.send('That letter has been guessed already.');
 			guesses.push(letter);
 			if (!word.includes(letter)) {
 				fouls++;
@@ -61,7 +57,7 @@ module.exports = {
 			guessedWordsIndices.push(...guessedTextCharIndices.map(x => x + guessedTextStartIndex));
 			wordUpdate();
 		}
-		const guessCollector = message.channel.createMessageCollector({});
+		const guessCollector = interaction.channel.createMessageCollector({});
 
 		guessCollector.on('collect', guessMessage => {
 			if(guessMessage.author.bot) return;
@@ -77,10 +73,10 @@ module.exports = {
 		});
 
 		const interval = setInterval(() => {
-			if (Date.now() > latestActivity + 5 * 60 * 1000 && client.games.has(message.channel.id)) {
+			if (Date.now() > latestActivity + 5 * 60 * 1000 && client.games.has(interaction.channel.id)) {
 				guessCollector.stop();
-				client.games.delete(message.channel.id);
-				message.channel.send('The hangman game has ended due to inactivity.');
+				client.games.delete(interaction.channel.id);
+				interaction.channel.send('The hangman game has ended due to inactivity.');
 				clearInterval(interval);
 			}
 		}, 5000);
@@ -147,16 +143,12 @@ module.exports = {
 			let loseText = '';
 			if (fouls === 7) {
 				loseText = `\nThe poor fella got hung. You lost the game. The word was:\n\`\`\`\n${word}\n\`\`\``;
-				client.games.delete(message.channel.id);
+				client.games.delete(interaction.channel.id);
 				guessCollector.stop();
 				clearInterval(interval);
 			}
-			message.channel.send(`The word doesn\'t include that ${!textGuess ? 'letter' : 'piece of text'}.\nAn incorrect guess leads to the addition of things to the drawing. It now looks like this:\n\`\`\`\n${stages[fouls - 1].join('\n')}\n\`\`\`` + loseText);
+			ea.reply(`The word doesn\'t include that ${!textGuess ? 'letter' : 'piece of text'}.\nAn incorrect guess leads to the addition of things to the drawing. It now looks like this:\n\`\`\`\n${stages[fouls - 1].join('\n')}\n\`\`\`` + loseText);
 		}
-		message.channel.send(`I have received a word from ${message.member.toString()}. Anyone can guess letters or the full word by doing \`guess [letter or word]\`\nThe word is:\n\`\`\`\n${hideWord()}\n\`\`\``);
 	},
-	name: 'hangman',
-	description: 'Play the hangman game with other Discord users',
-	cooldown: 60,
-	category: 'Fun'
+	data: new SlashCommandBuilder().setName("hangman").setDescription("Starts a game of hangman!").addStringOption((opt)=>opt.setName("word").setDescription("The word to users have to try and guess.").setRequired(true))
 };

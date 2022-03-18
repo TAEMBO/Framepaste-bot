@@ -1,32 +1,23 @@
-const ms = require('ms');
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const ms = require("ms");
 
 module.exports = {
-    run: async (client, message, args) => {
-        if (message.guild.id !== client.config.mainServer.id) {
-            return message.reply({content: 'Wrong server.', allowedMentions: { repliedUser: false }})
+    run: async (client, interaction) => {
+        if (interaction.guild.id !== client.config.mainServer.id) {
+            return interaction.reply({content: 'Wrong server.', allowedMentions: { repliedUser: false }})
         }
-        if (!client.hasModPerms(client, message.member)) {
-            return message.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
+        if (!client.hasModPerms(client, interaction.member)) {
+            return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
         }
-        let giveawayChannel = message.mentions.channels.first();
-        if (!giveawayChannel) {
-            return message.channel.send(':boom: Uh oh, I couldn\'t find that channel! Try again!');
-        }
+        const giveawayChannel = interaction.options.getChannel("channel");
 
-        let giveawayDuration = ms(args[2]);
-        if (!giveawayDuration || isNaN(giveawayDuration)) {
-            return message.channel.send(':boom: Hm. you haven\'t provided a duration. Can you try again?');
+        const giveawayDuration = ms(interaction.options.getString("time"));
+        if (isNaN(giveawayDuration)) {
+            return interaction.channel.send(':boom: Hm. you haven\'t provided a duration. Can you try again?');
         }
         
-        let giveawayNumberWinners = parseInt(args[3]);
-        if (isNaN(giveawayNumberWinners) || (giveawayNumberWinners <= 0)) {
-            return message.channel.send(':boom: Uh... you haven\'t provided the amount of winners.');
-        }
-
-        let giveawayPrize = args.slice(4).join(' ');
-        if (!giveawayPrize) {
-            return message.channel.send(':boom: Oh, it seems like you didn\'t give me a valid prize!');
-        }
+        const giveawayNumberWinners = interaction.options.getInteger("winners");
+        const giveawayPrize = interaction.options.getString("prize");
         if (!client.config["Giveaway_Options"].showMention && client.config["Giveaway_Options"].giveawayRoleID && client.config["Giveaway_Options"].giveawayMention) {
 
             giveawayChannel.send(`<@&${client.config["Giveaway_Options"].giveawayRoleID}>`).then((msg) => msg.delete({ timeout: 1000 }))
@@ -34,7 +25,7 @@ module.exports = {
                 duration: giveawayDuration,
                 prize: giveawayPrize,
                 winnerCount: giveawayNumberWinners,
-                hostedBy: client.config["Giveaway_Options"].hostedBy ? message.author : null,
+                hostedBy: client.config["Giveaway_Options"].hostedBy ? interaction.user : null,
                 messages: {
                     giveaway: "🎉 GIVEAWAY 🎉",
                     giveawayEnded: "🎉 GIVEAWAY ENDED 🎉",
@@ -71,7 +62,7 @@ module.exports = {
                 time: ms(giveawayDuration),
                 prize: giveawayPrize,
                 winnerCount: parseInt(giveawayNumberWinners),
-                hostedBy: client.config["Giveaway_Options"].hostedBy ? message.author : null,
+                hostedBy: client.config["Giveaway_Options"].hostedBy ? interaction.user : null,
                 messages: {
                     giveaway: ":tada: **GIVEAWAY** :tada:",
                     giveawayEnded: ":tada: **GIVEAWAY ENDED** :tada:",
@@ -98,7 +89,7 @@ module.exports = {
                 time: ms(giveawayDuration),
                 prize: giveawayPrize,
                 winnerCount: parseInt(giveawayNumberWinners),
-                hostedBy: client.config["Giveaway_Options"].hostedBy ? message.author : null,
+                hostedBy: client.config["Giveaway_Options"].hostedBy ? interaction.user : null,
                 messages: {
                     giveaway: (client.config["Giveaway_Options"].showMention ? `@everyone\n\n` : "") + ":tada: **GIVEAWAY** :tada:",
                     giveawayEnded: (client.config["Giveaway_Options"].showMention ? `@everyone\n\n` : "") + ":tada: **GIVEAWAY ENDED** :tada:",
@@ -124,7 +115,7 @@ module.exports = {
                 time: ms(giveawayDuration),
                 prize: giveawayPrize,
                 winnerCount: parseInt(giveawayNumberWinners),
-                hostedBy: client.config["Giveaway_Options"].hostedBy ? message.author : null,
+                hostedBy: client.config["Giveaway_Options"].hostedBy ? interaction.user : null,
                 messages: {
                     giveaway: ":tada: **GIVEAWAY** :tada:",
                     giveawayEnded: ":tada: **GIVEAWAY ENDED** :tada:",
@@ -149,10 +140,7 @@ module.exports = {
         const channel = client.channels.resolve(giveawayChannel)
 
         channel.send('<@&903649265224663121>').then(x => setTimeout(() => x.delete(), 500)) //giveaway role that gets pinged, then deleted for a cleaner look
-        message.channel.send(`:tada: Done! The giveaway for the \`${giveawayPrize}\` is starting in ${giveawayChannel}!`);
+        interaction.reply(`:tada: Done! The giveaway for the \`${giveawayPrize}\` is starting in ${giveawayChannel}!`);
     },
-    name: "start",
-    description: "Starts a giveaway.",
-    usage: ['channel', 'duration', 'winners', 'prize'],
-    category: "Giveaways",
+    data: new SlashCommandBuilder().setName("start").setDescription("Starts a giveaway!").addChannelOption((opt)=>opt.setName("channel").setDescription("The channel to host the giveaway in.").setRequired(true)).addStringOption((opt)=>opt.setName("time").setDescription("The time for the giveaway.").setRequired(true)).addIntegerOption((opt)=>opt.setName("winners").setDescription("The amount of winners for this giveaway.").setRequired(true)).addStringOption((opt)=>opt.setName("prize").setDescription("The prize for the giveaway.").setRequired(true))
 };
