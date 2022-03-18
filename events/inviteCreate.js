@@ -4,6 +4,7 @@ module.exports = {
     giveaway: false,
     frs: false,
     execute: async (client, invite) =>{
-        client.invites.set(invite.code, {uses: 0, creator: invite.inviter.id})
+        const newInvites = await invite.guild.invites.fetch();
+        newInvites.forEach(inv => client.invites.set(inv.code, {uses: inv.uses, creator: inv.inviter.id}));
     }
 }
