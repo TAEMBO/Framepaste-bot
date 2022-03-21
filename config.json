@@ -4,11 +4,12 @@
 	"embedColorRed": 15158332,
 	"botSwitches": {
 		"fpb": true,
-		"modmail": false,
+		"modmail": true,
 		"commands": true,
-		"automod": false,
-		"reactionRoles": false,
-		"freeGames": false
+		"automod": true,
+		"reactionRoles": true,
+		"freeGames": true,
+		"registerCommands": false
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",
