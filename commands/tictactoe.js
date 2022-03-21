@@ -114,7 +114,7 @@ module.exports = {
 					},
 					draw: () => {
 						game.ended = true;
-						interaction.channel.send(game.boardState() + '\nIt\'s a draw! Neither player won the game. TIP: You can view Tic Tac Toe statistics with `' + client.prefix + 'ttt leaderboard`');
+						interaction.channel.send(`${game.boardState()}\nIt's a draw! Neither player won the game. TIP: You can view Tic Tac Toe statistics with /tictactoe leaderboard`);
 						if (game.singleplayer) return;
 						db.addData({ players: game.participants.map(x => x.user.tag), draw: true, startTime: game.startTime, endTime: Date.now() });
 						return;
