@@ -30,7 +30,7 @@ module.exports = {
 			.addField("Search Terms", "Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.")
 			.addField("Manufacturer Search", "Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `intel`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.")
 			.addField("i dont want to write this", "so here are examples\n\`,CPU intel 9900k, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = intel (only intel CPUs will be searched)\nname search = 9900k (CPU name must include \"9900k\")\nfilter: price > 1000 (CPU msrp must be more than 1000 usd)\n\n\`,CPU 11900k\`\n1 search term\nno manufacturer, no filters\nnamesearch = 5700x (CPU name must include \"5700x\")\n\n\`,CPU intel -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = intel\nmultiple search: list is active (\`-s\` also works)")
-			return interaction.channel.send({embeds: [embed]});
+			return interaction.reply({embeds: [embed], allowedMentions: {repliedUser: false}, fetchReply: true});
 		} else if(subCmd === "search"){
 		const searchTerms = interaction.options.getString("query").split(",");
 
