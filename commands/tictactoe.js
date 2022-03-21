@@ -10,10 +10,9 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('__Tic Tac Toe Statistics__')
 				.setDescription(`A total of ${db.getTotalGames()} games have been played.`)
-				.setFooter({text: `Do "/ttt stats [username]" for player stats.`})
+				.setFooter({text: `Do "/tictactoe stats [username]" for player stats.`})
 				.setColor(client.config.embedColor)
-			await interaction.reply({embeds: [embed]});
-			await interaction.followUp(`Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], db.calcWinPercentage(x[1])]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``);
+			await interaction.reply({content: `Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], db.calcWinPercentage(x[1])]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``, embeds: [embed]});
 			return;
 		} else if (subCmd === 'stats') {
 			const allPlayers = db.getAllPlayers();
@@ -107,7 +106,7 @@ module.exports = {
 					},
 					victoryAction: () => {
 						game.ended = true;
-						interaction.channel.send(`${game.boardState()}\n${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!${game.singleplayer ? ' Singleplayer games are not counted in Tic Tac Toe Statistics.' : ' TIP: You can view Tic Tac Toe statistics with /ttt leaderboard`'}`);
+						interaction.channel.send(`${game.boardState()}\n${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!${game.singleplayer ? ' Singleplayer games are not counted in Tic Tac Toe Statistics.' : ' TIP: You can view Tic Tac Toe statistics with /tictactoe leaderboard`'}`);
 						if (game.singleplayer) return;
 						db.addData({ players: game.participants.map(x => x.user.tag), winner: game.participants[game.turn].user.tag, startTime: game.startTime, endTime: Date.now() });
 						return;
