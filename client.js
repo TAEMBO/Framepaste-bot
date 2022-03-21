@@ -166,7 +166,7 @@ class YClient extends Client {
 					let errorSearchFilter;
 					if (nameSearch) errorSearchFilter = search[i + 1];
 					else errorSearchFilter = search[i];
-					interaction.channel.send(`Invalid property, operator or value in \`${errorSearchFilter.trim()}\``);
+					interaction.reply({content: `Invalid property, operator or value in \`${errorSearchFilter.trim()}\``, ephemeral: true});
 				}
 				return false;
 			}
