@@ -30,7 +30,7 @@ module.exports = {
 			.addField("Search Terms", "Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.")
 			.addField("Manufacturer Search", "Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `intel`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.")
 			.addField("i dont want to write this", "so here are examples\n\`,CPU intel 9900k, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = intel (only intel CPUs will be searched)\nname search = 9900k (CPU name must include \"9900k\")\nfilter: price > 1000 (CPU msrp must be more than 1000 usd)\n\n\`,CPU 11900k\`\n1 search term\nno manufacturer, no filters\nnamesearch = 5700x (CPU name must include \"5700x\")\n\n\`,CPU intel -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = intel\nmultiple search: list is active (\`-s\` also works)")
-			return interaction.channel.send({embeds: [embed]});
+			return interaction.reply({embeds: [embed], allowedMentions: {repliedUser: false}, fetchReply: true});
 		} else if(subCmd === "search"){
 		const searchTerms = interaction.options.getString("query").split(",");
 
@@ -207,7 +207,7 @@ module.exports = {
 			} else {
 				embed.setFooter({text: `Showing ${limit} of ${rankedCPUs.length} CPUs.`})
 			}
-			interaction.channel.send({embeds: [embed]});
+			interaction.reply({embeds: [embed], allowedMentions: {repliedUser: false}, fetchReply: true});
 			if (multipleSearch === "s") {
 				const filter = x => x.author.id === interaction.user.id && parseInt(x.content)
 				return interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ["time"]}).then(responses => {
@@ -241,7 +241,7 @@ module.exports = {
 				matches.amd = CPUs.amd.filter(x => x.name).find(x => CPUs.amd.filter(z => z.name).every(y => y.score <= x.score));
 			}
 			const bestMatch = Object.entries(matches).find((x, index) => (typeof x[1]?.score === "number" ? x[1]?.score : -1) >= (typeof Object.entries(matches)[(!index) + 0][1]?.score === "number" ? Object.entries(matches)[(!index) + 0][1]?.score : -1));
-			if (!bestMatch[1] || bestMatch[1].score < 0) return interaction.channel.send("That query returned `0` results.");
+			if (!bestMatch[1] || bestMatch[1].score < 0) return interaction.reply({content: 'That query returned `0` results.', allowedMentions: {repliedUser: false}, fetchReply: true});
 			interaction.reply({embeds: [CPUEmbed(client, bestMatch[1], bestMatch[0])]});
 		}
 	}
