@@ -207,13 +207,13 @@ module.exports = {
 			} else {
 				embed.setFooter({text: `Showing ${limit} of ${rankedCPUs.length} CPUs.`})
 			}
-			interaction.channel.send({embeds: [embed]});
+			interaction.reply({embeds: [embed]});
 			if (multipleSearch === "s") {
 				const filter = x => x.author.id === interaction.user.id && parseInt(x.content)
 				return interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ["time"]}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
 					if (isNaN(index)) return interaction.channel.send("That\"s not a valid number.");
-					interaction.channel.send({embeds: [CPUEmbed(client, rankedCPUs[index][1], manufacturer || getManufacturer(rankedCPUs[index][0]))]});
+					interaction.followUp({embeds: [CPUEmbed(client, rankedCPUs[index][1], manufacturer || getManufacturer(rankedCPUs[index][0]))]});
 				}).catch(() => interaction.channel.send("You failed."))
 			}
 		} else {
@@ -241,7 +241,7 @@ module.exports = {
 				matches.amd = CPUs.amd.filter(x => x.name).find(x => CPUs.amd.filter(z => z.name).every(y => y.score <= x.score));
 			}
 			const bestMatch = Object.entries(matches).find((x, index) => (typeof x[1]?.score === "number" ? x[1]?.score : -1) >= (typeof Object.entries(matches)[(!index) + 0][1]?.score === "number" ? Object.entries(matches)[(!index) + 0][1]?.score : -1));
-			if (!bestMatch[1] || bestMatch[1].score < 0) return interaction.channel.send("That query returned `0` results.");
+			if (!bestMatch[1] || bestMatch[1].score < 0) return interaction.reply({content: "That query returned `0` results.", ephemeral: true});
 			interaction.reply({embeds: [CPUEmbed(client, bestMatch[1], bestMatch[0])]});
 		}
 	}
