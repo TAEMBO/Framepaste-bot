@@ -124,7 +124,7 @@ module.exports = {
 				if (!client.config.eval.whitelist.includes(interaction.user.id)) return interaction.reply('You\'re not allowed to do that.');
 				const memeNumber = interaction.options.getInteger("meme")
 				if (memeNumber) {
-					const meme = client.memeQueue.get(memeNumber);
+					const meme = client.memeQueue.get(`${memeNumber}`);
 
 					const approve = () => {
 						// add this meme to the collection
@@ -149,7 +149,7 @@ module.exports = {
 						fs.writeFileSync(dir, json);
 
 						// remove this meme from the queue
-						client.memeQueue.delete(memeNumber);
+						client.memeQueue.delete(`${memeNumber}`);
 
 						// inform user
 						interaction.reply({content: ':clap: Meme :clap: Approved!', allowedMentions: { repliedUser: false }});
@@ -158,7 +158,7 @@ module.exports = {
 
 					const decline = () => {
 						// remove this meme from the queue
-						client.memeQueue.delete(memeNumber);
+						client.memeQueue.delete(`${memeNumber}`);
 
 						// inform user
 						interaction.reply({content: 'The submission has been declined and removed from the queue.', allowedMentions: { repliedUser: false }});
