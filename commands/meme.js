@@ -168,7 +168,7 @@ module.exports = {
 
 					if (!meme) return interaction.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
 					await interaction.reply({content: ':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. Type "cancel" to leave this meme in the queue. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n' + (Math.random() < (1 / 3) ? '\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' : '') + meme.url, allowedMentions: { repliedUser: false }, components: [new MessageActionRow().addComponents(new MessageButton().setLabel("Approve").setStyle("SUCCESS").setCustomId(`accept-${interaction.user.id}`), new MessageButton().setStyle("DANGER").setLabel("Decline").setCustomId(`decline-${interaction.user.id}`))]});
-					const fil = x => x.user.id === interaction.user.id && [`accept-${interaction.user.id}`, `decline-${interaction.user.id}`].includes(i.customId);
+					const fil = x => x.user.id === interaction.user.id && [`accept-${interaction.user.id}`, `decline-${interaction.user.id}`].includes(x.customId);
 					const approval = await interaction.channel.createMessageComponentCollector({filter: fil, max: 1, time: 30000});
 					approval.on("collect", async (inter)=>{
 					if (inter.customId === `accept-${interaction.user.id}`)
