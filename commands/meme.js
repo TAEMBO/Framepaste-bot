@@ -119,7 +119,7 @@ module.exports = {
 					.setTitle('A meme with the following info has been created:')
 					.setDescription('```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\nInform one of the following people so they can approve your meme:\n' + client.config.eval.whitelist.map(x => '<@' + x + '>').join('\n') + '\nWith the following information: ":clap: meme :clap: review ' + key + '"')
 					.setColor(color)
-				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+				return interaction.followUp({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else if (subCmd === 'review') {
 				if (!client.config.eval.whitelist.includes(interaction.user.id)) return interaction.reply('You\'re not allowed to do that.');
 				const memeNumber = interaction.options.getInteger("meme")
