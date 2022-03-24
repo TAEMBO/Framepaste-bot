@@ -263,7 +263,7 @@ module.exports = {
 				if (eligiblity.messages >= nextRoleReq.requirements.messages) text += ':white_check_mark: ';
 				else text += ':x: ';
 			} else text += ':gem: ';
-			text += eligiblity.messages.toLocaleString('en-US') + (showRequirements ? '/' + nextRoleReq.requirements.messages.toLocaleString('en-US') : '') + ' **messages\n';
+			text += '**' + eligiblity.messages.toLocaleString('en-US') + (showRequirements ? '/' + nextRoleReq.requirements.messages.toLocaleString('en-US') : '') + ' messages\n';
 			if (showRequirements) {
 				if (eligiblity.age >= nextRoleReq.requirements.age) text += ':white_check_mark: ';
 				else text += ':x: ';
@@ -282,7 +282,7 @@ module.exports = {
 		if (nextRoleReq) { // if user hasnt yet gotten all the level roles
 			messageContents.push(...[ 
 				pronounBool('You', 'They') + (achievedRoles.length > 0 ? ' already have the ' + achievedRoles + ' role(s).' : ' don\'t have any level roles yet.'), // show levels roles that user already has, if any
-				pronounBool('Your', 'Their') + ' next level role is **' + nextRole.name + '** and here\'s ' + pronounBool('your', 'their') + ' progress:',
+				pronounBool('Your', 'Their') + ' next level role is **' + nextRole + '** and here\'s ' + pronounBool('your', 'their') + ' progress:',
 				progressText() // show them what their next role is
 			]);
 			if (nextRoleReq.eligible) { // if theyre eligible for their next role
@@ -292,7 +292,7 @@ module.exports = {
 				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => interaction.followUp('You\'ve received the **' + nextRole.name + '** role.')).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => interaction.followUp('You\'ve received the **' + nextRole + '** role.')).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
 						// and inform user of outcome
 					}, 500);
 				}
