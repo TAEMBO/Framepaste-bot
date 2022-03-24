@@ -250,7 +250,7 @@ module.exports = {
 		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id) : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
-		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => interaction.guild.roles.cache.get(x.role.id));
+		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `<@&${interaction.guild.roles.cache.get(x.role.id)}>`);
 		achievedRoles = achievedRoles.map((x, i) => {
 			if (i === achievedRoles.length - 2) return x + ' and ';
 			else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
@@ -282,7 +282,7 @@ module.exports = {
 		if (nextRoleReq) { // if user hasnt yet gotten all the level roles
 			messageContents.push(...[ 
 				pronounBool('You', 'They') + (achievedRoles.length > 0 ? ' already have the ' + achievedRoles + ' role(s).' : ' don\'t have any level roles yet.'), // show levels roles that user already has, if any
-				pronounBool('Your', 'Their') + ' next level role is **' + nextRole + '** and here\'s ' + pronounBool('your', 'their') + ' progress:',
+				pronounBool('Your', 'Their') + ' next level role is <@&' + nextRole + '> and here\'s ' + pronounBool('your', 'their') + ' progress:',
 				progressText() // show them what their next role is
 			]);
 			if (nextRoleReq.eligible) { // if theyre eligible for their next role
