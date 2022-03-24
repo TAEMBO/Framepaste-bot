@@ -292,7 +292,7 @@ module.exports = {
 				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => interaction.followUp(`You\'ve received the **${nextRole.name}** role.`)).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => interaction.followUp({content: `You\'ve received the <@&${nextRole}> role.`,allowedMentions: {roles: false}})).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
 						// and inform user of outcome
 					}, 500);
 				}
