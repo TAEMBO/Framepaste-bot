@@ -286,10 +286,6 @@ module.exports = {
 				progressText() // show them what their next role is
 			]);
 			if (nextRoleReq.eligible) { // if theyre eligible for their next role
-				messageContents.push(...[
-					'',
-					pronounBool('You\'re', 'They\'re') + ' eligible for the next level role.', // inform them
-				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
 						member.roles.add(nextRole).then(() => interaction.followUp({content: `You\'ve received the <@&${nextRole}> role.`,allowedMentions: {roles: false}})).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
