@@ -247,7 +247,7 @@ module.exports = {
 		const nextRoleReq = eligiblity.roles[nextRoleKey];
 
 		// next <Role> in level roles that user is going to get 
-		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id) : undefined;
+		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role) : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
 		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `${interaction.guild.roles.cache.get(x.role.id)}`);
@@ -268,7 +268,7 @@ module.exports = {
 				if (eligiblity.age >= nextRoleReq.requirements.age) text += ':white_check_mark: ';
 				else text += ':x: ';
 			} else text += ':gem: ';
-			text += Math.floor(eligiblity.age).toLocaleString('en-US') + 'd' + (showRequirements ? '/' + nextRoleReq.requirements.age.toLocaleString('en-US') + 'd' : '') + ' time on server.**';
+			text += Math.floor(eligiblity.age).toLocaleString('en-US') + 'd' + (showRequirements ? '/' + nextRoleReq.requirements.age.toLocaleString('en-US') + 'd' : '') + ' time on server**';
 			return text;
 		}
 		
@@ -282,7 +282,7 @@ module.exports = {
 		if (nextRoleReq) { // if user hasnt yet gotten all the level roles
 			messageContents.push(...[ 
 				pronounBool('You', 'They') + (achievedRoles.length > 0 ? ' already have the ' + achievedRoles + ' role(s).' : ' don\'t have any level roles yet.'), // show levels roles that user already has, if any
-				pronounBool('Your', 'Their') + ' next level role is <@&' + nextRole + '> and here\'s ' + pronounBool('your', 'their') + ' progress:',
+				pronounBool('Your', 'Their') + ` next level role is <@&${nextRole.id}> and here\'s ` + pronounBool('your', 'their') + ' progress:',
 				progressText() // show them what their next role is
 			]);
 			if (nextRoleReq.eligible) { // if theyre eligible for their next role
@@ -292,7 +292,7 @@ module.exports = {
 				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => interaction.followUp('You\'ve received the **' + nextRole + '** role.')).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => interaction.followUp(`You\'ve received the ${nextRole.name} role.`)).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
 						// and inform user of outcome
 					}, 500);
 				}
