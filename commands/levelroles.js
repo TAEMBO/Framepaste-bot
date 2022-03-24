@@ -228,6 +228,9 @@ module.exports = {
 			return;
 		} else if(subCmd === "view"){
 
+		const embed0 = new client.embed()
+	    	.setColor(client.config.embedColor)
+
 		// fetch user or user interaction sender
 		const member = interaction.options.getMember("member") ?? interaction.member;
 
@@ -247,7 +250,7 @@ module.exports = {
 		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id) : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
-		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => '**' + interaction.guild.roles.cache.get(x.role.id).name + '**');
+		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => interaction.guild.roles.cache.get(x.role.id));
 		achievedRoles = achievedRoles.map((x, i) => {
 			if (i === achievedRoles.length - 2) return x + ' and ';
 			else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
@@ -260,12 +263,12 @@ module.exports = {
 				if (eligiblity.messages >= nextRoleReq.requirements.messages) text += ':white_check_mark: ';
 				else text += ':x: ';
 			} else text += ':gem: ';
-			text += eligiblity.messages.toLocaleString('en-US') + (showRequirements ? '/' + nextRoleReq.requirements.messages.toLocaleString('en-US') : '') + ' messages\n';
+			text += eligiblity.messages.toLocaleString('en-US') + (showRequirements ? '/' + nextRoleReq.requirements.messages.toLocaleString('en-US') : '') + ' **messages\n';
 			if (showRequirements) {
 				if (eligiblity.age >= nextRoleReq.requirements.age) text += ':white_check_mark: ';
 				else text += ':x: ';
 			} else text += ':gem: ';
-			text += Math.floor(eligiblity.age).toLocaleString('en-US') + 'd' + (showRequirements ? '/' + nextRoleReq.requirements.age.toLocaleString('en-US') + 'd' : '') + ' time on server.';
+			text += Math.floor(eligiblity.age).toLocaleString('en-US') + 'd' + (showRequirements ? '/' + nextRoleReq.requirements.age.toLocaleString('en-US') + 'd' : '') + ' time on server.**';
 			return text;
 		}
 		
@@ -314,10 +317,12 @@ module.exports = {
 					else return 'th';
 				}
 			})(index);
-			messageContents.push(`You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles interaction count.`);
+			
+			embed0.setFooter({text: `You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles interaction count.`});
 		}
-
-		interaction.reply({content: messageContents.join('\n\n'), allowedMentions: { repliedUser: false }}); // compile interaction and send
+	
+		embed0.setDescription(messageContents.join('\n\n'))
+		interaction.reply({embeds: [embed0], allowedMentions: { repliedUser: false }}); // compile interaction and send
 	 }
 	},
 	data: new SlashCommandBuilder().setName("rank").setDescription("View your, another user, or stats about ranking").addSubcommand((optt)=>optt.setName("view").setDescription("View your or another user's ranking information").addUserOption((opt)=>opt.setName("member").setDescription("Views a members ranking statistics.").setRequired(false))).addSubcommand((optt)=>optt.setName("stats").setDescription("Views ranking statistics.")).addSubcommand((optt)=>optt.setName("perks").setDescription("Views ranking perks.")).addSubcommand((optt)=>optt.setName("nerd_stats").setDescription("Views more formal statistics."))
