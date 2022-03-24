@@ -247,10 +247,10 @@ module.exports = {
 		const nextRoleReq = eligiblity.roles[nextRoleKey];
 
 		// next <Role> in level roles that user is going to get 
-		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id) : undefined;
+		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id).id : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
-		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `${interaction.guild.roles.cache.get(x.role.id)}`);
+		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `${interaction.guild.roles.cache.get(x.role.id).id}`);
 		achievedRoles = achievedRoles.map((x, i) => {
 			if (i === achievedRoles.length - 2) return x + ' and ';
 			else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
@@ -292,7 +292,7 @@ module.exports = {
 				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => interaction.followUp(`You\'ve received the ${nextRole.name} role.`)).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => interaction.followUp(`You\'ve received the **${nextRole.name}** role.`)).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
 						// and inform user of outcome
 					}, 500);
 				}
