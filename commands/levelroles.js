@@ -250,7 +250,7 @@ module.exports = {
 		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id).id : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
-		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `${interaction.guild.roles.cache.get(x.role.id).id}`);
+		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `<@&${interaction.guild.roles.cache.get(x.role.id).id}>`);
 		achievedRoles = achievedRoles.map((x, i) => {
 			if (i === achievedRoles.length - 2) return x + ' and ';
 			else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
