@@ -6,7 +6,7 @@ module.exports = {
             return interaction.reply({content: 'Wrong server.', allowedMentions: { repliedUser: false }})
         }
         if (!client.hasModPerms(client, interaction.member)) {
-            return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }});
+            return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, allowedMentions: {roles: false}});
         }
 
         const giveaway = client.giveawaysManager.giveaways.find((g) => g.messageID === interaction.options.getString("message_id"));

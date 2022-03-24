@@ -422,8 +422,8 @@ class YClient extends Client {
     }
     async punish(client, interaction, type) {
         if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: 'this command doesnt work in this server', ephemeral: true});
-        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, ephemeral: true});
-        if (type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, ephemeral: true});
+        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
+        if (type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
         const member = interaction.options.getMember("member");
         const time = interaction.options.getString("time");
         const reason = interaction.options.getString("reason") ?? "None";
@@ -436,10 +436,10 @@ class YClient extends Client {
     };
     async unPunish(client, interaction) {
         if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: 'this command doesnt work in this server', ephemeral: true});
-        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, ephemeral: true});
+        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
         const punishment = client.punishments._content.find(x => x.id == interaction.options.getInteger("id"));
         if (!punishment) return interaction.reply({content: "that isn't a valid case ID.", ephemeral: true});
-        if (punishment.type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return interaction.reply({content: 'Trial moderators can only remove warnings.', ephemeral: true});
+        if (punishment.type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return interaction.reply({content: 'Trial moderators can only remove warnings.', ephemeral: true, allowedMentions: {roles: false}});
         const reason = interaction.options.getString("reason") ?? "None";
         const unpunishResult = await client.punishments.removePunishment(punishment.id, interaction.user.id, reason);
         interaction.reply(unpunishResult);

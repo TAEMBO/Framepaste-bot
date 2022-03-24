@@ -77,7 +77,7 @@ module.exports = {
 				const channelId = interaction.options.getChannel("channel");
 				const categoryOrCommandName = interaction.options.getString("category_or_command_name").toLowerCase();
 				if (categoryOrCommandName) {
-					if (!client.hasModPerms(client, interaction.member)) return interaction.reply(`You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
+					if (!client.hasModPerms(client, interaction.member)) return interaction.reply(`You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command`);
 
 					let restrictionsForThisChannel = client.channelRestrictions._content[channelId];
 

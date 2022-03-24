@@ -12,7 +12,7 @@ module.exports = {
             interaction.reply('Froze server')
         
         } else {
-            interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`, allowedMentions: { repliedUser: false }})
+            interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, allowedMentions: {roles: false}})
         }
 	},
     data: new SlashCommandBuilder().setName("freeze").setDescription("Lock the server for casuals")
