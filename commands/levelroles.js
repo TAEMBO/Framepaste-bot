@@ -317,7 +317,7 @@ module.exports = {
 			messageContents.push(`You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles interaction count.`);
 		}
 
-		interaction.reply({content: messageContents.join('\n'), allowedMentions: { repliedUser: false }}); // compile interaction and send
+		interaction.reply({content: messageContents.join('\n\n'), allowedMentions: { repliedUser: false }}); // compile interaction and send
 	 }
 	},
 	data: new SlashCommandBuilder().setName("rank").setDescription("View your, another user, or stats about ranking").addSubcommand((optt)=>optt.setName("view").setDescription("View your or another user's ranking information").addUserOption((opt)=>opt.setName("member").setDescription("Views a members ranking statistics.").setRequired(false))).addSubcommand((optt)=>optt.setName("stats").setDescription("Views ranking statistics.")).addSubcommand((optt)=>optt.setName("perks").setDescription("Views ranking perks.")).addSubcommand((optt)=>optt.setName("nerd_stats").setDescription("Views more formal statistics."))
