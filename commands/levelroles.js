@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const d = require("discord.js")
 module.exports = {
 	run: async (client, interaction) => {
-		if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: 'This command doesn\'t work in this server.', allowedMentions: { repliedUser: false }});
 
 		// dailymsgs.json
 		const dailyMsgs = require('../databases/dailyMsgs.json');
