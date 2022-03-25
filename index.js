@@ -30,7 +30,7 @@ client.on("ready", async () => {
 		})
 	});
 	setInterval(async () => {
-		await client.user.setActivity(`Mr. Yeester videos`, {
+		await client.user.setActivity(`you follow @scambl`, {
 			type: "WATCHING",
 		})
 	}, 60000);
