@@ -107,7 +107,7 @@ class YClient extends Client {
 	} else if(subCmd === "search"){
 	const manufacturer = `${manufacture}`.toUpperCase();
 	const color = manufacturer === 'INTEL' ? 2793983 : 13582629;
-	const search = interaction.options.getString("query").split(',');
+	const search = interaction.options.getString("query").toLowerCase().split(',');
 	let matches = new client.collection();
 	let nameSearch = false;
 	let filters = [];
