@@ -32,13 +32,10 @@ client.on("ready", async () => {
 	setInterval(async () => {
 		await client.user.setActivity(`you follow @scambl`, {
 			type: "WATCHING",
-		})
-	}, 60000);
-	setInterval(async () => {
-		await client.user.setActivity(`you follow @mryeester`, {
+		});setTimeout(() => client.user.setActivity(`you follow @mryeester`, {
 			type: "WATCHING",
-		})
-	}, 30000);
+		}), 30000);
+	}, 60000);
 	console.log("\x1b[36m", `Bot active as ${client.user.tag}.`);
 
 	const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
