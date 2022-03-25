@@ -54,20 +54,6 @@ module.exports = {
     if (commandFile) {
         console.log(`${interaction.user.tag} used /${interaction.commandName} in ${interaction.channel.name}`);
 
-        // channel restrictions
-        if (client.channelRestrictions._content[interaction.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[interaction.channel.id]?.some(x => x.includes(commandFile.name))) {
-            if (!client.hasModPerms(client, interaction.member) && !interaction.member.roles.cache.has(client.config.mainServer.roles.levels.three.id) && !interaction.member.roles.cache.has(client.config.mainServer.roles.helper))
-            return interaction.reply({content: 'Command is restricted in this channel, use <#902524214718902332>', ephemeral: true})
-        }
-        try {
-            commandFile.run(client, interaction);
-            commandFile.uses ? commandFile.uses++ : commandFile.uses = 1;
-            return;
-        } catch (error) {
-            console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
-            return interaction.reply("An error occured while executing that command.");
-        }
     }
-   }
-   }
+   }}
 }
