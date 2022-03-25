@@ -48,6 +48,7 @@ class YClient extends Client {
         this.punishments = new database("./databases/punishments.json", "array");
         this.specsDb = new database("./databases/specs.json", "object");
         this.votes = new database("./databases/suggestvotes.json", "array");
+        this.channelRestrictions = new database("./databases/channelRestrictions.json", "object");
         this.starboard = new database("./databases/starboard.json", "object");
         this.repeatedMessages = {};
         this.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
@@ -63,6 +64,7 @@ class YClient extends Client {
         this.punishments.initLoad();
         this.specsDb.initLoad().intervalSave(15000);
         this.votes.initLoad();
+        this.channelRestrictions.initLoad();
         this.starboard.initLoad().intervalSave(60000);
         this.repeatedMessagesContent.initLoad();
         const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
