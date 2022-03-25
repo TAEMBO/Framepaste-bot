@@ -158,7 +158,7 @@ module.exports = {
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Perks')
-				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Bypassing Channel Restrictions & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
+				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Use bot commands anywhere & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
 				.setColor(client.config.embedColor)
 			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			return;
