@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
 	run: (client, interaction) => {
 		let content = `https://www.google.com/search?q=${new URLSearchParams(interaction.options.getString("query")).toString()}`
-		content = content.slice(0, -1)
+		content = content.slice(0, content.length -1)
         interaction.reply(content)
 
 		//interaction.reply(`https://www.google.com/search?q=${new URLSearchParams(interaction.options.getString("query")).toString()}`)
