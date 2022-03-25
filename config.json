@@ -9,7 +9,7 @@
 		"automod": true,
 		"reactionRoles": true,
 		"freeGames": true,
-		"registerCommands": false
+		"registerCommands": true
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",
