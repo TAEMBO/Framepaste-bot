@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
 	run: (client, interaction) => {
-		const content = `https://www.google.com/search?q=${new URLSearchParams(interaction.options.getString("query")).split(" ").join("+")}`
+		let content = `https://www.google.com/search?q=${new URLSearchParams(interaction.options.getString("query")).split(" ").join("+")}`
 		if(content.substr(-1) === "="){
 		content = content.slice(0, content.lenght-1)
 		}
