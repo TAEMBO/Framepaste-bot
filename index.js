@@ -30,8 +30,8 @@ client.on("ready", async () => {
 		})
 	});
 	setInterval(async () => {
-		await client.user.setActivity(`/help`, {
-			type: "LISTENING",
+		await client.user.setActivity(`Mr. Yeester videos`, {
+			type: "WATCHING",
 		})
 	}, 60000);
 	console.log("\x1b[36m", `Bot active as ${client.user.tag}.`);
