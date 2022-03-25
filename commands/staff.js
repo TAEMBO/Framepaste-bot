@@ -2,7 +2,6 @@ const { Client, interaction, MessageEmbed, ClientVoiceManager } = require("disco
 const {SlashCommandBuilder} = require("@discordjs/builders");
 module.exports = {
     run: async (client, interaction) => {
-        if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: `\`/staff\` doesn't work in this server.`, allowedMentions: { repliedUser: false }});
         const staff = {
             administrator: await interaction.guild.roles.fetch(client.config.mainServer.roles.administrator),
             moderator: await interaction.guild.roles.fetch(client.config.mainServer.roles.moderator),
