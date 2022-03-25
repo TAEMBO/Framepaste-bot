@@ -22,7 +22,7 @@ client.on("ready", async () => {
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
 	await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(' ')}`)});
 	setInterval(()=>{client.guilds.cache.get(client.config.mainServer.id).invites.fetch().then((invs)=>{invs.forEach(async(inv)=>{client.invites.set(inv.code, {uses: inv.uses, creator: inv.inviter.id})})})}, 500000)
-	if(client.config.botSwitches.registerCommands) client.application.commands.set(client.registery).catch((e)=>{console.log(`Couldn't register commands bcuz: ${e}`)});
+	if(client.config.botSwitches.registerCommands) client.guilds.cache.get(client.config.mainServer.id).commands.set(client.registery).catch((e)=>{console.log(`Couldn't register commands bcuz: ${e}`)});
 	process.on("unhandledRejection", async (error)=>{
 		console.log(error)
 		await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{
