@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
 	run: (client, interaction) => {
-		if (!client.hasModPerms(client, interaction.member)) return interaction.reply(`You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`);
+		if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, allowedMentions: {roles: false}});
 		client.dmForwardBlacklist.addData(interaction.options.getUser("user").id).forceSave();
 		interaction.reply({content: `Successfully blocked user ${interaction.options.getUser("user").id}`, allowedMentions: { repliedUser: false }});
 	},

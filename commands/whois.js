@@ -12,7 +12,7 @@ module.exports = {
 			.addField(':small_blue_diamond: Join Date', `${member.joinedAt.getUTCFullYear()}-${('0' + (member.joinedAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.joinedAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.joinedTimestamp, 1, { longNames: true })} ago`)
 			.addField(':small_blue_diamond: ID, Nickname, and Mention', `ID: ${member.user.id}\nNickname: ${member.nickname ? member.nickname : 'None'}\nMention: ${member.toString()}`)
 			.addField(':small_blue_diamond: Roles', member.roles.cache.size > 1 ? member.roles.cache.filter(x => x.id !== interaction.guild.roles.everyone.id).sort((a, b) => b.position - a.position).map(x => x).join(member.roles.cache.size > 4 ? ' ' : '\n').slice(0, 1024) : 'None')
-			.setColor(member.displayColor || '#fefefe')
+			.setColor(member.displayColor || client.config.embedColor)
 			.setImage(member.user.bannerURL({ format: 'png', dynamic: true, size: 1024}))
 		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},

@@ -48,7 +48,6 @@ class YClient extends Client {
         this.punishments = new database("./databases/punishments.json", "array");
         this.specsDb = new database("./databases/specs.json", "object");
         this.votes = new database("./databases/suggestvotes.json", "array");
-        this.channelRestrictions = new database("./databases/channelRestrictions.json", "object");
         this.starboard = new database("./databases/starboard.json", "object");
         this.repeatedMessages = {};
         this.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
@@ -64,7 +63,6 @@ class YClient extends Client {
         this.punishments.initLoad();
         this.specsDb.initLoad().intervalSave(15000);
         this.votes.initLoad();
-        this.channelRestrictions.initLoad();
         this.starboard.initLoad().intervalSave(60000);
         this.repeatedMessagesContent.initLoad();
         const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
@@ -109,7 +107,7 @@ class YClient extends Client {
 	} else if(subCmd === "search"){
 	const manufacturer = `${manufacture}`.toUpperCase();
 	const color = manufacturer === 'INTEL' ? 2793983 : 13582629;
-	const search = interaction.options.getString("query").split(',');
+	const search = interaction.options.getString("query").toLowerCase().split(',');
 	let matches = new client.collection();
 	let nameSearch = false;
 	let filters = [];
@@ -421,9 +419,8 @@ class YClient extends Client {
         return milliseconds;
     }
     async punish(client, interaction, type) {
-        if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: 'this command doesnt work in this server', ephemeral: true});
-        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, ephemeral: true});
-        if (type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, ephemeral: true});
+        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
+        if (type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
         const member = interaction.options.getMember("member");
         const time = interaction.options.getString("time");
         const reason = interaction.options.getString("reason") ?? "None";
@@ -435,11 +432,10 @@ class YClient extends Client {
         }
     };
     async unPunish(client, interaction) {
-        if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: 'this command doesnt work in this server', ephemeral: true});
-        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the **${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, ephemeral: true});
+        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
         const punishment = client.punishments._content.find(x => x.id == interaction.options.getInteger("id"));
         if (!punishment) return interaction.reply({content: "that isn't a valid case ID.", ephemeral: true});
-        if (punishment.type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return interaction.reply({content: 'Trial moderators can only remove warnings.', ephemeral: true});
+        if (punishment.type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.trialmoderator)) return interaction.reply({content: 'Trial moderators can only remove warnings.', ephemeral: true, allowedMentions: {roles: false}});
         const reason = interaction.options.getString("reason") ?? "None";
         const unpunishResult = await client.punishments.removePunishment(punishment.id, interaction.user.id, reason);
         interaction.reply(unpunishResult);

@@ -22,7 +22,7 @@ client.on("ready", async () => {
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
 	await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(' ')}`)});
 	setInterval(()=>{client.guilds.cache.get(client.config.mainServer.id).invites.fetch().then((invs)=>{invs.forEach(async(inv)=>{client.invites.set(inv.code, {uses: inv.uses, creator: inv.inviter.id})})})}, 500000)
-	if(client.config.botSwitches.registerCommands) client.application.commands.set(client.registery).catch((e)=>{console.log(`Couldn't register commands bcuz: ${e}`)});
+	if(client.config.botSwitches.registerCommands) client.guilds.cache.get(client.config.mainServer.id).commands.set(client.registery).catch((e)=>{console.log(`Couldn't register commands bcuz: ${e}`)});
 	process.on("unhandledRejection", async (error)=>{
 		console.log(error)
 		await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{
@@ -30,9 +30,11 @@ client.on("ready", async () => {
 		})
 	});
 	setInterval(async () => {
-		await client.user.setActivity(`/help`, {
-			type: "LISTENING",
-		})
+		await client.user.setActivity(`you follow @scambl`, {
+			type: "WATCHING",
+		});setTimeout(() => client.user.setActivity(`you follow @mryeester`, {
+			type: "WATCHING",
+		}), 30000);
 	}, 60000);
 	console.log("\x1b[36m", `Bot active as ${client.user.tag}.`);
 
@@ -44,7 +46,7 @@ client.on("ready", async () => {
     } else if(event.tracker){
 	client.tracker.on(event.name, async (...args) => event.execute(client, ...args));
     } else if(event.frs){
-		client.frs.on(event.name, async (...args) => event.execute(client, frs, ...args));
+		client.frs.on(event.name, async (...args) => event.execute(client, client.frs, ...args));
 	} else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));
     };

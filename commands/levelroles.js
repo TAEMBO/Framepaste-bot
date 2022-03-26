@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const d = require("discord.js")
 module.exports = {
 	run: async (client, interaction) => {
-		if (interaction.guild.id !== client.config.mainServer.id) return interaction.reply({content: 'This command doesn\'t work in this server.', allowedMentions: { repliedUser: false }});
 
 		// dailymsgs.json
 		const dailyMsgs = require('../databases/dailyMsgs.json');
@@ -158,7 +157,7 @@ module.exports = {
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Perks')
-				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Bypassing Channel Restrictions & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
+				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Use bot commands anywhere & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
 				.setColor(client.config.embedColor)
 			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			return;
@@ -228,6 +227,9 @@ module.exports = {
 			return;
 		} else if(subCmd === "view"){
 
+		const embed0 = new client.embed()
+	    	.setColor(client.config.embedColor)
+
 		// fetch user or user interaction sender
 		const member = interaction.options.getMember("member") ?? interaction.member;
 
@@ -244,10 +246,10 @@ module.exports = {
 		const nextRoleReq = eligiblity.roles[nextRoleKey];
 
 		// next <Role> in level roles that user is going to get 
-		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id) : undefined;
+		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id).id : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
-		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => '**' + interaction.guild.roles.cache.get(x.role.id).name + '**');
+		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `<@&${interaction.guild.roles.cache.get(x.role.id).id}>`);
 		achievedRoles = achievedRoles.map((x, i) => {
 			if (i === achievedRoles.length - 2) return x + ' and ';
 			else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
@@ -260,12 +262,12 @@ module.exports = {
 				if (eligiblity.messages >= nextRoleReq.requirements.messages) text += ':white_check_mark: ';
 				else text += ':x: ';
 			} else text += ':gem: ';
-			text += eligiblity.messages.toLocaleString('en-US') + (showRequirements ? '/' + nextRoleReq.requirements.messages.toLocaleString('en-US') : '') + ' messages\n';
+			text += '**' + eligiblity.messages.toLocaleString('en-US') + (showRequirements ? '/' + nextRoleReq.requirements.messages.toLocaleString('en-US') : '') + ' messages\n';
 			if (showRequirements) {
 				if (eligiblity.age >= nextRoleReq.requirements.age) text += ':white_check_mark: ';
 				else text += ':x: ';
 			} else text += ':gem: ';
-			text += Math.floor(eligiblity.age).toLocaleString('en-US') + 'd' + (showRequirements ? '/' + nextRoleReq.requirements.age.toLocaleString('en-US') + 'd' : '') + ' time on server.';
+			text += Math.floor(eligiblity.age).toLocaleString('en-US') + 'd' + (showRequirements ? '/' + nextRoleReq.requirements.age.toLocaleString('en-US') + 'd' : '') + ' time on server**';
 			return text;
 		}
 		
@@ -279,17 +281,13 @@ module.exports = {
 		if (nextRoleReq) { // if user hasnt yet gotten all the level roles
 			messageContents.push(...[ 
 				pronounBool('You', 'They') + (achievedRoles.length > 0 ? ' already have the ' + achievedRoles + ' role(s).' : ' don\'t have any level roles yet.'), // show levels roles that user already has, if any
-				pronounBool('Your', 'Their') + ' next level role is **' + nextRole.name + '** and here\'s ' + pronounBool('your', 'their') + ' progress:',
+				pronounBool('Your', 'Their') + ` next level role is <@&${nextRole}> and here\'s ` + pronounBool('your', 'their') + ' progress:',
 				progressText() // show them what their next role is
 			]);
 			if (nextRoleReq.eligible) { // if theyre eligible for their next role
-				messageContents.push(...[
-					'',
-					pronounBool('You\'re', 'They\'re') + ' eligible for the next level role.', // inform them
-				]);
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => interaction.followUp('You\'ve received the **' + nextRole.name + '** role.')).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => interaction.followUp({content: `You\'ve received the <@&${nextRole}> role.`,allowedMentions: {roles: false}})).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
 						// and inform user of outcome
 					}, 500);
 				}
@@ -314,10 +312,12 @@ module.exports = {
 					else return 'th';
 				}
 			})(index);
-			messageContents.push(`You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles interaction count.`);
+			
+			embed0.setFooter({text: `You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles interaction count.`});
 		}
-
-		interaction.reply({content: messageContents.join('\n'), allowedMentions: { repliedUser: false }}); // compile interaction and send
+	
+		embed0.setDescription(messageContents.join('\n\n'))
+		interaction.reply({embeds: [embed0], allowedMentions: { repliedUser: false }}); // compile interaction and send
 	 }
 	},
 	data: new SlashCommandBuilder().setName("rank").setDescription("View your, another user, or stats about ranking").addSubcommand((optt)=>optt.setName("view").setDescription("View your or another user's ranking information").addUserOption((opt)=>opt.setName("member").setDescription("Views a members ranking statistics.").setRequired(false))).addSubcommand((optt)=>optt.setName("stats").setDescription("Views ranking statistics.")).addSubcommand((optt)=>optt.setName("perks").setDescription("Views ranking perks.")).addSubcommand((optt)=>optt.setName("nerd_stats").setDescription("Views more formal statistics."))

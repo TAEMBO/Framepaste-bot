@@ -6,13 +6,13 @@ module.exports = {
 		const subCmd = interaction.options.getSubcommand()
 			if (subCmd === 'help') {
 				const embed = new client.embed()
-					.setTitle(`Help: /specifications`)
+					.setTitle(`Help: /specs`)
 					.setDescription('This command makes it possible to store and view user-generated information about your or someone else\'s computer specs.')
 					.setColor(client.config.embedColor)
-					.addField('Adding your own specs', `To add your own specs, you can do \`/specifications add [component]: [name]\`. The component should be a universally known term, such as "CPU", "RAM" or "Video Card". The name should contain the name of the part that you own, and some additional info, for example "AMD Ryzen 5 5600x 6-core 12-thread Socket AM4". Make sure that the capitalization on both, the component and name, is correct. It is important to separate the component and name with a colon \`:\`.`)
-					.addField('Viewing specs', `To view your own specs, you can do \`/specifications\`. To view specs of other people, you can do \`/specifications [user]\`. User can be a mention, id or username.`)
-					.addField('Editing specs', `To edit your own specs, you can do \`/specifications edit [component]: [new name]\`. Component capitalization doesn't matter. The old name will be overwritten by the new name. You cannot edit the component part, only the name.`)
-					.addField('Deleting specs', `To delete all your specs, you can do \`/specifications delete\`. To delete a single component from your specs you can do \`/specifications delete [component]\`. Component capitalization doesn't matter.`)
+					.addField('Adding your own specs', `To add your own specs, you can do \`/specs add [component]: [name]\`. The component should be a universally known term, such as "CPU", "RAM" or "Video Card". The name should contain the name of the part that you own, and some additional info, for example "AMD Ryzen 5 5600x 6-core 12-thread Socket AM4". Make sure that the capitalization on both, the component and name, is correct. It is important to separate the component and name with a colon \`:\`.`)
+					.addField('Viewing specs', `To view your own specs, you can do \`/specs\`. To view specs of other people, you can do \`/specs [user]\`. User can be a mention, id or username.`)
+					.addField('Editing specs', `To edit your own specs, you can do \`/specs edit [component]: [new name]\`. Component capitalization doesn't matter. The old name will be overwritten by the new name. You cannot edit the component part, only the name.`)
+					.addField('Deleting specs', `To delete all your specs, you can do \`/specs delete\`. To delete a single component from your specs you can do \`/specs delete [component]\`. Component capitalization doesn't matter.`)
 				interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else if (subCmd === 'add') {
 				const endPart = interaction.options.getString("info")
@@ -62,7 +62,7 @@ module.exports = {
 				}
 				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else {
-				if (!client.specsDb.hasUser(interaction.user.id)) return interaction.reply({content: `You haven\'t added any specs yet. Do \`/specifications help\` to learn more.`, allowedMentions: { repliedUser: false }});
+				if (!client.specsDb.hasUser(interaction.user.id)) return interaction.reply({content: `You haven\'t added any specs yet. Do \`/specs help\` to learn more.`, allowedMentions: { repliedUser: false }});
 				const embed = client.displaySpecs(client, interaction.member);
 				interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			}

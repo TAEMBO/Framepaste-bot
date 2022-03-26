@@ -119,12 +119,12 @@ module.exports = {
 					.setTitle('A meme with the following info has been created:')
 					.setDescription('```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\nInform one of the following people so they can approve your meme:\n' + client.config.eval.whitelist.map(x => '<@' + x + '>').join('\n') + '\nWith the following information: ":clap: meme :clap: review ' + key + '"')
 					.setColor(color)
-				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
+				return interaction.followUp({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else if (subCmd === 'review') {
 				if (!client.config.eval.whitelist.includes(interaction.user.id)) return interaction.reply('You\'re not allowed to do that.');
 				const memeNumber = interaction.options.getInteger("meme")
 				if (memeNumber) {
-					const meme = client.memeQueue.get(memeNumber);
+					const meme = client.memeQueue.get(`${memeNumber}`);
 
 					const approve = () => {
 						// add this meme to the collection
@@ -149,7 +149,7 @@ module.exports = {
 						fs.writeFileSync(dir, json);
 
 						// remove this meme from the queue
-						client.memeQueue.delete(memeNumber);
+						client.memeQueue.delete(`${memeNumber}`);
 
 						// inform user
 						interaction.reply({content: ':clap: Meme :clap: Approved!', allowedMentions: { repliedUser: false }});
@@ -158,7 +158,7 @@ module.exports = {
 
 					const decline = () => {
 						// remove this meme from the queue
-						client.memeQueue.delete(memeNumber);
+						client.memeQueue.delete(`${memeNumber}`);
 
 						// inform user
 						interaction.reply({content: 'The submission has been declined and removed from the queue.', allowedMentions: { repliedUser: false }});
@@ -168,7 +168,7 @@ module.exports = {
 
 					if (!meme) return interaction.reply({content: 'That meme doesn\'t exist.', allowedMentions: { repliedUser: false }});
 					await interaction.reply({content: ':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. Type "cancel" to leave this meme in the queue. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n' + (Math.random() < (1 / 3) ? '\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' : '') + meme.url, allowedMentions: { repliedUser: false }, components: [new MessageActionRow().addComponents(new MessageButton().setLabel("Approve").setStyle("SUCCESS").setCustomId(`accept-${interaction.user.id}`), new MessageButton().setStyle("DANGER").setLabel("Decline").setCustomId(`decline-${interaction.user.id}`))]});
-					const fil = x => x.user.id === interaction.user.id && [`accept-${interaction.user.id}`, `decline-${interaction.user.id}`].includes(i.customId);
+					const fil = x => x.user.id === interaction.user.id && [`accept-${interaction.user.id}`, `decline-${interaction.user.id}`].includes(x.customId);
 					const approval = await interaction.channel.createMessageComponentCollector({filter: fil, max: 1, time: 30000});
 					approval.on("collect", async (inter)=>{
 					if (inter.customId === `accept-${interaction.user.id}`)
