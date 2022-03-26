@@ -12,7 +12,7 @@ module.exports = {
             .setTitle(`Member Left: ${member.user.tag}`)
             .setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
             .addField('🔹 Account Creation Date', `${member.user.createdAt.getUTCFullYear()}-${('0' + (member.user.createdAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.user.createdAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.user.createdTimestamp, 1, { longNames: true })} ago`)
-            .addField('🔹 Join Date', `${new Date(member.joinedAt)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.joinedTimestamp, 1, { longNames: true })} ago`)
+            .addField('🔹 Join Date', `${new Date(member.joinedAt)}, ${client.formatTime(Date.now() - member.joinedTimestamp, 1, { longNames: true })} ago`)
             .addField('🔹 Roles', `${member.roles.cache.map(x => x).join(" ")}`)
             .setColor(client.config.embedColorRed)
             .setTimestamp(Date.now())
