@@ -288,7 +288,7 @@ module.exports = {
 
 		if (nextRoleReq) { // if user hasnt yet gotten all the level roles
 			messageContents.push(...[ 
-				pronounBool('You', 'They') + (achievedRoles.length > 0 ? ' already have the ' + achievedRoles + ' role(s).' : ' don\'t have any level roles yet.'), // show levels roles that user already has, if any
+				pronounBool('You', 'They') + (achievedRoles.length > 0 ? ' currently have the ' + achievedRoles + ' role.' : ' don\'t have any level roles yet.'), // show levels roles that user already has, if any
 				pronounBool('Your', 'Their') + ` next level role is <@&${nextRole}> and here\'s ` + pronounBool('your', 'their') + ' progress:',
 				progressText() // show them what their next role is
 			]);
