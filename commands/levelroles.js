@@ -241,8 +241,6 @@ module.exports = {
 
 		// index of next role
 		let nextRoleKey;
-		//const roleArray = [];
-		//client.config.mainServer.roles.levels.forEach((e)=>{roleArray.push(e.id)});
 		Object.values(client.config.mainServer.roles.levels).map(x=>x.id).forEach(async (role)=>{
 			if(member.roles.cache.has(role)){
 				nextRoleKey = parseInt(`${interaction.guild.roles.cache.get(role).name}`.toLowerCase().replace("level ", ""));
@@ -258,12 +256,13 @@ module.exports = {
 		const lastRole = lastRoleReq ? lastRoleReq.role.id : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
-		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `<@&${interaction.guild.roles.cache.get(x.role.id).id}>`);
-		achievedRoles = achievedRoles.map((x, i) => {
-			if (i === achievedRoles.length - 2) return x + ' and ';
-			else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
-			else return x + ', ';
-		}).join('');
+		// let achievedRoles = Object.values(client.config.mainServer.roles.levels).filter(x=>nextRoleKey>=x.number).map(x => `<@&${x.id}>`);
+		// achievedRoles = achievedRoles.map((x, i) => {
+		// 	if (i === achievedRoles.length - 2) return x + ' and ';
+		// 	else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
+		// 	else return x + ', ';
+		// }).join('');
+		const achievedRoles = 
 		
 		function progressText(showRequirements = true) { // shows progress, usually to next milestone
 			let text = '';
