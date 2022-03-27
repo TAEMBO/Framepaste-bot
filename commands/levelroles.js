@@ -262,7 +262,7 @@ module.exports = {
 		// 	else if (achievedRoles.length === 1 || i === achievedRoles.length - 1) return x;
 		// 	else return x + ', ';
 		// }).join('');
-		const achievedRoles = `<@${eligiblity.roles.find(x=>x.role.has).role.id}>`
+		const achievedRoles = `<@&${eligiblity.roles.find(x=>x.role.has).role.id}>`
 		
 		function progressText(showRequirements = true) { // shows progress, usually to next milestone
 			let text = '';
