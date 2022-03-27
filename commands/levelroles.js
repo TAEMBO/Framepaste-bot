@@ -244,7 +244,7 @@ module.exports = {
 		//const roleArray = [];
 		//client.config.mainServer.roles.levels.forEach((e)=>{roleArray.push(e.id)});
 		Object.values(client.config.mainServer.roles.levels).map(x=>x.id).forEach(async (role)=>{
-			if(interaction.member.roles.cache.has(role)){
+			if(member.roles.cache.has(role)){
 				nextRoleKey = parseInt(`${interaction.guild.roles.cache.get(role).name}`.toLowerCase().replace("level ", ""));
 			}
 		})
