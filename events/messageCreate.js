@@ -155,7 +155,32 @@ module.exports = {
 			"940726714915495946" /* fpb-testing */
 		];
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
-		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
+		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id){ 
+			client.userLevels.incrementUser(message.author.id);
+			const eligiblity = await client.userLevels.getEligible(message.member);			
+			let nextRoleKey;
+			//const roleArray = [];
+			//client.config.mainServer.roles.levels.forEach((e)=>{roleArray.push(e.id)});
+			Object.values(client.config.mainServer.roles.levels).map(x=>x.id).forEach(async (role)=>{
+				if(message.member.roles.cache.has(role)){
+					nextRoleKey = parseInt(`${message.guild.roles.cache.get(role).name}`.toLowerCase().replace("level ", ""));
+				}
+			});
+			if(nextRoleKey){
+			// eligibility information about the next level role
+			const nextRoleReq = eligiblity.roles[nextRoleKey ? nextRoleKey : 0];
+			const lastRoleReq = nextRoleKey ? eligiblity.roles[nextRoleKey - 1] : null;
+	
+			// next <Role> in level roles that user is going to get 
+			const nextRole = nextRoleReq ? nextRoleReq.role.id : undefined;
+			const lastRole = lastRoleReq ? lastRoleReq.role.id : undefined;
+			if(nextRoleReq.eligible){
+			message.member.roles.add(nextRole);
+			message.member.roles.remove(lastRole);
+			client.channels.cache.get(client.config.mainServer.channels.bot_commands).send({content: `<@${message.author.id}> has received the <@&${nextRole}> role.`, allowedMentions: {roles: false}});
+			}
+			}
+		}
 	// handle discord invite links
 	if (!client.config.botSwitches.automod) return;
 	if (message.content.includes("discord.gg/") && !message.member.roles.cache.has(client.config.mainServer.roles.moderator) && !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)&& message.guild.id === client.config.mainServer.id) {

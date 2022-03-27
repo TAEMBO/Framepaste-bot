@@ -240,13 +240,22 @@ module.exports = {
 		const eligiblity = await client.userLevels.getEligible(member);
 
 		// index of next role
-		const nextRoleKey = eligiblity.roles.map(x => x.role.has).indexOf(false);
+		let nextRoleKey;
+		//const roleArray = [];
+		//client.config.mainServer.roles.levels.forEach((e)=>{roleArray.push(e.id)});
+		Object.values(client.config.mainServer.roles.levels).map(x=>x.id).forEach(async (role)=>{
+			if(interaction.member.roles.cache.has(role)){
+				nextRoleKey = parseInt(`${interaction.guild.roles.cache.get(role).name}`.toLowerCase().replace("level ", ""));
+			}
+		})
 
 		// eligibility information about the next level role
-		const nextRoleReq = eligiblity.roles[nextRoleKey];
+		const nextRoleReq = eligiblity.roles[nextRoleKey ? nextRoleKey : 0];
+		const lastRoleReq = nextRoleKey ? eligiblity.roles[nextRoleKey - 1] : null;
 
 		// next <Role> in level roles that user is going to get 
-		const nextRole = nextRoleReq ? interaction.guild.roles.cache.get(nextRoleReq.role.id).id : undefined;
+		const nextRole = nextRoleReq ? nextRoleReq.role.id : undefined;
+		const lastRole = lastRoleReq ? lastRoleReq.role.id : undefined;
 
 		// level roles that user has, formatted to "1, 2 and 3"
 		let achievedRoles = eligiblity.roles.filter(x => x.role.has).map(x => `<@&${interaction.guild.roles.cache.get(x.role.id).id}>`);
@@ -287,7 +296,8 @@ module.exports = {
 			if (nextRoleReq.eligible) { // if theyre eligible for their next role
 				if (pronounBool()) { // if theyre doing this command themselves,
 					setTimeout(() => { // add role
-						member.roles.add(nextRole).then(() => interaction.followUp({content: `You\'ve received the <@&${nextRole}> role.`,allowedMentions: {roles: false}})).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						member.roles.add(nextRole).then(() => interaction.followUp({ephemeral: true, content: `You\'ve received the <@&${nextRole}> role.`,allowedMentions: {roles: false}})).catch(() => interaction.channel.send('Something went wrong while giving you the **' + nextRole.name + '** role.'));
+						lastRole ? member.roles.remove(lastRole) : null;
 						// and inform user of outcome
 					}, 500);
 				}
