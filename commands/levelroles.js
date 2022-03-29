@@ -157,7 +157,7 @@ module.exports = {
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Perks')
-				.setDescription(`<@&${client.config.mainServer.roles.levels.one.id}> - External sticker permissions\n<@&${client.config.mainServer.roles.levels.two.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.three.id}> - Use bot commands anywhere & access to <#919472838631641118>\n<@&${client.config.mainServer.roles.levels.four.id}> - N/A\n<@&${client.config.mainServer.roles.levels.five.id}> - N/A`)
+				.setDescription(`<@&${client.config.mainServer.roles.levels.three.id}> - Use External Sticker permissions\n<@&${client.config.mainServer.roles.levels.five.id}> - Permission to create public & private threads\n<@&${client.config.mainServer.roles.levels.seven.id}> - Use bot commands anywhere\n<@&${client.config.mainServer.roles.levels.ten.id}> - Hoisted\n<@&${client.config.mainServer.roles.levels.eleven.id}> - Hoisted\n<@&${client.config.mainServer.roles.levels.twelve.id}> - Hoisted\n<@&${client.config.mainServer.roles.levels.thirteen.id}> - Hoisted\n<@&${client.config.mainServer.roles.levels.fourteen.id}> - Hoisted\n<@&${client.config.mainServer.roles.levels.fifteen.id}> - Hoisted`)
 				.setColor(client.config.embedColor)
 			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			return;
