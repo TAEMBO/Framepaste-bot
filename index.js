@@ -212,7 +212,7 @@ Object.assign(client.punishments, {
 	},
 	async addPunishment(type = "", member, options = {}, moderator) {
 		const now = Date.now();
-		const { time, reason, message } = options;
+		const { time, reason, interaction } = options;
 		const ms = require("ms");
 		let timeInMillis;
 		if(type != "mute"){
