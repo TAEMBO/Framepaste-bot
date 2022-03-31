@@ -4,9 +4,6 @@ const YClient = require("./client");
 const client = new YClient();
 client.init();
 const fs = require("fs");
-if (client.config.botSwitches.modmail) {
-	client.modmailClient.login(client.tokens.modmailBotToken);
-}
 const InvitesTracker = require('@androz2091/discord-invites-tracker');
 client.tracker = InvitesTracker.init(client, {
     fetchGuilds: true,
