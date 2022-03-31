@@ -223,7 +223,7 @@ Object.assign(client.punishments, {
 		switch (type) {
 			case "ban":
 				const banData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const dm1 = await member.send(`You've been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${banData.id})`).catch(err => setTimeout(() => message.channel.send('Failed to DM user.'), 500));
+				const dm1 = await member.send(`You've been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${banData.id})`).catch(err => setTimeout(() => interaction.channel.send('Failed to DM user.'), 500));
 				const banResult = await member.ban({ reason: `${reason || "unspecified"} | Case #${banData.id}` }).catch(err => err.message);
 				if (typeof banResult === "string") {
 					dm1.delete();
@@ -248,7 +248,7 @@ Object.assign(client.punishments, {
 			case "softban":
 				const guild = member.guild;
 				const softbanData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const dm2 = await member.send(`You've been softbanned from ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${softbanData.id})`).catch(err => setTimeout(() => message.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
+				const dm2 = await member.send(`You've been softbanned from ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${softbanData.id})`).catch(err => setTimeout(() => interaction.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
 				const softbanResult = await member.ban({ days: 7, reason: `${reason || "unspecified"} | Case #${softbanData.id}` }).catch(err => err.message);
 				if (typeof softbanResult === "string") {
 					dm2.delete();
@@ -256,7 +256,7 @@ Object.assign(client.punishments, {
 				} else {
 					const unbanResult = guild.members.unban(softbanData.member, `${reason || "unspecified"} | Case #${softbanData.id}`).catch(err => err.message);
 					if (typeof unbanResult === "string") {
-						return message.channel.send(`Softbanan (unban) was unsuccessful: ${softbanResult}`);
+						return `Softbanan (unban) was unsuccessful: ${softbanResult}`
 					} else {
 						if (reason) softbanData.reason = reason;
 						client.makeModlogEntry(softbanData, client);
@@ -272,7 +272,7 @@ Object.assign(client.punishments, {
 				}
 			case "kick":
 				const kickData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const dm3 = await member.send(`You've been kicked from ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${kickData.id})`).catch(err => setTimeout(() => message.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
+				const dm3 = await member.send(`You've been kicked from ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${kickData.id})`).catch(err => setTimeout(() => interaction.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
 				const kickResult = await member.kick(`${reason || "unspecified"} | Case #${kickData.id}`).catch(err => err.message);
 				if (typeof kickResult === "string") {
 					dm3.delete();
@@ -293,7 +293,7 @@ Object.assign(client.punishments, {
 				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				let muteResult;
 				if(client.hasModPerms(client, member)) return "Staff members cannot be muted."
-				const dm4 = await member.send(`You've been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${muteData.id})`).catch(err => setTimeout(() => message.channel.send('Failed to DM user.'), 500));
+				const dm4 = await member.send(`You've been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"} for reason \`${reason || "unspecified"}\` (Case #${muteData.id})`).catch(err => setTimeout(() => interaction.channel.send('Failed to DM user.'), 500));
 				if(timeInMillis){
 				muteResult = await member.timeout(timeInMillis, `${reason || "unspecified"} | Case #${muteData.id}`).catch(err => err.message);
 				} else {
@@ -322,7 +322,7 @@ Object.assign(client.punishments, {
 				}
 			case "warn":
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => setTimeout(() => message.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
+				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => setTimeout(() => interaction.channel.send(`Failed to DM <@${member.user.id}>.`), 500));
 				if (typeof warnResult === "string") {
 					return `Warn was unsuccessful: ${warnResult}`;
 				} else {
