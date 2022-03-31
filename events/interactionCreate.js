@@ -51,6 +51,7 @@ module.exports = {
    }
    } else if(interaction.isCommand()){
     const commandFile = client.commands.get(interaction.commandName);
+    if(client.config.botSwitches.commands === false) return;
     if (commandFile) {
         console.log(`${interaction.user.tag} used /${interaction.commandName} in ${interaction.channel.name}`);
 

@@ -4,11 +4,11 @@
 	"embedColorRed": 15158332,
 	"botSwitches": {
 		"fpb": true,
-		"modmail": true,
-		"commands": true,
-		"automod": true,
-		"reactionRoles": true,
-		"freeGames": true,
+		"modmail": false,
+		"commands": false,
+		"automod": false,
+		"reactionRoles": false,
+		"freeGames": false,
 		"API": true,
 		"registerCommands": false
 	},
@@ -23,7 +23,7 @@
 		"allowed": true,
 		"whitelist": [
 			"709960501378940939",
-			"615761944154210305"
+			""
 		]
 	},
 	"enableAutoResponse": false,
