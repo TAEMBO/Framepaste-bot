@@ -4,13 +4,13 @@
 	"embedColorRed": 15158332,
 	"botSwitches": {
 		"fpb": true,
-		"modmail": false,
-		"commands": false,
-		"automod": false,
-		"reactionRoles": false,
-		"freeGames": false,
+		"modmail": true,
+		"commands": true,
+		"automod": true,
+		"reactionRoles": true,
+		"freeGames": true,
 		"API": true,
-		"registerCommands": false
+		"registerCommands": true
 	},
 	"Giveaway_Options": {
 		"giveawayManagerID": "",
@@ -23,7 +23,7 @@
 		"allowed": true,
 		"whitelist": [
 			"709960501378940939",
-			""
+			"615761944154210305"
 		]
 	},
 	"enableAutoResponse": false,

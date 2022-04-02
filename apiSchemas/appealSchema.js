@@ -16,8 +16,7 @@ const schema = new mongoose.Schema({
         id: {
             type: String,
             required: true
-        },
-        required: true
+        }
     },
     reason_info: {
         ban: {
@@ -27,8 +26,7 @@ const schema = new mongoose.Schema({
         appeal: {
             type: String,
             required: true
-        },
-        required: true
+        }
     }
 });
 module.exports = mongoose.model("appeal", schema);
