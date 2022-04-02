@@ -29,8 +29,9 @@ module.exports = {
          const embed = new Discord.MessageEmbed()
             .setTitle(`Member Joined: ${member.user.tag}`)
             .setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
-            .addField('🔹 Account Creation Date', `<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}> - <t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}:R>`)
-            .addField("🔹Invite Data:", `I couldn't find out how they joined!`)
+            .addFields(
+            {name: '🔹 Account Creation Date', value: `<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}>\n<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}:R>`},
+            {name: '🔹Invite Data:', value: `I couldn't find out how they joined!`})
             .setColor(client.config.embedColorGreen)
             .setTimestamp(Date.now())
             .setThumbnail(member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 2048}))
@@ -40,8 +41,9 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setTitle(`Member Joined: ${member.user.tag}`)
             .setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
-            .addField('🔹 Account Creation Date', `<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}> - <t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}:R>`)
-            .addField("🔹Invite Data:", `Invite: \`${usedInvite.code}\`\nCreated by: **${usedInvite.inviter.tag}**`)
+            .addFields(
+            {name: '🔹 Account Creation Date', value: `<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}>\n<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}:R>`},
+            {name: '🔹Invite Data:', value: `Invite: \`${usedInvite.code}\`\nCreated by: **${usedInvite.inviter.tag}**`})
             .setColor(client.config.embedColorGreen)
             .setTimestamp(Date.now())
             .setThumbnail(member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 2048}))
