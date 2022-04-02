@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
 	run: (client, interaction) => {
-        const userToPunish = interaction.options.getInteger('member')
+        const userToPunish = interaction.options.getUser('member')
 
         if(interaction.user === userToPunish){
             interaction.reply({content: "You can't warn yourself", ephemeral: true})
