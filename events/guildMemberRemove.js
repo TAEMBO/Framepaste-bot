@@ -12,8 +12,8 @@ module.exports = {
             .setTitle(`Member Left: ${member.user.tag}`)
             .setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
             .addFields(
-            {name: '🔹 Account Creation Date', value: `<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}:R>`},
-            {name: '🔹 Join Date', value: `<t:${Math.round(new Date(member.joinedTimestamp) / 1000)}:R>`})
+            {name: '🔹 Account Creation Date', value: `<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}> - <t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}:R>`},
+            {name: '🔹 Join Date', value: `<t:${Math.round(new Date(member.joinedTimestamp) / 1000)}> - <t:${Math.round(new Date(member.joinedTimestamp) / 1000)}:R>`})
             .addField('🔹 Roles', `${member.roles.cache.map(x => x).join(" ")}`)
             .setColor(client.config.embedColorRed)
             .setTimestamp(Date.now())
