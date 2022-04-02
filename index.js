@@ -16,6 +16,13 @@ console.log(client.config.botSwitches)
 
 // global properties
 client.on("ready", async () => {
+	client.lastGames = await client.frs.getGameList("free");
+	setInterval(async ()=>{const newGamesArray = []; const newGames = await client.frs.getGameList("free"); await client.lastGames.forEach(async (e)=>{
+		if(newGames.includes(e)){
+			return
+		} else {
+			newGamesArray.push(e);
+		}});client.frs.emitRawEvent("free_games", (newGamesArray))}, 300_000);
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
 	await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(' ')}`)});
 	setInterval(()=>{client.guilds.cache.get(client.config.mainServer.id).invites.fetch().then((invs)=>{invs.forEach(async(inv)=>{client.invites.set(inv.code, {uses: inv.uses, creator: inv.inviter.id})})})}, 500000)

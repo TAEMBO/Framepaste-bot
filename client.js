@@ -53,6 +53,7 @@ class YClient extends Client {
         this.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
         this.modmailClient = new Discord.Client({ disableEveryone: true, intents: Object.keys(Discord.Intents.FLAGS), partials: ["MESSAGE", "REACTION", "CHANNEL"]});
         this.modmailClient.threads = new Discord.Collection();
+        this.lastGames = [];
         if(this.config.botSwitches.API) require("./API.js")(this);
         require("mongoose").connect(this.tokens.mongo_db);
     }
