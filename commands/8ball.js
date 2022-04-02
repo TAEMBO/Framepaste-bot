@@ -28,6 +28,7 @@ module.exports = {
         }
 
             interaction.reply({embeds: [eightballembed], allowedMentions: { repliedUser: false }});
+
 },
     data: new SlashCommandBuilder().setName("8ball").setDescription("You ask a question and it will answer you from a premade array.").addStringOption((opt)=>opt.setName("question").setDescription("Your question to the bot.").setRequired(true)),
 }
