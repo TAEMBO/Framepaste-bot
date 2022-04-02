@@ -22,7 +22,7 @@ client.on("ready", async () => {
 			return
 		} else {
 			newGamesArray.push(e);
-		}});client.frs.emitRawEvent({ event: 'free_games', data: newGamesArray })}, 300_000);
+		}});if(newGamesArray.length !== 0){client.frs.emitRawEvent({ event: 'free_games', data: newGamesArray })}}, 300_000);
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
 	await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(' ')}`)});
 	setInterval(()=>{client.guilds.cache.get(client.config.mainServer.id).invites.fetch().then((invs)=>{invs.forEach(async(inv)=>{client.invites.set(inv.code, {uses: inv.uses, creator: inv.inviter.id})})})}, 500000)
