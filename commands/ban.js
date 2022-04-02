@@ -5,7 +5,7 @@ module.exports = {
 
 		const userToPunish = interaction.options.getUser('member')
 
-		if(interaction.user === userToPunish){
+		if(interaction.user.id === userToPunish.id){
 			interaction.reply({content: "You can't ban yourself", ephemeral: true})
 			return;
 		}

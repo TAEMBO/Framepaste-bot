@@ -17,8 +17,8 @@ console.log(client.config.botSwitches)
 // global properties
 client.on("ready", async () => {
 	client.lastGames = await client.frs.getGameList("free");
-	setInterval(async ()=>{const newGamesArray = []; const newGames = await client.frs.getGameList("free"); await client.lastGames.forEach(async (e)=>{
-		if(newGames.includes(e)){
+	setInterval(async ()=>{const newGamesArray = []; const newGames = await client.frs.getGameList("free"); await newGames.forEach(async (e)=>{
+		if(client.lastGames.includes(e)){
 			return
 		} else {
 			newGamesArray.push(e);

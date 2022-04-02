@@ -9,7 +9,7 @@
 		"automod": true,
 		"reactionRoles": true,
 		"freeGames": true,
-		"API": true,
+		"API": false,
 		"registerCommands": true
 	},
 	"Giveaway_Options": {

@@ -4,7 +4,7 @@ module.exports = {
 	run: (client, interaction) => {
         const userToPunish = interaction.options.getUser('member')
 
-        if(interaction.user === userToPunish){
+        if(interaction.user.id === userToPunish.id){
             interaction.reply({content: "You can't warn yourself", ephemeral: true})
             return;
         }
