@@ -11,8 +11,9 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setTitle(`Member Left: ${member.user.tag}`)
             .setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
-            .addField('🔹 Account Creation Date', `<t:${member.user.createdTimestamp.slice(0, -3)}> - <t:${member.user.createdTimestamp.slice(0, -3)}:R>`)
-            .addField('🔹 Join Date', `<t:${member.joinedTimestamp.slice(0, -3)}> - <t:${member.user.joinedTimestamp.slice(0, -3)}:R>`)
+            .addFields(
+            {name: '🔹 Account Creation Date', value: `<t:${Math.round(new Date(member.user.joinedTimestamp) / 1000)}:R>`},
+            {name: '🔹 Join Date', value: `<t:${Math.round(new Date(interaction.member.joinedTimestamp) / 1000)}:R>`})
             .addField('🔹 Roles', `${member.roles.cache.map(x => x).join(" ")}`)
             .setColor(client.config.embedColorRed)
             .setTimestamp(Date.now())
