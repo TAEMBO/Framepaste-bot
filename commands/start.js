@@ -3,6 +3,10 @@ const ms = require("ms");
 
 module.exports = {
     run: async (client, interaction) => {
+
+        interaction.reply(`YO ${interaction.user.tag} why don't you giveaway deez nuts?`)
+        return;
+
         if (!client.hasModPerms(client, interaction.member)) {
             return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, allowedMentions: {roles: false}});
         }
