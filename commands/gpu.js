@@ -6,14 +6,16 @@ function gpuEmbed(client, gpu, manufacturer) {
 	else if (manufacturer.toLowerCase() === 'amd') color = 13582629;
 	const embed = new client.embed()
 		.setTitle(manufacturer.toUpperCase() + ' ' + gpu.name)
-		.addField('Memory Interface', gpu.memoryInterface === 'N/A' ? 'N/A' : gpu.memoryInterface + '-bit', true)
-		.addField('Memory Size', gpu.vram === 'N/A' ? 'N/A' : gpu.vram >= 1024 ? gpu.vram / 1024 + 'GB' : gpu.vram + 'MB', true)
-		.addField('Memory Type', gpu.vramType === 'N/A' ? 'N/A' : gpu.vramType, true)
-		.addField('Power Connectors', gpu.powerConnectors === 'N/A' ? 'N/A' : parseInt(gpu.powerConnectors) ? gpu.powerConnectors + ' pin' : gpu.powerConnectors, true)
-		.addField('TDP', gpu.tdp === 'N/A' ? 'N/A' : gpu.tdp + 'W', true)
-		.addField('MSRP', gpu.price === 'N/A' ? 'N/A' : '$' + gpu.price + ' USD', true)
+		.addFields(
+		{name: 'Memory Interface', value: gpu.memoryInterface === 'N/A' ? 'N/A' : gpu.memoryInterface + '-bit', inline: true},
+		{name: 'Memory Size', value: gpu.vram === 'N/A' ? 'N/A' : gpu.vram >= 1024 ? gpu.vram / 1024 + 'GB' : gpu.vram + 'MB', inline: true},
+		{name: 'Memory Type', value: gpu.vramType === 'N/A' ? 'N/A' : gpu.vramType, inline: true},
+		{name: 'Power Connectors', value: gpu.powerConnectors === 'N/A' ? 'N/A' : parseInt(gpu.powerConnectors) ? gpu.powerConnectors + ' pin' : gpu.powerConnectors, inline: true},
+		{name: 'TDP', value: gpu.tdp === 'N/A' ? 'N/A' : gpu.tdp + 'W', inline: true},
+		{name: 'MSRP', value: gpu.price === 'N/A' ? 'N/A' : '$' + gpu.price + ' USD', inline: true}
+		)
 		.setColor(color);
-	if (gpu.pcieLink) embed.addField('PCIe Link', 'PCIe ' + gpu.pcieLink, true);
+	if (gpu.pcieLink) embed.addFields({name: 'PCIe Link', value: `PCIe ${gpu.pcieLink}`, inline: true});
 	if (gpu.imageUrl) embed.setImage(gpu.imageUrl);
 	return embed;
 }
@@ -26,9 +28,10 @@ module.exports = {
 			.setTitle('GPU Command Help')
 			.setColor(client.config.embedColor)
 			.setDescription('This command searches a list of real life GPUs and supplies you with technical information about them. This guide explains how to use this command properly.')
-			.addField('Search Terms', 'Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.')
-			.addField('Manufacturer Search', 'Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `nvidia`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.')
-			.addField('i dont want to write this', 'so here are examples\n\`,gpu nvidia 3080, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = nvidia (only nvidia gpus will be searched)\nname search = 3080 (gpu name must include "3080")\nfilter: price > 1000 (gpu msrp must be more than 1000 usd)\n\n\`,gpu 6900\`\n1 search term\nno manufacturer, no filters\nnamesearch = 6900 (gpu name must include "6900")\n\n\`,gpu nvidia -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = nvidia\nmultiple search: list is active (\`-s\` also works)')
+			.addFields(
+			{name: 'Search Terms', value: 'Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.'},
+			{name: 'Manufacturer Search', value: 'Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `nvidia`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.'},
+			{name: 'I don\'t want to write this', value: 'so here are examples\n\`,gpu nvidia 3080, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = nvidia (only nvidia gpus will be searched)\nname search = 3080 (gpu name must include "3080")\nfilter: price > 1000 (gpu msrp must be more than 1000 usd)\n\n\`,gpu 6900\`\n1 search term\nno manufacturer, no filters\nnamesearch = 6900 (gpu name must include "6900")\n\n\`,gpu nvidia -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = nvidia\nmultiple search: list is active (\`-s\` also works)'})
 			return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		} else if(subCmd === "search"){
 		const searchTerms = interaction.options.getString("query").split(",");
@@ -189,14 +192,14 @@ module.exports = {
 				if (manufacturer) textAddition = `\`${i + 1}. ${gpu[1].name}\`\n`;
 				else textAddition = `\`${i + 1}. ${getManufacturer(gpu[0])} ${gpu[1].name}\`\n`;
 				if (text.length + textAddition.length > 1024) {
-					embed.addField('\u200b', text, true);
+					embed.addFields({name: '\u200b', value: text, inline: true});
 					text = '';
 				}
 				text += textAddition;
 			});
 			if (text.length > 0) {
 				if (embed.fields.length > 0) {
-					embed.addField('\u200b', text, true);
+					embed.addFields({name: '\u200b', value: text, inline: true});
 				} else {
 					embed.description += '\n' + text;
 				}

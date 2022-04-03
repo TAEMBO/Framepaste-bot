@@ -17,7 +17,7 @@ module.exports = {
 			return `**${x[1].c}** :star: By <@${x[1].a}>: [Jump to Starboard](${starboardMessage.url})`;
 		});
 		const bestMessages = await Promise.all(promises);
-		embed.addField('Most Starred Messages', bestMessages.join('\n'));
+		embed.addFields({name: 'Most Starred Messages', value: bestMessages.join('\n')});
 
 		const starboardValues = Object.values(client.starboard._content).filter(x => x.c >= client.starLimit);
 		embed.setDescription(`Statistics from <#${client.config.mainServer.channels.starboard}>\nA total of **${starboardValues.map(x => x.c).reduce((a, b) => a + b, 0)}** :star: reactions have been added.`);
@@ -27,7 +27,7 @@ module.exports = {
 			return filtered.reduce((a, b) => a + b, 0);
 		})()]);
 		const bestUsersText = bestUsers.filter(x => typeof x[1] === 'number' && !isNaN(x[1])).sort((a, b) => b[1] - a[1]).slice(0, 5).map(x => `**${x[1]}** :star: <@${x[0]}>`);
-		embed.addField('Most Starred Users', bestUsersText.join('\n'));
+		embed.addFields({name: 'Most Starred Users', value: bestUsersText.join('\n')});
 		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},
 	data: new SlashCommandBuilder().setName("starboard_stats").setDescription("Views starboard statistics.")

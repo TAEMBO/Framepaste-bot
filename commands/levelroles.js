@@ -147,7 +147,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats')
 				.setDescription(`Level Roles was created ${timeActive} days ago. Since then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been recorded in this server.`)
-				.addField('Top Users by Messages Sent', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map((x, i) => `\`${i + 1}.\` <@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n') + `\n\Messages per day in ${client.guilds.cache.get(client.config.mainServer.id).name}:`)
+				.addFields({name: 'Top Users by Messages Sent', value: Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map((x, i) => `\`${i + 1}.\` <@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n') + `\n\Messages per day in ${client.guilds.cache.get(client.config.mainServer.id).name}:`})
 				.setImage('attachment://dailymsgs.png')
 				.setColor(client.config.embedColor)
 			const yeahok = new d.MessageAttachment(img.toBuffer(), "dailymsgs.png")

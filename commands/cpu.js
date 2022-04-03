@@ -6,15 +6,16 @@ function CPUEmbed(client, CPU, manufacturer) {
 	else if (manufacturer.toLowerCase() === "amd") color = 13582629;
 	const embed = new client.embed()
 		.setTitle(manufacturer.charAt(0).toUpperCase() + manufacturer.slice(1).toLowerCase() + " " + CPU.name)
-		.addField("Cores", `${CPU.cores}`, true)
-		.addField("Base Clock Speed", `${CPU.base ? (CPU.base === "N/A" ? "N/A" : CPU.base + " GHz") : "N/A"}`, true)
-		.addField("TDP", `${CPU.tdp ? (CPU.tdp === "N/A" ? "N/A" : CPU.tdp + "W") : "N/A"}`, true)
-		.addField("Threads", `${CPU.threads ? (CPU.threads === "N/A" ? "N/A" : CPU.threads) : "N/A"}`, true)
-		.addField("Boost Clock Speed", `${CPU.boost ? (CPU.boost === "N/A" ? "N/A" : CPU.boost + " GHz") : "N/A"}`, true)
-		.addField("Socket", `${CPU.socket ? (CPU.socket === "N/A" ? "N/A" : CPU.socket): "N/A"}`, true)
-		.addField("MSRP", `${CPU.price ? (CPU.price === "N/A" ? "N/A" : "$" + CPU.price.toFixed(2)) : "N/A"}`, true)
+		.addFields(
+		{name: 'Cores', value: `${CPU.cores}`, inline: true},
+		{name: 'Base Clock Speed', value: `${CPU.base ? (CPU.base === "N/A" ? "N/A" : CPU.base + " GHz") : "N/A"}`, inline: true},
+		{name: 'TDP', value: `${CPU.tdp ? (CPU.tdp === "N/A" ? "N/A" : CPU.tdp + "W") : "N/A"}`, inline: true},
+		{name: 'Threads', value: `${CPU.threads ? (CPU.threads === "N/A" ? "N/A" : CPU.threads) : "N/A"}`, inline: true},
+		{name: 'Boost Clock Speed', value: `${CPU.boost ? (CPU.boost === "N/A" ? "N/A" : CPU.boost + " GHz") : "N/A"}`, inline: true},
+		{name: 'Socket', value: `${CPU.socket ? (CPU.socket === "N/A" ? "N/A" : CPU.socket): "N/A"}`, inline: true},
+		{name: 'MSRP', value: `${CPU.price ? (CPU.price === "N/A" ? "N/A" : "$" + CPU.price.toFixed(2)) : "N/A"}`, inline: true})
 		.setColor(color);
-		if (CPU.igpu) embed.addField("iGPU", CPU.igpu, true);
+		if (CPU.igpu) embed.addFields({name: 'iGPU', value: CPU.igpu, inline: true});
 	return embed;
 }
 
@@ -27,9 +28,10 @@ module.exports = {
 			.setTitle("CPU Command Help")
 			.setColor(client.config.embedColor)
 			.setDescription("This command searches a list of real life CPUs and supplies you with technical information about them. This guide explains how to use this command properly.")
-			.addField("Search Terms", "Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.")
-			.addField("Manufacturer Search", "Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `intel`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.")
-			.addField("i dont want to write this", "so here are examples\n\`,CPU intel 9900k, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = intel (only intel CPUs will be searched)\nname search = 9900k (CPU name must include \"9900k\")\nfilter: price > 1000 (CPU msrp must be more than 1000 usd)\n\n\`,CPU 11900k\`\n1 search term\nno manufacturer, no filters\nnamesearch = 5700x (CPU name must include \"5700x\")\n\n\`,CPU intel -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = intel\nmultiple search: list is active (\`-s\` also works)")
+			.addFields(
+			{name: 'Search Terms', value: 'Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.'},
+			{name: 'Manufacturer Search', value: 'Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `intel`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.'},
+			{name: 'I don\'t want to write this', value: 'so here are examples\n\`\\CPU intel 9900k, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = intel (only intel CPUs will be searched)\nname search = 9900k (CPU name must include \"9900k\")\nfilter: price > 1000 (CPU msrp must be more than 1000 usd)\n\n\`,CPU 11900k\`\n1 search term\nno manufacturer, no filters\nnamesearch = 5700x (CPU name must include \"5700x\")\n\n\`\\CPU intel -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = intel\nmultiple search: list is active (\`-s\` also works)'})
 			return interaction.reply({embeds: [embed], allowedMentions: {repliedUser: false}, fetchReply: true});
 		} else if(subCmd === "search"){
 		const searchTerms = interaction.options.getString("query").split(",");
@@ -190,14 +192,14 @@ module.exports = {
 				if (manufacturer) textAddition = `\`${i + 1}. ${CPU[1].name}\`\n`;
 				else textAddition = `\`${i + 1}. ${getManufacturer(CPU[0])} ${CPU[1].name}\`\n`;
 				if (text.length + textAddition.length > 1024) {
-					embed.addField("\u200b", text, true);
+					embed.addFields({name: '\u200b', value: text, inline: true});
 					text = "";
 				}
 				text += textAddition;
 			});
 			if (text.length > 0) {
 				if (embed.fields.length > 0) {
-					embed.addField("\u200b", text, true);
+					embed.addFields({name: '\u200b', value: text, inline: true});
 				} else {
 					embed.description += "\n" + text;
 				}

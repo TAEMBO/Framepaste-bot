@@ -15,7 +15,7 @@ module.exports = {
          const embed = new MessageEmbed()
          .setDescription(`\`\`\`${text}\`\`\``.slice(0, 3900))
          .setTitle(`${messages.size} Messages Were Deleted.`)
-         .addField("Channel", `<#${messages.first().channel.id}>`)
+         .addFields({name: 'Channel', value: `<#${messages.first().channel.id}>`})
          .setColor(client.config.embedColor)
          .setTimestamp(Date.now())
          channel.send({embeds: [embed]})

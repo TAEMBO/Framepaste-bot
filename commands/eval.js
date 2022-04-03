@@ -28,8 +28,7 @@ module.exports = {
 			error = true;
 			const embed = new client.embed()
 				.setTitle('__Eval__')
-				.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
-				.addField('Output', `\`\`\`\n${err}\n\`\`\``)
+				.addFields({name: 'Input', value: `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``}, {name: 'Output', value: `\`\`\`\n${err}\n\`\`\``})
 				.setColor('ff0000');
 			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((e)=>interaction.channel.send({embeds: [embed]})).then(errorEmbedMessage => {
 				const filter = x => x.content === 'stack' && x.author.id === interaction.user.id
@@ -49,8 +48,7 @@ module.exports = {
 		output = output.replace(regexp, 'TOKEN_LEAK');
 		const embed = new client.embed()
 			.setTitle('__Eval__')
-			.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
-			.addField('Output', `\`\`\`${removeUsername(output).slice(0, 1016)}\n\`\`\``)
+			.addFields({name: 'Input', value:`\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``}, {name: 'Output', value: `\`\`\`${removeUsername(output).slice(0, 1016)}\n\`\`\``})
 			.setColor(client.config.embedColor);
 		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }}).catch((e)=>interaction.channel.send({embeds: [embed]}));
 	},

@@ -83,16 +83,17 @@ class YClient extends Client {
         async function cpuEmbed(client, options){
             const { cpu, manufacturer, color } = options;
             const embed = new client.embed()
-                .setTitle(manufacturer + ' ' + cpu.name)
-                .addField('Cores', `${cpu.cores}`, true)
-                .addField('Base Clock Speed', `${cpu.base ? (cpu.base === 'N/A' ? 'N/A' : cpu.base + ' GHz') : 'N/A'}`, true)
-                .addField('TDP', `${cpu.tdp ? (cpu.tdp === 'N/A' ? 'N/A' : cpu.tdp + 'W') : 'N/A'}`, true)
-                .addField('Threads', `${cpu.threads ? (cpu.threads === 'N/A' ? 'N/A' : cpu.threads) : 'N/A'}`, true)
-                .addField('Boost Clock Speed', `${cpu.boost ? (cpu.boost === 'N/A' ? 'N/A' : cpu.boost + ' GHz') : 'N/A'}`, true)
-                .addField('Socket', `${cpu.socket ? (cpu.socket === 'N/A' ? 'N/A' : cpu.socket): 'N/A'}`, true)
-                .addField('MSRP', `${cpu.price ? (cpu.price === 'N/A' ? 'N/A' : '$' + cpu.price.toFixed(2)) : 'N/A'}`, true)
+                .setTitle(`${manufacturer} ${cpu.name}`)
+                .addFields(
+                {name: 'Cores', value: `${cpu.cores}`, inline: true},
+                {name: 'Base Clock Speed', value: `${cpu.base ? (cpu.base === 'N/A' ? 'N/A' : cpu.base + ' GHz') : 'N/A'}`, inline: true},
+                {name: 'TDP', value: `${cpu.tdp ? (cpu.tdp === 'N/A' ? 'N/A' : cpu.tdp + 'W') : 'N/A'}`, inline: true},
+                {name: 'Threads', value: `${cpu.threads ? (cpu.threads === 'N/A' ? 'N/A' : cpu.threads) : 'N/A'}`, inline: true},
+                {name: 'Boost Clock Speed', value: `${cpu.boost ? (cpu.boost === 'N/A' ? 'N/A' : cpu.boost + ' GHz') : 'N/A'}`, inline: true},
+                {name: 'Socket', value: `${cpu.socket ? (cpu.socket === 'N/A' ? 'N/A' : cpu.socket): 'N/A'}`, inline: true},
+                {name: 'MSRP', value: `${cpu.price ? (cpu.price === 'N/A' ? 'N/A' : '$' + cpu.price.toFixed(2)) : 'N/A'}`, inline: true})
                 .setColor(color);
-                if (cpu.igpu) embed.addField('iGPU', cpu.igpu, true);
+                if (cpu.igpu) embed.addFields({name: 'iGPU', value: `${cpu.igpu}`, inline: true});
             return embed;
         }
         const subCmd = interaction.options.getSubcommand();
@@ -100,11 +101,12 @@ class YClient extends Client {
 		const embed = new client.embed()
 		.setTitle('CPU Command Help')
 		.setDescription('This command searches a list of real life CPUs and supplies you with technical information about them. This guide explains how to use this command properly.')
-		.addField('Name Search', `Name Search is the easiest method to find a specific CPU. The syntax of name search is \`${interaction.commandName} [CPU name]\`. CPU name is text that can include spaces but not commas. This text is transformed into all lowercase letters and matched with lowercase CPU names. Matches are assigned a value based on how well they match the search, if at all. This formula is \`Search length / CPU name length\`. Name search is optional when at least 1 filter is present.`)
-		.addField('Filters', `Filters are a method to narrow down a big list of CPUs. The syntax of filters is \`[Property] [Operator] [Value]\` where Property is one of "cores", "threads", "base", "boost", "price", "socket" or "tdp". Operator is one of <, >, =, ~. Value is an integer, decimal number or text (can contain numbers, e.g. LGA 1200). Filters must be separated with a comma \`,\` A comma must also be added after Name Search, between Name Search and the first Filter.`)
-		.addField('Filters - Part 2', `If the Property is "socket", < and > are not allowed and ~ matches CPUs with sockets that start with the text part of Value (Substring of Value, starting at the first character and ending at the first number, or ending of string, whichever comes first) If the Operator is ~, matches' Property must be ±20% of Value. Price is always measured in USD. Boost and base clocks are always measured in GHz. If you want to filter by price or clock speed, enter only an integer or decimal number without any GHz or Dollar signs. For decimal numbers, use \`.\`, e.g. \`price = 249.99\` matches CPUS which's price is equal to 249.99 USD ($).`)
-		.addField('Multiple Search', `Multiple Search is a way to receive a list of CPU names and choose the one you want to learn more about. Multiple Search is activated when you add \`-s\` to the end of the command. Multiple Search orders all matches by best matches first and responds with all or 200 best matches and attaches a number to each one. If Name Search is active, matches are ordered by the assigned value of how well they match the CPU's name. If Name Search is not active, matches are ordered alphabetically. You can choose your preferred CPU by sending a interaction with a valid number. A valid number is an integer within the constraints given by the bot.`)
-		.addField('Multiple Search: List', 'This variation of Multiple Search works exactly like Multiple Search, except it does not require you to select and respond with a valid number from the list of CPUs. Multiple Search: List is activated when you add \`-sl\` to the end of the command, instead of \`-s\` which is used for Multiple Search. This variation provides a list of CPUs that match the filters and/or Name Search with the same rules as Multiple Search. The purpose of this variation is to make it possible to find out e.g. how many CPUs exist in a given category.')
+        .addFields(
+        {name: 'Name Search', value: `Name Search is the easiest method to find a specific CPU. The syntax of name search is \`${interaction.commandName} [CPU name]\`. CPU name is text that can include spaces but not commas. This text is transformed into all lowercase letters and matched with lowercase CPU names. Matches are assigned a value based on how well they match the search, if at all. This formula is \`Search length / CPU name length\`. Name search is optional when at least 1 filter is present.`},
+        {name: 'Filters', value: `Filters are a method to narrow down a big list of CPUs. The syntax of filters is \`[Property] [Operator] [Value]\` where Property is one of "cores", "threads", "base", "boost", "price", "socket" or "tdp". Operator is one of <, >, =, ~. Value is an integer, decimal number or text (can contain numbers, e.g. LGA 1200). Filters must be separated with a comma \`,\` A comma must also be added after Name Search, between Name Search and the first Filter.`},
+        {name: 'Filters - Part 2', value: `If the Property is "socket", < and > are not allowed and ~ matches CPUs with sockets that start with the text part of Value (Substring of Value, starting at the first character and ending at the first number, or ending of string, whichever comes first) If the Operator is ~, matches' Property must be ±20% of Value. Price is always measured in USD. Boost and base clocks are always measured in GHz. If you want to filter by price or clock speed, enter only an integer or decimal number without any GHz or Dollar signs. For decimal numbers, use \`.\`, e.g. \`price = 249.99\` matches CPUS which's price is equal to 249.99 USD ($).`},
+        {name: 'Multiple Search', value: `Multiple Search is a way to receive a list of CPU names and choose the one you want to learn more about. Multiple Search is activated when you add \`-s\` to the end of the command. Multiple Search orders all matches by best matches first and responds with all or 200 best matches and attaches a number to each one. If Name Search is active, matches are ordered by the assigned value of how well they match the CPU's name. If Name Search is not active, matches are ordered alphabetically. You can choose your preferred CPU by sending a interaction with a valid number. A valid number is an integer within the constraints given by the bot.`},
+        {name: 'Multiple Search: List', value: 'This variation of Multiple Search works exactly like Multiple Search, except it does not require you to select and respond with a valid number from the list of CPUs. Multiple Search: List is activated when you add \`-sl\` to the end of the command, instead of \`-s\` which is used for Multiple Search. This variation provides a list of CPUs that match the filters and/or Name Search with the same rules as Multiple Search. The purpose of this variation is to make it possible to find out e.g. how many CPUs exist in a given category.'})
 		.setColor(client.config.embedColor)
 		return interaction.reply({embeds: [embed], ephemeral: true});
 	} else if(subCmd === "search"){
@@ -196,7 +198,7 @@ class YClient extends Client {
 			.setDescription(`Your search returned many CPUs. ${multipleResponseAsk ? 'Respond with the corresponding number to learn more about a specific cpu.' : 'Here is a list of them.'}`)
 			.setFooter({text: matches.filter(x => x).size > limit ? 'Showing ' + limit + ' best matches of ' + matches.filter(x => x).size + ' total matches.' : 'Showing all ' + matches.filter(x => x).size + ' matches.'}).setColor(color)
 		text.forEach((x, i) => {
-			embed.addField('Page ' + (i), x, true);
+            embed.addFields({name: `Page ${(i)}`, value: x, inline: true});
 		});
 		interaction.reply({embeds: [embed]}).then(async embedMessage => {
 			if (!multipleResponseAsk) return;
@@ -224,7 +226,7 @@ class YClient extends Client {
         return text;
     }
     commandInfo(client, command, options = { insertNewline: false, parts: [], titles: [] }) {
-        let text = ':small_blue_diamond: ';
+        let text = '🔹 ';
         if (!options.titles) options.titles = [];
         function e() {
             text += '\n';
@@ -330,7 +332,7 @@ class YClient extends Client {
             .setColor(client.config.embedColor)
         const specs = client.specsDb.getUser(member.user.id);
         Object.entries(specs).forEach(spec => {
-            embed.addField(spec[0], spec[1]);
+            embed.addFields({name: `${spec[0]}`, value: `${spec[1]}`});
         });
         return embed;
     };
@@ -386,18 +388,20 @@ class YClient extends Client {
         // format data into embed
         const embed = new this.embed()
             .setTitle(`${this.formatPunishmentType(data, client, cancels)} | Case #${data.id}`)
-            .addField(':small_blue_diamond: User', `<@${data.member}> \`${data.member}\``, true)
-            .addField(':small_blue_diamond: Moderator', `<@${data.moderator}> \`${data.moderator}\``, true)
-            .addField('\u200b', '\u200b', true)
-            .addField(':small_blue_diamond: Reason', `\`${data.reason || 'unspecified'}\``, true)
+            .addFields(
+            {name: '🔹 User', value: `<@${data.member}> \`${data.member}\``, inline: true},
+            {name: '🔹 Moderator', value: `<@${data.moderator}> \`${data.moderator}\``, inline: true},
+            {name: '\u200b', value: '\u200b', inline: true},
+            {name: '🔹 Reason', value: `\`${data.reason || 'unspecified'}\``, inline: true})
             .setColor(this.config.embedColor)
             .setTimestamp(data.time)
         if (data.duration) {
-            embed
-                .addField(':small_blue_diamond: Duration', client.formatTime(data.duration, 100), true)
-                .addField('\u200b', '\u200b', true)
+            embed.addFields(
+            {name: '🔹 Duration', value: client.formatTime(data.duration, 100), inline: true},
+            {name: '\u200b', value: '\u200b', inline: true}
+            )
         }
-        if (data.cancels) embed.addField(':small_blue_diamond: Overwrites', `This case overwrites Case #${cancels.id} \`${cancels.reason}\``);
+        if (data.cancels) embed.addFields({name: '🔹 Overwrites', value: `This case overwrites Case #${cancels.id} \`${cancels.reason}\``});
     
         // send embed in modlog channel
         client.channels.cache.get(client.config.mainServer.channels.caselogs).send({embeds: [embed]});

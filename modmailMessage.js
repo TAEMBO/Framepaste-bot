@@ -83,11 +83,12 @@ module.exports = async (message, modmailClient, client) => {
 	} else if (message.mentions.members.has(modmailClient.user.id)) {
 		const embed = new client.embed()
 			.setTitle('ModMail Instructions')
-			.addField(':small_blue_diamond: What?', 'ModMail is a bot that makes it easy to contact a server moderator.', true)
-			.addField(':small_blue_diamond: Why?', 'ModMail should be used when you want to report a rule breaker on this Discord server.', true)
-			.addField(':small_blue_diamond: How?', 'Send me a Direct Message on Discord. Moderators will then solve your problem.', true)
-			.addField(':small_blue_diamond: Don\'ts', 'Do not spam ModMail.\nDo not use ModMail unnecessarily.', true)
-			.addField(':small_blue_diamond: Small Things', 'If your concern is not urgent, start your ModMail message with "[Unimportant]". This way the moderators know that they don\'t need to rush.', true)
+			.addFields(
+			{name: '🔹 What?', value: 'ModMail is a bot that makes it easy to contact a server moderator.', inline: true},
+			{name: '🔹 Why?', value: 'ModMail should be used when you want to report a rule breaker on this Discord server.', inline: true},
+			{name: '🔹 How?', value: 'Send me a Direct Message on Discord. Moderators will then solve your problem.', inline: true},
+			{name: '🔹 Don\'ts', value: 'Do not spam ModMail.\nDo not use ModMail unnecessarily.', inline: true},
+			{name: '🔹 Small things', value: 'If your concern is not urgent, start your ModMail message with "[Unimportant]". This way the moderators know that they don\'t need to rush.', inline: true})
 			.setColor(client.config.embedColor)
 		message.channel.send({embeds: [embed]});
 	}

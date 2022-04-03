@@ -52,10 +52,10 @@ module.exports = {
 			if (memes.size > 0) {
 				const memesPerPage = memes.size / 3;
 				if (memesPerPage < 1) {
-					embed.addField('\u200b', memes.map((x, key) => `\`${key}\` - ${x.name}\n`).join(''), true);
+					embed.addFields({name: '\u200b', value: memes.map((x, key) => `\`${key}\` - ${x.name}\n`).join(''), inline: true});
 				} else {
 					for (let i = 0; i < 3; i++) {
-						embed.addField('\u200b', Array.from(memes).slice(Math.ceil(i * memesPerPage), Math.ceil((i + 1) * memesPerPage)).map(x => `\`${x[0]}\` - ${x[1].name}\n`).join(''), true);
+						embed.addFields({name: '\u200b', value: Array.from(memes).slice(Math.ceil(i * memesPerPage), Math.ceil((i + 1) * memesPerPage)).map(x => `\`${x[0]}\` - ${x[1].name}\n`).join(''), inline: true});
 					}
 				}
 			} else embed.setDescription('No memes have been added yet.');

@@ -12,19 +12,18 @@ module.exports = {
 			const cancels = punishment.cancels ? client.punishments._content.find(x => x.id === punishment.cancels) : null;
 			const embed = new client.embed()
 				.setTitle(`${client.formatPunishmentType(punishment, client, cancels)} | Case #${punishment.id}`)
-				.addField(':small_blue_diamond: User', `<@${punishment.member}> \`${punishment.member}\``, true)
-				.addField(':small_blue_diamond: Moderator', `<@${punishment.moderator}> \`${punishment.moderator}\``, true)
-				.addField('\u200b', '\u200b', true)
-				.addField(':small_blue_diamond: Reason', `\`${punishment.reason || 'unspecified'}\``, true)
+				.addFields(
+				{name: '🔹 User', value: `<@${punishment.member}> \`${punishment.member}\``, inline: true},
+				{name: '🔹 Moderator', value: `<@${punishment.moderator}> \`${punishment.moderator}\``, inline: true},
+				{name: '\u200b', value: '\u200b', inline: true},
+				{name: '🔹 Reason', value: `\`${punishment.reason || 'unspecified'}\``, inline: true})
 				.setColor(client.config.embedColor)
 				.setTimestamp(punishment.time)
 			if (punishment.duration) {
-				embed
-					.addField(':small_blue_diamond: Duration', client.formatTime(punishment.duration, 100), true)
-					.addField('\u200b', '\u200b', true)
+				embed.addFields({name: '🔹 Duration', value: client.formatTime(punishment.duration, 100), inline: true}, {name: '\u200b', value: '\u200b', inline: true})
 			}
-			if (punishment.expired) embed.addField(':small_blue_diamond: Expired', `This case has been overwritten by Case #${cancelledBy.id} for reason \`${cancelledBy.reason}\``)
-			if (punishment.cancels) embed.addField(':small_blue_diamond: Overwrites', `This case overwrites Case #${cancels.id} \`${cancels.reason}\``)
+			if (punishment.expired) embed.addFields({name: '🔹 Expired', value: `This case has been overwritten by Case #${cancelledBy.id} for reason \`${cancelledBy.reason}\``})
+			if (punishment.cancels) embed.addFields({name: '🔹 Overwrites', value: `This case overwrites Case #${cancels.id} \`${cancels.reason}\``})
 			interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		} else {
 			// if caseid is a user id, show their punishments, sorted by most recent

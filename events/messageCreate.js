@@ -19,16 +19,16 @@ module.exports = {
             .setDescription(`<@${message.author.id}>`)
             .setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: message.author.displayAvatarURL({ format: 'png', dynamic: true})})
             .setColor(client.config.embedColor)
-            .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b')
+            .addFields({name: 'Message Content', value: message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b'})
             .setTimestamp(Date.now());
         let messageAttachmentsText = '';
         message.attachments.forEach(attachment => {
             if (!embed.image && ['png', 'jpg', 'webp', 'gif', 'jpeg'].some(x => attachment.name.endsWith(x))) embed.setImage(attachment.url);
             else messageAttachmentsText += `[${attachment.name}](${attachment.url})\n`;
         });
-        if (messageAttachmentsText.length > 0) embed.addField('Message Attachments', messageAttachmentsText.trim());
+        if (messageAttachmentsText.length > 0) embed.addFields({name: 'Message Attachments', value: messageAttachmentsText.trim()});
         embed
-            .addField('Roles:', guildMemberObject.roles.cache.size > 1 ? guildMemberObject.roles.cache.filter(x => x.id !== client.config.mainServer.id).sort((a, b) => b.position - a.position).map(x => x).join(guildMemberObject.roles.cache.size > 4 ? ' ' : '\n').slice(0, 1024) : 'None')
+            .addFields({name: 'Roles:', value: guildMemberObject.roles.cache.size > 1 ? guildMemberObject.roles.cache.filter(x => x.id !== client.config.mainServer.id).sort((a, b) => b.position - a.position).map(x => x).join(guildMemberObject.roles.cache.size > 4 ? ' ' : '\n').slice(0, 1024) : 'None'})
         channel.send({content: client.config.eval.whitelist.map(x => `<@${x}>`).join(', '), embeds: [embed]});
     } else {
     const embed = new client.embed()
@@ -36,14 +36,14 @@ module.exports = {
             .setDescription(`<@${message.author.id}>`)
             .setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: message.author.displayAvatarURL({ format: 'png', dynamic: true})})
             .setColor(client.config.embedColor)
-            .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b')
+            .addFields({name: 'Message Content', value: message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b'})
             .setTimestamp(Date.now());
         let messageAttachmentsText = '';
         message.attachments.forEach(attachment => {
             if (!embed.image && ['png', 'jpg', 'webp', 'gif', 'jpeg'].some(x => attachment.name.endsWith(x))) embed.setImage(attachment.url);
             else messageAttachmentsText += `[${attachment.name}](${attachment.url})\n`;
         });
-        if (messageAttachmentsText.length > 0) embed.addField('message Attachments', messageAttachmentsText.trim());
+        if (messageAttachmentsText.length > 0) embed.addFields({name: 'message Attachments', value: messageAttachmentsText.trim()});
         channel.send({content: client.config.eval.whitelist.map(x => `<@${x}>`).join(', '), embeds: [embed]});
     }
     }

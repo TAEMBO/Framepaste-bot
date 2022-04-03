@@ -9,10 +9,11 @@ module.exports = {
 					.setTitle(`Help: /specs`)
 					.setDescription('This command makes it possible to store and view user-generated information about your or someone else\'s computer specs.')
 					.setColor(client.config.embedColor)
-					.addField('Adding your own specs', `To add your own specs, you can do \`/specs add [component]: [name]\`. The component should be a universally known term, such as "CPU", "RAM" or "Video Card". The name should contain the name of the part that you own, and some additional info, for example "AMD Ryzen 5 5600x 6-core 12-thread Socket AM4". Make sure that the capitalization on both, the component and name, is correct. It is important to separate the component and name with a colon \`:\`.`)
-					.addField('Viewing specs', `To view your own specs, you can do \`/specs\`. To view specs of other people, you can do \`/specs [user]\`. User can be a mention, id or username.`)
-					.addField('Editing specs', `To edit your own specs, you can do \`/specs edit [component]: [new name]\`. Component capitalization doesn't matter. The old name will be overwritten by the new name. You cannot edit the component part, only the name.`)
-					.addField('Deleting specs', `To delete all your specs, you can do \`/specs delete\`. To delete a single component from your specs you can do \`/specs delete [component]\`. Component capitalization doesn't matter.`)
+					.addFields(
+					{name: 'Adding your own specs', value: `To add your own specs, you can do \`/specs add [component]: [name]\`. The component should be a universally known term, such as "CPU", "RAM" or "Video Card". The name should contain the name of the part that you own, and some additional info, for example "AMD Ryzen 5 5600x 6-core 12-thread Socket AM4". Make sure that the capitalization on both, the component and name, is correct. It is important to separate the component and name with a colon \`:\`.`},
+					{name: 'Viewing specs', value: `To view your own specs, you can do \`/specs\`. To view specs of other people, you can do \`/specs [user]\`. User can be a mention, id or username.`},
+					{name: 'Editing specs', value: `To edit your own specs, you can do \`/specs edit [component]: [new name]\`. Component capitalization doesn't matter. The old name will be overwritten by the new name. You cannot edit the component part, only the name.`},
+					{name: 'Deleting specs', value: `To delete all your specs, you can do \`/specs delete\`. To delete a single component from your specs you can do \`/specs delete [component]\`. Component capitalization doesn't matter.`})
 				interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else if (subCmd === 'add') {
 				const endPart = interaction.options.getString("info")
@@ -57,8 +58,7 @@ module.exports = {
 				const embed = client.displaySpecs(client, member);
 				if (member.user.id === '795443537356521502') {
 					developers = await interaction.guild.roles.fetch('914646059714768906')
-					embed.addField('Developers', `${developers.members.map(e=>`<@${e.user.id}>`).join("\n") || "None"}`)
-					embed.addField('Package', `Discord.js V${version}`)
+					embed.addFields({name: 'Developers', value: `${developers.members.map(e=>`<@${e.user.id}>`).join("\n") || "None"}`}, {name: 'Package', value: `Discord.js V${version}`})
 				}
 				return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 			} else {

@@ -389,9 +389,10 @@ module.exports = {
 				.setTitle('Convert help')
 				.setColor(client.config.embedColor)
 				.setDescription(`To convert something, you add **amount** and **unit** combinations to the end of the command. The syntax for an amount and unit combination is \`[amount][unit symbol]\`. Amount and unit combinations are called **arguments**. Arguments are divided into **starters** and a **target unit**. Starters are the starting values that you want to convert to the target unit. A conversion command consists of one or many starters, separated with a comma (\`,\`) in case there are many. After starters comes the target unit, which must have a greater-than sign (\`>\`) or the word "to" before it. The argument(s) after the \`>\` (or "to"), called the target unit, must not include an amount. It is just a **unit symbol**. Because you cannot convert fruits into lengths, all starters and the target unit must be of the same **quantity**.`)
-				.addField('Supported Quantities', Object.keys(quantities).map(x => x[0].toUpperCase() + x.slice(1)).join(', ') + `\n\nTo learn more about a quantity and its units and unit symbols,\ndo \`/convert help [quantity]\``)
-				.addField('Examples', `An amount: "5", "1200300", "1.99"\nA unit: metre, kelvin, Euro\nA unit symbol: "fh", "cm^3", "$", "fl oz"\nAn argument: "180cm", "12.99€", "5km", "16fl oz"\nA target unit: ">km", ">c", ">m2"\nA complete conversion command: "\`/convert 5ft, 8in to cm\`", "\`/convert 300kelvin >celsius\`", "\`/convert 57mm, 3.3cm, 0.4m >cm\`", "\`/convert 2dl, 0.2l to fl oz\`"`)
-				.addField('NEW: Fraction Conversion', 'Use division in your commands to achieve something, for example velocity conversion. In fraction conversion, all the starters\' and the target\'s unit symbol must be a fraction. The syntax for a fraction is \`[unit symbol]["/" or "per"][unit symbol]\`. All of the numerators must be of the same quantity. Same for the denominators. You cannot mix fractions and non-fractions. Examples of Fraction Conversion:\n\`/convert 5m/s >km/h\`\n\`/convert 5 miles per hour, 1 meter per second to kilometers per hour\`')
+				.addFields(
+				{name: 'Supported Quantities', value: `${Object.keys(quantities).map(x => x[0].toUpperCase() + x.slice(1)).join(', ')}\n\nTo learn more about a quantity and its units and unit symbols,\ndo \`/convert help [quantity]\``},
+				{name: 'Examples', value: `An amount: "5", "1200300", "1.99"\nA unit: metre, kelvin, Euro\nA unit symbol: "fh", "cm^3", "$", "fl oz"\nAn argument: "180cm", "12.99€", "5km", "16fl oz"\nA target unit: ">km", ">c", ">m2"\nA complete conversion command: "\`/convert 5ft, 8in to cm\`", "\`/convert 300kelvin >celsius\`", "\`/convert 57mm, 3.3cm, 0.4m >cm\`", "\`/convert 2dl, 0.2l to fl oz\`"`},
+				{name: 'Fraction Conversion', value: 'Use division in your commands to achieve something, for example velocity conversion. In fraction conversion, all the starters\' and the target\'s unit symbol must be a fraction. The syntax for a fraction is \`[unit symbol]["/" or "per"][unit symbol]\`. All of the numerators must be of the same quantity. Same for the denominators. You cannot mix fractions and non-fractions. Examples of Fraction Conversion:\n\`/convert 5m/s >km/h\`\n\`/convert 5 miles per hour, 1 meter per second to kilometers per hour\`'})
 			return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		} else if(subCmd === "convert"){
 			const converter = interaction.options.getString("conversion").split(" ");
@@ -503,8 +504,9 @@ module.exports = {
 		// display amount and target unit symbol
 		const embed = new client.embed()
 			.setTitle(quantity[0].toUpperCase() + quantity.slice(1) + ' conversion')
-			.addField('Starting amount', starters.map(x => `${x.amount.toLocaleString('en-US')} ${x.unit.short[0]}`).join(', '), true)
-			.addField('Converted amount', amountInTarget.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' ' + target.unit.short[0], true)
+			.addFields(
+			{name: 'Starting amount', value: starters.map(x => `${x.amount.toLocaleString('en-US')} ${x.unit.short[0]}`).join(', '), inline: true},
+			{name: 'Converted amount', value: amountInTarget.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' ' + target.unit.short[0], inline: true})
 			.setColor(client.config.embedColor)
 		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	}

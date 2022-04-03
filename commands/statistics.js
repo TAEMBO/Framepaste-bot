@@ -21,15 +21,15 @@ module.exports = {
 			let fieldValue = '';
 			rows.forEach(row => {
 				if (fieldValue.length + row.length > 1024) {
-					embed.addField('\u200b', '```\n' + fieldValue + '```');
+					embed.addFields({name: '\u200b', value: `\`\`\`\n${fieldValue}\`\`\``});
 					fieldValue = row;
 				} else {
 					fieldValue += row
 				}
 			});
-			embed.addField('\u200b', '```\n' + fieldValue + '```');
+			embed.addFields({name: '\u200b', value: `\`\`\`\n${fieldValue}\`\`\``});
 		} else {
-			embed.addField('\u200b', '```\n' + rows.join('') + '```');
+			embed.addFields({name: '\u200b', value: `\`\`\`\n${rows.join('')}\`\`\``});
 		}
 		interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 	},

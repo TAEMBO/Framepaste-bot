@@ -244,8 +244,9 @@ Object.assign(client.punishments, {
 					const embedm = new client.embed()
 					    .setTitle(`Case #${banData.id}: Ban`)
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
-					    .addField('Reason', `\`${reason || "unspecified"}\``)
-					    .addField('Duration', `${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"}`)
+						.addFields(
+						{name: 'Reason', value: `\`${reason || "unspecified"}\``},
+						{name: 'Duration', value: `${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"}`})
 					    .setColor(client.config.embedColor)
 			    	return embedm
 				}
@@ -269,7 +270,7 @@ Object.assign(client.punishments, {
 						const embeds = new client.embed()
 					    	.setTitle(`Case #${softbanData.id}: Softban`)
 					    	.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
-					    	.addField('Reason', `\`${reason || "unspecified"}\``)
+					    	.addFields({name: 'Reason', value: `\`${reason || "unspecified"}\``})
 					    	.setColor(client.config.embedColor)
 						return embeds
 					}
@@ -289,7 +290,7 @@ Object.assign(client.punishments, {
 					const embedk = new client.embed()
 					    .setTitle(`Case #${kickData.id}: Kick`)
 					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
-					    .addField('Reason', `\`${reason || "unspecified"}\``)
+					    .addFields({name: 'Reason', value: `\`${reason || "unspecified"}\``})
 					    .setColor(client.config.embedColor)
 					return embedk
 				}
@@ -318,8 +319,9 @@ Object.assign(client.punishments, {
 					const embedm = new client.embed()
 					    .setTitle(`Case #${muteData.id}: Mute`)
 						.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
-						.addField('Reason', `\`${reason || "unspecified"}\``)
-						.addField('Duration', `${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)`)
+						.addFields(
+						{name: 'Reason', value: `\`${reason || "unspecified"}\``},
+						{name: 'Duration', value: `${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)`})
 						.setColor(client.config.embedColor)
 						.setThumbnail('https://cdn.discordapp.com/attachments/858068843570003998/942295666137370715/muted.png')
 					return embedm
@@ -337,7 +339,7 @@ Object.assign(client.punishments, {
 					const embedw = new client.embed()
 					.setTitle(`Case #${warnData.id}: Warn`)
 					.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
-					.addField('Reason', `\`${reason || "unspecified"}\``)
+					.addFields({name: 'Reason', value: `\`${reason || "unspecified"}\``})
 					.setColor(client.config.embedColor)
 					.setThumbnail('https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg')
 					if (moderator !== '795443537356521502') {return embedw};
@@ -474,7 +476,7 @@ Object.assign(client.starboard, {
 			.setAuthor({name: `${data.message.member.displayName} [${data.message.author.tag}]`, iconURL: data.message.author.avatarURL({ format: "png", size: 128 })})
 			.setTimestamp(data.message.createdTimestamp)
 			.setFooter({text: `MSG:${data.message.id}, USER:${data.message.author.id}`})
-			.addField("\u200b", `[Jump to Message](${data.message.url})`)
+			.addFields({name: '\u200b', value: `[Jump to Message](${data.message.url})`})
 			.setColor("#ffcc00");
 		
 		// attachments

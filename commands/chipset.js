@@ -6,13 +6,14 @@ async function chipsetEmbed(client, chipset, manufacturer) {
 	else if (manufacturer.toLowerCase() === "amd") color = 13582629;
 	const embed = await new client.embed()
 		.setTitle(`${manufacturer.toUpperCase() + " " + chipset.name}`)
-		.addField("Supported CPUs", `${chipset.supported === "N/A" ? "N/A" : chipset.supported}`, true)
-		.addField("Core OC", `${chipset.coreOC === null ? "N/A" : chipset.coreOC}`, true)
-		.addField("Memory OC", `${chipset.memOC === null ? "N/A" : chipset.memOC}`, true)
-		.addField("Memory channels", `${chipset.memChan === null ? "N/A" : chipset.memChan}`, true)
-		.addField("PCIe lanes", `${chipset.pcieLanes === null ? "N/A" : chipset.pcieLanes}`, true)
-		.addField("PCIe generation", `${chipset.pcieGen === null ? "N/A" : chipset.pcieGen}`, true)
-		.addField("Socket", `${chipset.socket === null ? "N/A" : chipset.socket}`, true)
+		.addFields(
+		{name: 'Supported CPUs', value: `${chipset.supported === "N/A" ? "N/A" : chipset.supported}`, inline: true},
+		{name: 'Core OC', value: `${chipset.coreOC === null ? "N/A" : chipset.coreOC}`, inline: true},
+		{name: 'Memory OC', value: `${chipset.memOC === null ? "N/A" : chipset.memOC}`, inline: true},
+		{name: 'Memory channels', value: `${chipset.memChan === null ? "N/A" : chipset.memChan}`, inline: true},
+		{name: 'PCIe lanes', value: `${chipset.pcieLanes === null ? "N/A" : chipset.pcieLanes}`, inline: true},
+		{name: 'PCIe generation', value: `${chipset.pcieGen === null ? "N/A" : chipset.pcieGen}`, inline: true},
+		{name: 'Socket', value: `${chipset.socket === null ? "N/A" : chipset.socket}`, inline: true})
 		.setColor(color);
 	return embed;
 }
@@ -22,12 +23,13 @@ module.exports = {
 		const subCmd = interaction.options.getSubcommand();
 		if (subCmd === "help") {
 			const embed = new client.embed()
-			.setTitle("Chipset Command Help [BETA]")
+			.setTitle("Chipset Command Help")
 			.setColor(client.config.embedColor)
 			.setDescription("This command searches a list of real life chipsets and supplies you with technical information about them. This guide explains how to use this command properly.")
-			.addField("Search Terms", "Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.")
-			.addField("Manufacturer Search", "Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `INTEL`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.")
-			.addField("I don\"t want to write this", "so here are examples\n\`,chipset INTEL z490\`\n2 search terms, separated with a comma\nmanufacturer = INTEL (only INTEL chipsets will be searched)\nname search = z490\n\n\`,chipset z490\`\n1 search term\nno manufacturer, no filters\nnamesearch = z490\n\n\`,chipset INTEL -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = INTEL\nmultiple search: list is active (\`-s\` also works(\`,s\` allows you to choose a cpu based on numbering, \`,sl` just shows the list))")
+			.addFields(
+			{name: 'Search Terms', value: 'Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.'},
+			{name: 'Manufacturer Search', value: 'Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `INTEL`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.'},
+			{name: 'I don\'t want to write this', value: 'so here are examples\n\`\\chipset INTEL z490\`\n2 search terms, separated with a comma\nmanufacturer = INTEL (only INTEL chipsets will be searched)\nname search = z490\n\n\`,chipset z490\`\n1 search term\nno manufacturer, no filters\nnamesearch = z490\n\n\`,chipset INTEL -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = INTEL\nmultiple search: list is active (\`-s\` also works(\`,s\` allows you to choose a cpu based on numbering, \`,sl` just shows the list))'})
 			return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		} else {
 		const searchTerms = interaction.options.getString("query").split(",");
@@ -188,14 +190,14 @@ module.exports = {
 				if (manufacturer) textAddition = `\`${i + 1}. ${chipset[1].name}\`\n`;
 				else textAddition = `\`${i + 1}. ${getManufacturer(chipset[0])} ${chipset[1].name}\`\n`;
 				if (text.length + textAddition.length > 1024) {
-					embed.addField("\u200b", text, true);
+					embed.addFields({name: '\u200b', valu: text, inline: true});
 					text = "";
 				}
 				text += textAddition;
 			});
 			if (text.length > 0) {
 				if (embed.fields.length > 0) {
-					embed.addField("\u200b", text, true);
+					embed.addFields({name: '\u200b', value: text, inline: true});
 				} else {
 					embed.description += "\n" + text;
 				}
