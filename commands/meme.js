@@ -152,7 +152,7 @@ module.exports = {
 						client.memeQueue.delete(`${memeNumber}`);
 
 						// inform user
-						interaction.reply({content: ':clap: Meme :clap: Approved!', allowedMentions: { repliedUser: false }});
+						interaction.editReply({content: ':clap: Meme :clap: Approved!', allowedMentions: { repliedUser: false }, components: []});
 						return;
 					};
 
@@ -161,7 +161,7 @@ module.exports = {
 						client.memeQueue.delete(`${memeNumber}`);
 
 						// inform user
-						interaction.reply({content: 'The submission has been declined and removed from the queue.', allowedMentions: { repliedUser: false }});
+						interaction.editReply({content: 'The submission has been declined and removed from the queue.', allowedMentions: { repliedUser: false }, components: []});
 						return;
 					};
 
