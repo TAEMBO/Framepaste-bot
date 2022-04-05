@@ -8,6 +8,7 @@ module.exports = {
 		const embed = new client.embed()
 		    .setThumbnail(member.user.avatarURL({ format: 'png', dynamic: true, size: 2048}) || member.user.defaultAvatarURL)
 			.setTitle(`Member info: ${member.user.tag}`)
+			.setURL(`https://discord.com/users/${member.user.id}`)
 			.setDescription(`<@${member.user.id}>\n\`${member.user.id}\``)
 			.addFields(
 			{name: '🔹 Account Creation Date', value: `<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}>\n<t:${Math.round(new Date(member.user.createdTimestamp) / 1000)}:R>`},
