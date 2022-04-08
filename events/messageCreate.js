@@ -55,7 +55,7 @@ module.exports = {
 	// }
 
 	// server suggestion channel restrictions
-	if(message.channel.id === client.config.mainServer.channels.suggestions && message.author.id !== client.user.id && !client.hasModPerms(client, member)){ return message.delete(); }
+	if(message.channel.id === client.config.mainServer.channels.suggestions && message.author.id !== client.user.id && !client.hasModPerms(client, message.member)){ return message.delete(); }
 
 	// handle banned words
 	if (client.config.botSwitches.automod && client.bannedWords._content.some(word => message.content.toLowerCase().includes(word)) && !client.hasModPerms(client, message.member) && message.guild.id === client.config.mainServer.id)
