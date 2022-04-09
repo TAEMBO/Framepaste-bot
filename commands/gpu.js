@@ -14,9 +14,9 @@ function gpuEmbed(client, gpu, manufacturer) {
 		{name: 'TDP', value: gpu.tdp === 'N/A' ? 'N/A' : gpu.tdp + 'W', inline: true},
 		{name: 'MSRP', value: gpu.price === 'N/A' ? 'N/A' : '$' + gpu.price + ' USD', inline: true}
 		)
-		.setColor(color);
+		.setColor(color)
+		.setImage(`https://gpus.yessar.xyz/r/${gpu.name.replaceAll(" ", "-").toLowerCase()}.png`);
 	if (gpu.pcieLink) embed.addFields({name: 'PCIe Link', value: `PCIe ${gpu.pcieLink}`, inline: true});
-	if (gpu.imageUrl) embed.setImage(gpu.imageUrl);
 	return embed;
 }
 
