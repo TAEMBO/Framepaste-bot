@@ -439,6 +439,7 @@ module.exports = {
 		if (!starters || starters.length === 0) return interaction.reply({content: 'You must convert _something._ Your interaction has 0 starters.', allowedMentions: { repliedUser: false }});
 
 		const target = (() => {
+			const args = interaction.options.getString("conversion").split(' ');
 			const targetPortion = args.slice(args.indexOf(args.find(x => x.includes(usedSeparator)))).join(' ').slice(usedSeparator.length).trim();
 			// target: fraction
 			if (targetPortion.includes('/') || targetPortion.includes(' per ')) {
