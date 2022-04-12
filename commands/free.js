@@ -10,6 +10,7 @@ module.exports = {
             language: ["en-US"]
         });
         const gam = await Object.values(gameData);
+        const boi = [];
         gam.forEach((data)=>{
             boi.push(`[${data.title}](${data.urls.org})\n<:blank:948403007970770994> ~~$${data.org_price.usd}~~ • **Free** until <t:${Math.floor(new Date(data.until).getTime()/1000)}:d>`)
         });
