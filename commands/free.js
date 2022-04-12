@@ -10,12 +10,10 @@ module.exports = {
             language: ["en-US"]
         });
         const gam = await Object.values(gameData);
-        if(!gam.length) return embed.addFields({name: 'Huh!', value: 'Looks like no free games today! (try running the command again to reload the API)'}) && interaction.reply({embeds: [embed]});
-        const boi = [];
         gam.forEach((data)=>{
             boi.push(`[${data.title}](${data.urls.org})\n<:blank:948403007970770994> ~~$${data.org_price.usd}~~ • **Free** until <t:${Math.floor(new Date(data.until).getTime()/1000)}:d>`)
         });
-        const embed = new MessageEmbed().setTitle("These games are currently free:").setColor(3092790).setDescription(`${boi.map(x=>x).join("\n\n")}`)
+        const embed = new MessageEmbed().setTitle("These games are currently free:").setColor(3092790).setDescription(`${gam.length !== 0 ? boi.map(x=>x).join("\n\n") : "Huh! Looks like their are no free games currently, try running the command again to reload the API."}`)
         interaction.reply({embeds: [embed], allowedMentions: {repliedUser: false}})
     },
     data: new SlashCommandBuilder().setName("free").setDescription("Fetch Today's Free Games!")
