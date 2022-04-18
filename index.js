@@ -1,15 +1,8 @@
-const intents = ["GUILDS", "GUILD_MESSAGES", "GUILD_EMOJIS_AND_STICKERS", "GUILD_BANS", "DIRECT_MESSAGES", "GUILD_VOICE_STATES", "DIRECT_MESSAGE_REACTIONS", "GUILD_MESSAGE_REACTIONS", "GUILD_MEMBERS"]
 const Discord = require("discord.js");
 const YClient = require("./client");
 const client = new YClient();
 client.init();
 const fs = require("fs");
-const InvitesTracker = require('@androz2091/discord-invites-tracker');
-client.tracker = InvitesTracker.init(client, {
-    fetchGuilds: true,
-    fetchVanity: true,
-    fetchAuditLogs: true
-});
 console.log("Using ./config.json");
 
 console.log(client.config.botSwitches)
@@ -47,8 +40,6 @@ client.on("ready", async () => {
     const event = require(`./events/${file}`);
     if(event.giveaway){
 	client.giveawaysManager.on(event.name, async (...args) => event.execute(...args));
-    } else if(event.tracker){
-	client.tracker.on(event.name, async (...args) => event.execute(client, ...args));
     } else if(event.frs){
 		client.frs.on(event.name, async (...args) => event.execute(client, client.frs, ...args));
 	} else {
