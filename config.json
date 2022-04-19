@@ -22,7 +22,8 @@
 	"eval": {
 		"allowed": true,
 		"whitelist": [
-			"463986224101588992"
+			"709960501378940939",
+                        "615761944154210305"
 		]
 	},
 	"enableAutoResponse": false,
