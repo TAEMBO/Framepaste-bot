@@ -19,9 +19,9 @@ module.exports = {
         const content = interaction.options.getString('content')
 
             //TODO solve this
-       /* interaction.guild.roles.cache.get('858077018732888084').map((user) => {
+       interaction.guild.roles.cache.get('858077018732888084').members.map((user) => {
             moderators.push(user)
-        }) */
+        })
 
         if (!moderators.includes(interaction.user)) return interaction.reply({
             content: 'You aren\'t allowed to make polls',
