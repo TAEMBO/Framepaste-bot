@@ -51,17 +51,17 @@ module.exports = {
 
         let contestants = [];
 
-        Collector.on('collect', i => {
+        Collector.on('collect', async i => {
             if (contestants.includes(i.user.id)) return i.reply({content: 'You already voted', ephemeral: true})
             if (i.customId === 'voteup') {
                 votesUp++
-                interaction.editReply({embeds: [pollEmbed]}).then(() => {
+                await interaction.editReply({embeds: [pollEmbed]}).then(() => {
                     contestants.push(i.user.id)
                 })
             }
             if (i.customId === 'votedown') {
                 votesDown++
-                interaction.editReply({embeds: [pollEmbed]}).then(() => {
+                await interaction.editReply({embeds: [pollEmbed]}).then(() => {
                     contestants.push(i.user.id)
                 })
             }
