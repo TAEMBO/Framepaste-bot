@@ -10,22 +10,31 @@ module.exports = {
             .setDescription('The poll content')
             .setRequired(true)),
     run: (client, interaction) => {
+        try{
+
         let moderators = [];
         let votesUp = 0;
         let votesDown = 0;
 
         const content = interaction.options.getString('content')
 
-        interaction.guild.roles.cache.get('858077018732888084').map((user) => {
+            //TODO solve this
+       /* interaction.guild.roles.cache.get('858077018732888084').map((user) => {
             moderators.push(user)
-        })
+        }) */
 
-        if(!moderators.includes(interaction.user)) return interaction.reply({content: 'You aren\'t allowed to make polls', ephemeral: true})
+        if (!moderators.includes(interaction.user)) return interaction.reply({
+            content: 'You aren\'t allowed to make polls',
+            ephemeral: true
+        })
 
         const pollEmbed = new MessageEmbed()
             .setTitle('New poll')
             .setDescription('The poll will automatically end in 15 minutes')
-            .addFields({name: 'Poll content', value: `${content}`}, {name: 'Votes', value: `Votes to yes: ${votesUp}\nVotes to no: ${votesDown}`})
+            .addFields({name: 'Poll content', value: `${content}`}, {
+                name: 'Votes',
+                value: `Votes to yes: ${votesUp}\nVotes to no: ${votesDown}`
+            })
             .setTimestamp()
 
         const voteButtons = new MessageActionRow()
@@ -47,14 +56,14 @@ module.exports = {
         const contestants = [];
 
         Collector.on('collect', i => {
-            if(contestants.includes(i.user.id)) return i.reply({content: 'You already voted', ephemeral: true})
-            if(i.customId === 'voteup'){
+            if (contestants.includes(i.user.id)) return i.reply({content: 'You already voted', ephemeral: true})
+            if (i.customId === 'voteup') {
                 votesUp++
                 interaction.editReply({embeds: [pollEmbed]}).then(() => {
                     contestants.push(i.user.id)
                 })
             }
-            if(i.customId === 'votedown'){
+            if (i.customId === 'votedown') {
                 votesDown++
                 interaction.editReply({embeds: [pollEmbed]}).then(() => {
                     contestants.push(i.user.id)
@@ -70,5 +79,8 @@ module.exports = {
                 const contestants = [];
             })
         })
+    }catch (err){
+            interaction.reply(err)
+        }
     }
 }
