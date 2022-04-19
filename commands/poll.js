@@ -11,19 +11,15 @@ module.exports = {
             .setRequired(true)),
     run: (client, interaction) => {
         try{
-
-        let moderators = [];
         let votesUp = 0;
         let votesDown = 0;
 
         const content = interaction.options.getString('content')
 
             //TODO solve this
-       interaction.guild.roles.cache.get('858077018732888084').members.map((user) => {
-            moderators.push(user)
-        })
 
-        if (!moderators.includes(interaction.user)) return interaction.reply({
+
+        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({
             content: 'You aren\'t allowed to make polls',
             ephemeral: true
         })
@@ -53,7 +49,7 @@ module.exports = {
 
         const Collector = interaction.channel.createMessageComponentCollector({time: 900000});
 
-        const contestants = [];
+        let contestants = [];
 
         Collector.on('collect', i => {
             if (contestants.includes(i.user.id)) return i.reply({content: 'You already voted', ephemeral: true})
@@ -73,10 +69,9 @@ module.exports = {
 
         Collector.on('end', () => {
             interaction.deleteReply().then(() => {
-                let moderators = [];
-                let votesUp = 0;
-                let votesDown = 0;
-                const contestants = [];
+                votesUp = 0;
+                votesDown = 0;
+                contestants = [];
             })
         })
     }catch (err){
