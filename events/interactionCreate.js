@@ -25,7 +25,7 @@ module.exports = {
         })
         if(hasVoted){
             interaction.reply({embeds: [new MessageEmbed().setDescription("You've already voted!").setColor(client.config.embedColorRed).setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})
-        } else if(interaction.message.embeds[0].author.name=== `${interaction.member.displayName} (${interaction.user.id})`){
+        } else if(interaction.message.embeds[0].author.name === `${interaction.member.displayName} (${interaction.user.id})`){
             interaction.reply({embeds: [new MessageEmbed().setDescription("You can't vote on your own suggestion!").setColor(client.config.embedColorRed).setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({})})], ephemeral: true})        } else if(interaction.customId === "suggestion-decline"){
             const ee = await parseInt(interaction.component.label) + 1;
             UpdateButtons(upvotes, ee, interaction.message, interaction.user.id)

@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const {FreeStuffApi} = require("freestuff");
 const database = require("./database");
 const {GiveawaysManager} = require("discord-giveaways");
+const EventEmitter = require("node:events");
 class YClient extends Client {
     constructor(options){
         super({
@@ -447,5 +448,11 @@ class YClient extends Client {
         const unpunishResult = await client.punishments.removePunishment(punishment.id, interaction.user.id, reason);
         interaction.reply(unpunishResult);
     };
+};
+
+class MusicPlayer extends EventEmitter {
+    constructor(client) {
+        this.client = client;
+    }
 }
 module.exports = YClient;
