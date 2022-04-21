@@ -18,7 +18,7 @@ const removeUsername = (text) => {
 module.exports = {
 	run: async (client, interaction) => {
 		if (!client.config.eval.allowed) return interaction.reply({content: 'Eval is disabled.', allowedMentions: { repliedUser: false }});
-		if (!client.config.eval.whitelist.includes(interaction.user.id) && !interaction.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)) return interaction.reply({content: 'You\'re not allowed to use eval', allowedMentions: { repliedUser: false }});
+		if (!client.config.eval.whitelist.includes(interaction.user.id) && !interaction.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.botdeveloper).id}> role to use this command.`, allowedMentions: {roles: false}});
 		const code = interaction.options.getString("code")
 		let output = 'error';
 		let error = false;
