@@ -22,15 +22,15 @@
 	"eval": {
 		"allowed": true,
 		"whitelist": [
-			"709960501378940939",
-                        "615761944154210305"
+			"",
+            "615761944154210305"
 		]
 	},
 	"enableAutoResponse": false,
 	"mainServer": {
 		"id":"858054240416432158",
 		"modmailPing": [
-			"moderator"
+			"trialmoderator"
 		],
 		"staffRoles": [
 			"owner",

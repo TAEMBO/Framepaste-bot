@@ -1,4 +1,5 @@
 module.exports = async (message, modmailClient, client) => {
+	const { Discord, MessageEmbed, MessageActionRow, MessageButton, Interaction, ButtonInteraction } = require("discord.js");
 	if (message.channel.type === "DM") { // user has started new modmail
 		console.log('beans')
 		if (message.author.bot) return;
@@ -14,13 +15,14 @@ module.exports = async (message, modmailClient, client) => {
 		}
 		// new modmail
 		const msg = message.channel.send({embeds: [new MessageEmbed().setTitle("Are you sure you want to open a Modmail case?").setColor(client.config.embedColor)], components: [new MessageActionRow().addComponents(new MessageButton({label: "Send", style: "SUCCESS", customId: "SEND"}), new MessageButton({label: "Cancel", style: "DANGER", customId: "CANCEL"}))]})
-		const filter = i => ["SEND", "STOP"].includes(i.customId) && i.message.id === msg.id;
+		const filter = i => ["SEND", "CANCEL"].includes(i.customId);
 		const collector = await message.channel.createMessageComponentCollector({ max: 1, filter, time: 18_000_000 });
 		collector.on("collect", async (interaction) => {
 			if (interaction.customId === "SEND") {
+						await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail sent').setColor(client.config.embedColor)], components: []});
 						const caseId = (Date.now() + '').slice(0, -5); // case id is unix timestamp with accuracy of ~1 minute
 						const unimportant = message.content.toLowerCase().startsWith('[unimportant]') || message.content.toLowerCase().startsWith('unimportant'); // bool, is modmail unimportant?
-						message.channel.send(`ModMail received! :white_check_mark:\nWait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to a moderator.\n\`Case ID: ${caseId}\``); // inform user that bot has received modmail
+						await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail received! :white_check_mark:').setDescription('Wait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to a moderator.').setFooter({text: `Case ID: ${caseId}`}).setColor(7844437)], components: []}); // inform user that bot has received modmail
 						modmailClient.threads.set(message.author.id, { messages: [], caseId, startTime: Date.now() }); // create thread
 						modmailChannel.send(`${unimportant ? '' : client.config.mainServer.modmailPing.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}\n\`Case ID: ${caseId}\` New ModMail from ${message.author.toString()} (${message.author.tag}). A communication portal has been opened for ${unimportant ? '20' : '10'} minutes.\nModMail Content: ${message.content + '\n' + (message.attachments.first()?.url || '')}`); // inform mods of new modmail, show instructions
 						modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // add recipients message to summary
@@ -84,7 +86,10 @@ module.exports = async (message, modmailClient, client) => {
 							}
 							modmailClient.threads.delete(message.author.id);
 						});
-				} else if(interaction.customId === "CANCEL") return message.channel.send('Modmail canceled.');
+				} else if(interaction.customId === "CANCEL") {
+					await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail canceled :x:').setColor(14495300)], components: []});
+					return;
+				}
 		});
 		
 	} else if (message.mentions.members.has(modmailClient.user.id)) {
