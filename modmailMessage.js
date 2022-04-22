@@ -53,7 +53,7 @@ module.exports = async (message, modmailClient, client) => {
 								const replyCaseId = args[1];
 								if (replyCaseId !== caseId) return; // replied to different convo than this
 								const reason = args.slice(2).join(' ');
-								message.channel.send(`:x: ${modReply.member.roles.highest.name} ${modReply.author.tag} has ended this ModMail session with${reason ? ` reason: ${reason}` : 'out a reason.'}`);
+								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`with${reason ? ` reason: ${reason}` : 'out a reason.'}`).setFooter({text: `${modReply.member.roles.highest.name} ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(14495300)]});
 								await modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has been closed${reason ? '' : ' without a reason'}.`);
 								modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}) Ended session. Reason: ${reason}`); // R = recipient, M = moderator
 								return modReplyCollector.stop();
