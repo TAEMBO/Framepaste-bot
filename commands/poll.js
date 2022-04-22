@@ -33,7 +33,7 @@ module.exports = {
                 votes.push(i.user.id);
             }
         collecctor.on("end", async (ia) => {
-            inte.edit({embeds: [inte.embeds[0]], components: [new Discord.MessageActionRow().addComponents(inte.components[0].components[0].forEach((e)=>{e.setDisabled(true)}))]})
+            inte.edit({embeds: [inte.embeds[0]], components: [new Discord.MessageActionRow().addComponents(inte.components[0].components.forEach((e)=>{e.setDisabled(true)}))]})
         });
       });
     }
