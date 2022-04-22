@@ -192,9 +192,6 @@ module.exports = {
 		message.channel.send("No advertising other Discord servers.").then(x => setTimeout(() => x.delete(), 10000))
 	}
 	// auto responses
-	if(message.content.startsWith(",")){
-		return message.reply({content: "Regular commands are deprecated, the bot uses slash commands now", allowedMentions: {repliedUser: false}});
-	}
 	if (message.content.toLowerCase().includes("forgor")) {
 		message.react("💀")
 	}
