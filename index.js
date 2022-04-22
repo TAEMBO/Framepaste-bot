@@ -27,11 +27,13 @@ client.on("ready", async () => {
 		})
 	});
 	setInterval(async () => {
-		await client.user.setActivity(`you follow @scambl`, {
-			type: "WATCHING",
-		});setTimeout(() => client.user.setActivity(`you follow @mryeester`, {
-			type: "WATCHING",
-		}), 30000);
+		await client.user.setPresence({
+			status: 'dnd',
+			game: {
+				name: 'paint dry',
+				type: 'WATCHING'
+			}
+		});
 	}, 60000);
 	console.log("\x1b[36m", `Bot active as ${client.user.tag}.`);
 
