@@ -18,7 +18,7 @@ module.exports = {
             ephemeral: true
         }) 
         
-        const inte = await interaction.reply({fetchReply: true, embeds: [new client.embed().setAuthor({name: "This poll expires in 15 minutes."}).setTitle("New Poll.").setColor(client.config.embedColor).setDescription(`**${content}**`)], components: [new Discord.MessageActionRow().addComponents(new Discord.MessageButton().setStyle("SUCCESS").setLabel("1").setCustomId(`upvate`).setEmoji("<:upvote:708964481413283891>"), new Discord.MessageButton().setStyle("DANGER").setLabel("1").setCustomId("downbad").setEmoji("<:downvote:910416524840423435> "))]})
+        const inte = await interaction.reply({fetchReply: true, embeds: [new client.embed().setFooter({text: "This poll expires in 15 minutes."}).setTitle(`${content}`).setColor(client.config.embedColor).setAuthor({name: `Poll created by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL()})], components: [new Discord.MessageActionRow().addComponents(new Discord.MessageButton().setStyle("SUCCESS").setLabel("1").setCustomId(`upvate`).setEmoji("<:upvote:708964481413283891>"), new Discord.MessageButton().setStyle("DANGER").setLabel("1").setCustomId("downbad").setEmoji("<:downvote:910416524840423435> "))]})
 
         const collecctor = inte.createMessageComponentCollector({time: 900000});
         const votes = [];
@@ -28,7 +28,7 @@ module.exports = {
             } else if (i.customId === 'upvate') {
                 i.update({embeds: [i.message.embeds[0]], components: [new Discord.MessageActionRow().addComponents(i.message.components[0].components[0].setLabel(`${parseInt(i.message.components[0].components[0].label) + 1}`), i.message.components[0].components[1])]});
                 votes.push(i.user.id);
-            } else if (i.customId === 'votedown') {
+            } else if (i.customId === 'downbad') {
                 i.update({embeds: [i.message.embeds[0]], components: [new Discord.MessageActionRow().addComponents(i.message.components[0].components[0], i.message.components[0].components[1].setLabel(`${parseInt(i.message.components[0].components[1].label) + 1}`))]});
                 votes.push(i.user.id);
             }
