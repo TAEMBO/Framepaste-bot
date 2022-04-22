@@ -27,7 +27,7 @@ client.on("ready", async () => {
 		})
 	});
 	setInterval(async () => {
-		await client.user.setActivity('paint dry.', { type: "STREAMING", url: "https://twitch.tv/mryeester"});
+	        client.user.setActivity('paint dry.', { type: "STREAMING", url: "https://twitch.tv/mryeester"});
 	}, 60000);
 	console.log("\x1b[36m", `Bot active as ${client.user.tag}.`);
 
