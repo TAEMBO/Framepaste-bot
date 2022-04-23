@@ -91,7 +91,7 @@ module.exports = {
 			if (client.repeatedMessages[message.author.id]) {
 				if (thisContent.includes('tenor')) {
 					return;
-				}   else {
+				}   else if(thisContent.includes("discord"){ return; } else {
 				// add this message to the list
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: thisContent, ch: message.channel.id });
 
