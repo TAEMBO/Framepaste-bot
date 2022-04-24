@@ -46,7 +46,7 @@ module.exports = async (message, modmailClient, client) => {
 								if (reply.trim().length === 0) return modReply.reply(`\`Case ID: ${caseId}\` Your reply needs to contain text or an attachment. Reply not forwarded.`);
 								modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}): ${args.slice(2).join(' ') + (modReply.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
 								message.channel.send(`:warning: Reply from ${modReply.member.roles.highest.name} ${modReply.author.tag}: ${reply}`);
-								message.channel.send({content: `${modReply.attachments.first()?.url || ' '}`, embeds: new client.embed().setTitle(':warning Reply').setDescription(`${reply}`).setFooter({text: `${modReply.member.roles.highest.name} ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColor)})
+								message.channel.send({content: `${modReply.attachments.first()?.url || ' '}`, embeds: [new client.embed().setTitle(':warning Reply').setDescription(`${reply}`).setFooter({text: `${modReply.member.roles.highest.name} ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColor)]})
 								return modmailChannel.send(`\`Case ID: ${caseId}\` Reply forwarded.`);
 							} else if (modReply.content.startsWith('end')) {
 								const args = modReply.content.split(' ');
