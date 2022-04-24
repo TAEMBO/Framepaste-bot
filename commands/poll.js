@@ -18,7 +18,7 @@ module.exports = {
             ephemeral: true
         }) 
         
-        const inte = await interaction.reply({fetchReply: true, embeds: [new client.embed().setFooter({text: "This poll expires in 15 minutes."}).setDescription(`${content}`).setColor(client.config.embedColor).setAuthor({name: `Poll created by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL()})], components: [new Discord.MessageActionRow().addComponents(new Discord.MessageButton().setStyle("SUCCESS").setLabel("0").setCustomId(`upvate`).setEmoji("<:upvote:708964481413283891>"), new Discord.MessageButton().setStyle("DANGER").setLabel("0").setCustomId("downbad").setEmoji("<:downvote:910416524840423435> "))]})
+        const inte = await interaction.reply({fetchReply: true, embeds: [new client.embed().setFooter({text: "This poll expires in 15 minutes."}).setDescription(`${content}`).setColor(client.config.embedColor)], components: [new Discord.MessageActionRow().addComponents(new Discord.MessageButton().setStyle("SUCCESS").setLabel("0").setCustomId(`upvate`).setEmoji("<:upvote:708964481413283891>"), new Discord.MessageButton().setStyle("DANGER").setLabel("0").setCustomId("downbad").setEmoji("<:downvote:910416524840423435> "))]})
 
         const collecctor = inte.createMessageComponentCollector({time: 900000});
         const votes = [];
