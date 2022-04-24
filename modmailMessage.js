@@ -23,7 +23,8 @@ module.exports = async (message, modmailClient, client) => {
 						const unimportant = message.content.toLowerCase().startsWith('[unimportant]') || message.content.toLowerCase().startsWith('unimportant'); // bool, is modmail unimportant?
 						await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail received! :white_check_mark:').setDescription('Wait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to a moderator.').setFooter({text: `Case ID: ${caseId}`}).setColor(7844437)], components: []}); // inform user that bot has received modmail
 						modmailClient.threads.set(message.author.id, { messages: [], caseId, startTime: new Date() }); // create thread
-						modmailChannel.send(`${unimportant ? '' : client.config.mainServer.modmailPing.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}\n\`Case ID: ${caseId}\` New ModMail from ${message.author.toString()} (${message.author.tag}). A communication portal has been opened for ${unimportant ? '20' : '10'} minutes.\nModMail Content: ${message.content + '\n' + (message.attachments.first()?.url || '')}`); // inform mods of new modmail, show instructions
+						modmailChannel.send({content: `${unimportant ? '' : client.config.mainServer.modmailPing.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}`, embeds: [new client.embed().setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setTitle(`New Modmail | Case ${caseId}`).setDescription(`Session opened for ${unimportant ? '20' : '10'} minutes`).setColor(client.config.embedColor)]}); // inform mods of new modmail, show instructions
+						modmailChannel.send(`${message.content + '\n' + (message.attachments.first()?.url || '')}`)
 						modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // add recipients message to summary
 						let collectorEndTimestamp = Date.now() + 10 * 60 * 1000; // modmail will end in 10 minutes
 						if (unimportant) collectorEndTimestamp += 10 * 60 * 1000; // if unimportant, give mods 10 more minutes of time to reply
@@ -52,7 +53,7 @@ module.exports = async (message, modmailClient, client) => {
 								const replyCaseId = args[1];
 								if (replyCaseId !== caseId) return; // replied to different convo than this
 								const reason = args.slice(2).join(' ');
-								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`With${reason ? ` reason: ${reason}` : 'out a reason.'}`).setFooter({text: `${modReply.member.roles.highest.name} ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(14495300)]});
+								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`With${reason ? ` reason: ${reason}` : 'out a reason.'}`).setFooter({text: `${modReply.member.roles.highest.name} | ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(14495300)]});
 								await modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has been closed${reason ? '' : ' without a reason'}.`);
 								modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}) Ended session. Reason: ${reason}`); // R = recipient, M = moderator
 								return modReplyCollector.stop();
