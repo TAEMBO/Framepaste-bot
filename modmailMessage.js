@@ -15,7 +15,7 @@ module.exports = async (message, modmailClient, client) => {
 		// new modmail
 		const msg = await message.channel.send({embeds: [new MessageEmbed().setTitle("Are you sure you want to open a Modmail case?").setColor(client.config.embedColor)], components: [new MessageActionRow().addComponents(new MessageButton({label: "Send", style: "SUCCESS", customId: "SEND"}), new MessageButton({label: "Cancel", style: "DANGER", customId: "CANCEL"}))]})
 		const filter = i => ["SEND", "CANCEL"].includes(i.customId) && i.id === msg.id;
-		const collector = await msg.createMessageComponentCollector({ max: 1, filter, time: 18_000_000 });
+		const collector = await message.channel.createMessageComponentCollector({ max: 1, filter, time: 18_000_000 });
 		collector.on("collect", async (interaction) => {
 			if (interaction.customId === "SEND") {
 						await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail sent').setColor(client.config.embedColor)], components: []});
