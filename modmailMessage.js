@@ -8,9 +8,8 @@ module.exports = async (message, modmailClient, client) => {
 			return `[${client.format24hClock(Date.now(), true)}]`;
 		}
 		if (modmailClient.threads.has(message.author.id)) { // modmail thread is already active
-			modmailChannel.send({embeds: [new client.embed().setAuthor({name: `Reply | ${message.author.tag} | Case ${modmailClient.threads.get(message.author.id).caseId}`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColor)]})
-			modmailChannel.send(`${message.content + '\n' + (message.attachments.first()?.url || '')}`)
-			/* modmailChannel.send(`\`Case ID: ${modmailClient.threads.get(message.author.id).caseId}\` Additional information from ${message.author.toString()} (${message.author.tag}): ${message.content + '\n' + (message.attachments.first()?.url || '')}`); // inform mods of additional info */
+			modmailChannel.send({embeds: [new client.embed().setAuthor({name: `Reply | ${message.author.tag} | Case ${modmailClient.threads.get(message.author.id).caseId}`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColor)]}) // inform mods of additional info
+			modmailChannel.send(`${message.content + '\n' + (message.attachments.first()?.url || '')}`) // inform mods of additional info
 			modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // add recipients message to summary
 			return;
 		}
@@ -49,7 +48,7 @@ module.exports = async (message, modmailClient, client) => {
 								if (reply.trim().length === 0) return modReply.reply(`\`Case ID: ${caseId}\` Your reply needs to contain text or an attachment. Reply not forwarded.`);
 								modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}): ${args.slice(2).join(' ') + (modReply.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
 								message.channel.send({content: `${modReply.attachments.first()?.url || ' '}`, embeds: [new client.embed().setTitle(':warning: Reply').setDescription(`${reply}`).setFooter({text: `${modReply.member.roles.highest.name} ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColor)]})
-								return modReply.react('white_check_mark');
+								return modReply.react(':white_check_mark:');
 							} else if (modReply.content.startsWith('end')) {
 								const args = modReply.content.split(' ');
 								const replyCaseId = args[1];
