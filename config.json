@@ -34,7 +34,7 @@
 		],
 		"staffRoles": [
 			"owner",
-			"administrator",
+			"admin",
 			"mod",
 			"minimod",
 			"botdeveloper"
