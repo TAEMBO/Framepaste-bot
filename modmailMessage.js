@@ -80,10 +80,11 @@ module.exports = async (message, modmailClient, client) => {
 								.setTimestamp(modmailClient.threads.get(message.author.id).startTime)
 								.setColor(client.config.embedColor)
 							modmailChannel.send({embeds: [embed]});
-							message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`With no further response.`).setFooter({text: `Time limit reached`}).setColor(14495300)]})
 							// remove from threads collection
 							if (!modmailClient.threads.get(message.author.id).messages.some(x => x.includes('] M ('))) {
-								message.channel.send(':x: The ModMail session ended automatically with no response from a moderator. Usually this means that there are no moderators online. Please wait patiently. The moderators will contact you when they come online.');
+								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`The Modmail session ended automatically with no response from a staff member, Please wait for one to contact you personally.`).setFooter({text: `Time limit reached | Case ${caseId}`}).setColor(14495300)]})
+							} else {
+								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`With no further response.`).setFooter({text: `Time limit reached | Case ${caseId}`}).setColor(14495300)]})
 							}
 							modmailClient.threads.delete(message.author.id);
 						});
