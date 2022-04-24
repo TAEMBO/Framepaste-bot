@@ -1,7 +1,6 @@
 module.exports = async (message, modmailClient, client) => {
 	const { Discord, MessageEmbed, MessageActionRow, MessageButton, Interaction, ButtonInteraction } = require("discord.js");
 	if (message.channel.type === "DM") { // user has started new modmail
-		console.log('beans')
 		if (message.author.bot) return;
 		if (client.dmForwardBlacklist._content.includes(message.author.id)) return; // if user is blocked, ignore
 		const modmailChannel = modmailClient.channels.cache.get(client.config.mainServer.channels.modmail);
@@ -16,7 +15,7 @@ module.exports = async (message, modmailClient, client) => {
 		// new modmail
 		const msg = message.channel.send({embeds: [new MessageEmbed().setTitle("Are you sure you want to open a Modmail case?").setColor(client.config.embedColor)], components: [new MessageActionRow().addComponents(new MessageButton({label: "Send", style: "SUCCESS", customId: "SEND"}), new MessageButton({label: "Cancel", style: "DANGER", customId: "CANCEL"}))]})
 		const filter = i => ["SEND", "CANCEL"].includes(i.customId);
-		const collector = await message.channel.createMessageComponentCollector({ max: 1, filter, time: 18_000_000 });
+		const collector = await msg.createMessageComponentCollector({ max: 1, filter, time: 18_000_000 });
 		collector.on("collect", async (interaction) => {
 			if (interaction.customId === "SEND") {
 						await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail sent').setColor(client.config.embedColor)], components: []});
