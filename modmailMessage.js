@@ -5,7 +5,7 @@ module.exports = async (message, modmailClient, client) => {
 		if (client.dmForwardBlacklist._content.includes(message.author.id)) return; // if user is blocked, ignore
 		const modmailChannel = modmailClient.channels.cache.get(client.config.mainServer.channels.modmail);
 		function summaryTimestamp() { // creates clock syntax for use in modmail summary
-			return `[<t:${Date.now()/1000}:t>]`;
+			return `[<t:${Date.now()/1000 | 0}:t>]`;
 		}
 		if (modmailClient.threads.has(message.author.id)) { // modmail thread is already active
 			modmailChannel.send({embeds: [new client.embed().setAuthor({name: `Reply | ${message.author.tag} | Case ${modmailClient.threads.get(message.author.id).caseId}`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColor)]}) // inform mods of additional info
