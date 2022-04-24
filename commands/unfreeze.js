@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
     run: async (client, interaction) => {
-        if (interaction.member.roles.cache.has(client.config.mainServer.roles.moderator)) {
+        if (interaction.member.roles.cache.has(client.config.mainServer.roles.mod)) {
             // credits to Skippy for this
             const role = interaction.guild.roles.everyone;
             const perms = role.permissions.toArray()
@@ -11,7 +11,7 @@ module.exports = {
             interaction.reply('Unfroze server')     
             
          } else {
-            interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command`, allowedMentions: {roles: false}})
+            interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command`, allowedMentions: {roles: false}})
         }
     },
     data: new SlashCommandBuilder().setName("unfreeze").setDescription("Unlock the server for causals.")

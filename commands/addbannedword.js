@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
 	run: (client, interaction) => {
-		if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`, ephemeral: true});
+		if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.mod).name}** role to use this command.`, ephemeral: true});
 		client.bannedWords.addData(interaction.options.getString("word")).forceSave();
 		interaction.reply({content: `Successfully added \`${interaction.options.getString("word")}\` to bannedWords list`, allowedMentions: { repliedUser: false }});
 	},

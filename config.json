@@ -30,20 +30,20 @@
 	"mainServer": {
 		"id":"858054240416432158",
 		"modmailPing": [
-			"moderator"
+			"mod"
 		],
 		"staffRoles": [
 			"owner",
 			"administrator",
-			"moderator",
-			"trialmoderator",
+			"mod",
+			"minimod",
 			"botdeveloper"
 		],
 		"roles": {
 			"owner": "858072846248706108",
-			"administrator": "901677965631443015",
-			"moderator": "858077018732888084",
-			"trialmoderator": "922141395597262859",
+			"admin": "901677965631443015",
+			"mod": "858077018732888084",
+			"minimod": "922141395597262859",
 			"helper": "903534357858369576",
 			"botdeveloper": "914646059714768906",
 			"freegames": "920049508291854336",

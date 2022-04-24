@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = { 
 	run: (client, interaction) => {
-		if(!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.moderator).id}> role to use this command.`, allowedMentions: {roles: false}})
+		if(!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command.`, allowedMentions: {roles: false}})
         const time = interaction.options.getInteger("time");
         
         if(time > 21600) return interaction.reply({content: 'The slowmode limit is 6 hours (\`21600\` seconds).', allowedMentions: {repliedUser: false}})

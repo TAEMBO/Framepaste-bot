@@ -64,8 +64,8 @@ module.exports = {
 
 	// useless staff ping mute
 	const punishableRoleMentions = [
-		client.config.mainServer.roles.trialmoderator,
-		client.config.mainServer.roles.moderator
+		client.config.mainServer.roles.minimod,
+		client.config.mainServer.roles.mod
 	];
 	if (message.mentions.roles.some(mentionedRole => punishableRoleMentions.includes(mentionedRole.id))) {
 		console.log("user mentioned staff role");
@@ -186,7 +186,7 @@ module.exports = {
 		}
 	// handle discord invite links
 	if (!client.config.botSwitches.automod) return;
-	if (message.content.includes("discord.gg/") && !message.member.roles.cache.has(client.config.mainServer.roles.moderator) && !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)&& message.guild.id === client.config.mainServer.id) {
+	if (message.content.includes("discord.gg/") && !message.member.roles.cache.has(client.config.mainServer.roles.mod) && !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)&& message.guild.id === client.config.mainServer.id) {
 		message.delete()
 		client.punishments.addPunishment("warn", message.member, { reason: "Discord advertisement" }, client.user.id)
 		message.channel.send("No advertising other Discord servers.").then(x => setTimeout(() => x.delete(), 10000))
