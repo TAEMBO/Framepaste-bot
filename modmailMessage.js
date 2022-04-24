@@ -8,7 +8,9 @@ module.exports = async (message, modmailClient, client) => {
 			return `[${client.format24hClock(Date.now(), true)}]`;
 		}
 		if (modmailClient.threads.has(message.author.id)) { // modmail thread is already active
-			modmailChannel.send(`\`Case ID: ${modmailClient.threads.get(message.author.id).caseId}\` Additional information from ${message.author.toString()} (${message.author.tag}): ${message.content + '\n' + (message.attachments.first()?.url || '')}`); // inform mods of additional info
+			modmailChannel.send({embeds: [new client.embed().setAuthor({name: `Reply | ${message.author.tag} | Case ${modmailClient.threads.get(message.author.id).caseId}`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`})]})
+			modmailChannel.send(`${message.content + '\n' + (message.attachments.first()?.url || '')}`)
+			/* modmailChannel.send(`\`Case ID: ${modmailClient.threads.get(message.author.id).caseId}\` Additional information from ${message.author.toString()} (${message.author.tag}): ${message.content + '\n' + (message.attachments.first()?.url || '')}`); // inform mods of additional info */
 			modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // add recipients message to summary
 			return;
 		}
@@ -23,7 +25,7 @@ module.exports = async (message, modmailClient, client) => {
 						const unimportant = message.content.toLowerCase().startsWith('[unimportant]') || message.content.toLowerCase().startsWith('unimportant'); // bool, is modmail unimportant?
 						await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail received! :white_check_mark:').setDescription('Wait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to a moderator.').setFooter({text: `Case ID: ${caseId}`}).setColor(7844437)], components: []}); // inform user that bot has received modmail
 						modmailClient.threads.set(message.author.id, { messages: [], caseId, startTime: new Date() }); // create thread
-						modmailChannel.send({content: `${unimportant ? '' : client.config.mainServer.modmailPing.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}`, embeds: [new client.embed().setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setTitle(`New Modmail | Case ${caseId}`).setDescription(`Session opened for ${unimportant ? '20' : '10'} minutes`).setColor(client.config.embedColor)]}); // inform mods of new modmail, show instructions
+						modmailChannel.send({content: `${unimportant ? '' : client.config.mainServer.modmailPing.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}`, embeds: [new client.embed().setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setTitle(`New Modmail | Case ${caseId}`).setDescription(`<@${message.author.id}>\nSession opened for ${unimportant ? '20' : '10'} minutes.`).setColor(client.config.embedColor)]}); // inform mods of new modmail, show instructions
 						modmailChannel.send(`${message.content + '\n' + (message.attachments.first()?.url || '')}`)
 						modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // add recipients message to summary
 						let collectorEndTimestamp = Date.now() + 10 * 60 * 1000; // modmail will end in 10 minutes
