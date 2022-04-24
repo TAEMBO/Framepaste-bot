@@ -47,8 +47,8 @@ module.exports = async (message, modmailClient, client) => {
 								const reply = args.slice(2).join(' ');
 								if (reply.trim().length === 0) return modReply.reply(`\`Case ID: ${caseId}\` Your reply needs to contain text or an attachment. Reply not forwarded.`);
 								modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}): ${args.slice(2).join(' ') + (modReply.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
-								message.channel.send({content: `${modReply.attachments.first()?.url || ' '}`, embeds: [new client.embed().setTitle(':warning: Reply').setDescription(`${reply}`).setFooter({text: `${modReply.member.roles.highest.name} ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColor)]})
-								return modReply.react(':white_check_mark:');
+								message.channel.send({content: `${modReply.attachments.first()?.url || ' '}`, embeds: [new client.embed().setTitle(':warning: Reply').setDescription(`${reply}`).setFooter({text: `${modReply.member.roles.highest.name} | ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColor)]})
+								return modReply.react('✅');
 							} else if (modReply.content.startsWith('end')) {
 								const args = modReply.content.split(' ');
 								const replyCaseId = args[1];
@@ -80,6 +80,7 @@ module.exports = async (message, modmailClient, client) => {
 								.setTimestamp(modmailClient.threads.get(message.author.id).startTime)
 								.setColor(client.config.embedColor)
 							modmailChannel.send({embeds: [embed]});
+							message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`With no further response.`).setFooter({text: `Time limit reached`}).setColor(14495300)]})
 							// remove from threads collection
 							if (!modmailClient.threads.get(message.author.id).messages.some(x => x.includes('] M ('))) {
 								message.channel.send(':x: The ModMail session ended automatically with no response from a moderator. Usually this means that there are no moderators online. Please wait patiently. The moderators will contact you when they come online.');
