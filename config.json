@@ -30,7 +30,7 @@
 	"mainServer": {
 		"id":"858054240416432158",
 		"modmailPing": [
-			"trialmoderator"
+			"moderator"
 		],
 		"staffRoles": [
 			"owner",
