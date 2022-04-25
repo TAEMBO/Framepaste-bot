@@ -3,7 +3,6 @@ const YClient = require("./client");
 const client = new YClient();
 client.init();
 const fs = require("fs");
-console.log("Using ./config.json");
 
 console.log(client.config.botSwitches)
 
