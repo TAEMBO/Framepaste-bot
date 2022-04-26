@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+/* const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
 
 module.exports = {
@@ -22,4 +22,4 @@ module.exports = {
 
     },
     data: new SlashCommandBuilder().setName("trend").setDescription("Search for users with a matching username or nickname.").addStringOption((opt)=>opt.setName("query").setDescription("The query for the trend.").setRequired(true))
-};
+}; */
