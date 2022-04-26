@@ -7,7 +7,7 @@ module.exports = {
         const Randomanswer = Math.floor(Math.random() * answers.length);
 
         if(msg.length <= 4){
-            interaction.reply({content: 'Ask a real question dumb ass', allowedMentions: { repliedUser: false }});
+            interaction.reply({content: 'Ask a real question, numb nut.', allowedMentions: { repliedUser: false }});
             return;
         }
 

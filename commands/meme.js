@@ -77,7 +77,7 @@ module.exports = {
 				const urlMessage = (await interaction.channel.awaitMessages({ filter: fililil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first();
 				if (urlMessage.content) {
 					if (!['jpg', 'png', 'webp', 'gif', 'jpeg'].some(x => urlMessage.content.endsWith(x))) {
-						return interaction.followUp('Your log-headed ass didn\'t notice that that\'s not an image url. Your mishap has terminated the `meme add` process. Thanks.');
+						return interaction.followUp('Your walnut brain didn\'t notice that that\'s not an image url. Your mishap has terminated the `meme add` process. Thanks.');
 					}
 					meme.url = urlMessage.content;
 				} else meme.url = urlMessage.attachments.first()?.url;
