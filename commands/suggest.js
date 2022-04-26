@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
+/* const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
 const {SlashCommandBuilder} = require("@discordjs/builders");
 module.exports = {
     run: async (client, interaction) => {
@@ -19,4 +19,4 @@ module.exports = {
             await interaction.reply({embeds: [embed], components: [new MessageActionRow().addComponents(new MessageButton().setStyle("SUCCESS").setEmoji("✅").setCustomId("suggestion-upvote").setLabel("1"), new MessageButton().setStyle("DANGER").setEmoji("❌").setCustomId("suggestion-decline").setLabel("1"))]});
     },
     data: new SlashCommandBuilder().setName("suggest").setDescription("Create a suggestion. Only works in <#912591798436761631>.").addStringOption((opt)=>opt.setName("suggestion").setDescription("Your suggestion.").setRequired(true)),
-};
+}; */
