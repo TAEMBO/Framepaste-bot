@@ -10,18 +10,11 @@ module.exports = {
         let messagesArray = [];
 
 		if(user){
-			let messagesArrayNotDefinitive = [];
 			await interaction.channel.messages.fetch({ limit: amount }).then(messages => {
-				messagesArrayNotDefinitive.push(messages.id);
-			})
-
-			interaction.reply({content: messagesArrayNotDefinitive[0]});
-
-				messagesArrayNotDefinitive.forEach(message => {
-				if(message === user.id){
-					messagesArray.push(message);
+				if(messages.id === user.id){
+					messagesArray.push(messages.id);
 				}
-			});
+			})
 		}else{
 			await interaction.channel.messages.fetch({ limit: amount }).then(messages => {
 				messages.forEach(message => {
@@ -31,6 +24,7 @@ module.exports = {
 		}
 
 		await interaction.channel.bulkDelete(messagesArray);
+		await interaction.reply(`Successfully deleted ${amount} messages.`);
 
 	},
 	data: new SlashCommandBuilder().setName("purge").setDescription("Purges messages in a channel.").addIntegerOption((opt)=>opt.setName("amount").setDescription("The amount of messages to purge.").setRequired(true)).addUserOption((opt)=>opt.setName("user").setDescription("The user to purge messages from.").setRequired(false))
