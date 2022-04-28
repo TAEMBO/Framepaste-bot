@@ -10,16 +10,20 @@ module.exports = {
         let messagesArray = [];
 
 		if(user){
-			interaction.channel.messages.fetch({limit: 100}).then((msgs)=>{messagesArray.push(msgs.filter(x=>x.author.id===user.id))});
+			interaction.channel.messages.fetch({limit: 100}).then((msgs)=>{
+				const cum = msgs.filter(x => x.author.id === user.id);
+				interaction.channel.bulkDelete(cum);
+			})
 		}else{
-			await interaction.channel.messages.fetch({ limit: amount }).then(messages => {
+			await interaction.channel.messages.fetch({ limit: amount }).then(async messages => {
 				messages.forEach(message => {
 					messagesArray.push(message.id);
 				});
+				await interaction.channel.bulkDelete(messagesArray);
 			});
 		}
 
-		await interaction.channel.bulkDelete(messagesArray);
+
 		await interaction.reply(`Successfully deleted ${amount} messages.`);
 
 	},
