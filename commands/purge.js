@@ -23,7 +23,6 @@ module.exports = {
 			});
 		}
 
-
 		await interaction.reply(`Successfully deleted ${amount} messages.`);
 
 	},
