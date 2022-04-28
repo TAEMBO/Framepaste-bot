@@ -11,7 +11,6 @@ client.on("ready", async () => {
 	client.lastGames = await client.frs.getGameList("free");
 	setInterval(async ()=>{const newGamesArray = []; const newGames = await client.frs.getGameList(`free?abc=${Math.random()}`); await newGames.forEach(async (e)=>{
 		if(client.lastGames.includes(e)){
-			return
 		} else {
 			newGamesArray.push(e);
 		}});client.lastGames = newGames;if(newGamesArray.length !== 0){client.frs.emitRawEvent({ event: 'free_games', data: newGamesArray })}}, 300_000);
@@ -39,7 +38,7 @@ client.on("ready", async () => {
 		client.frs.on(event.name, async (...args) => event.execute(client, client.frs, ...args));
 	} else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));
-    };
+    }
   }); 
 });
 
@@ -57,12 +56,10 @@ client.modmailClient.on("ready", async () => {
 Object.assign(client.tictactoeDb, {
 	// global stats
 	getTotalGames() {
-		const amount = this._content.length;
-		return amount;
+		return this._content.length;
 	},
 	getRecentGames(amount) {
-		const games = this._content.sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
-		return games;
+		return this._content.sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
 	},
 	getAllPlayers() {
 		const players = {};
@@ -181,8 +178,7 @@ Object.assign(client.specsDb, {
 		return this;
 	},
 	getUser(id) {
-		const user = this._content[id];
-		return user;
+		return this._content[id];
 	},
 	hasUser(id) {
 		const user = this._content[id];
@@ -205,7 +201,7 @@ Object.assign(client.punishments, {
 		const { time, reason, interaction } = options;
 		const ms = require("ms");
 		let timeInMillis;
-		if(type != "mute"){
+		if(type !== "mute"){
 			timeInMillis = time ? ms(time) : null;
 		} else {
 			timeInMillis = time ? ms(time) : 2419200000;
@@ -227,14 +223,18 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(banData, client);
 					this.addData(banData);
 					this.forceSave();
-					const embedm = new client.embed()
-					    .setTitle(`Case #${banData.id}: Ban`)
-					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
+					return new client.embed()
+						.setTitle(`Case #${banData.id}: Ban`)
+						.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 						.addFields(
-						{name: 'Reason', value: `\`${reason || "unspecified"}\``},
-						{name: 'Duration', value: `${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : "forever"}`})
-					    .setColor(client.config.embedColor)
-			    	return embedm
+							{name: 'Reason', value: `\`${reason || "unspecified"}\``},
+							{name: 'Duration',
+								value: `${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, {
+									longNames: true,
+									commas: true
+								})} (${timeInMillis}ms)` : "forever"}`
+							})
+						.setColor(client.config.embedColor)
 				}
 			case "softban":
 				const guild = member.guild;

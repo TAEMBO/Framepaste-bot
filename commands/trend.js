@@ -3,7 +3,6 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     run: (client, interaction) => {
-        return interaction.reply({content: 'Command is disabled.', ephemeral: true});
         const embed = new MessageEmbed().setTitle('trend');
         const trend = interaction.options.getString("query");
         if(trend.length < 3) return interaction.reply({content: 'A trend must be a minimum of 3 letters.', allowedMentions: {repliedUser: false}, ephemeral: true});
@@ -22,5 +21,6 @@ module.exports = {
         }
 
     },
-    data: new SlashCommandBuilder().setName("trend").setDescription("Search for users with a matching username or nickname.").addStringOption((opt)=>opt.setName("query").setDescription("The query for the trend.").setRequired(true))
+    data: new SlashCommandBuilder().setName("trend").setDescription("Search for users with a matching username or nickname.").addStringOption((opt)=>opt.setName("query").setDescription("The query for the trend.").setRequired(true)),
+    disabled: true
 }; 
