@@ -13,6 +13,7 @@ module.exports = {
 			await interaction.channel.messages.fetch({ limit: amount }).then(messages => {
 				if(messages.id === user.id){
 					messagesArray.push(messages.id);
+					interaction.channel.send('added 1 to array');
 				}
 			})
 		}else{
