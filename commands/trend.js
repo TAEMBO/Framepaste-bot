@@ -10,7 +10,6 @@ module.exports = {
         if(!trendmembers){
             embed.addFields({name: trend, value: 'No users follow this trend (bozo)'})
             interaction.reply({embeds: [embed], ephemeral: true, allowedMentions: {repliedUser: false}})
-            return;
         }else if(trendmembers.length > 6000){
                 return interaction.reply({content: 'This trend is too big', ephemeral: true});
             }else {

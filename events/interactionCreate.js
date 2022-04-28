@@ -53,7 +53,7 @@ module.exports = {
     const commandFile = client.commands.get(interaction.commandName);
     if(client.config.botSwitches.commands === false) return;
     if (commandFile) {
-        if(commandFile.disabled) return interaction.reply('This command is disabled.');
+        if(commandFile.disabled) return interaction.reply({content: 'This command is disabled.', ephemeral: true});
         console.log(`${interaction.user.tag} used /${interaction.commandName} in ${interaction.channel.name}`);
 
         try {

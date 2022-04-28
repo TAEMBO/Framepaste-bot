@@ -78,21 +78,17 @@ Object.assign(client.tictactoeDb, {
 		return players;
 	},
 	getBestPlayers(amount) {
-		const players = Object.entries(this.getAllPlayers()).filter(x => x[1].total >= 10).sort((a, b) => b[1].wins / b[1].total - a[1].wins / a[1].total).slice(0, amount - 1)
-		return players;
+		return Object.entries(this.getAllPlayers()).filter(x => x[1].total >= 10).sort((a, b) => b[1].wins / b[1].total - a[1].wins / a[1].total).slice(0, amount - 1);
 	},
 	getMostActivePlayers(amount) {
-		const players = Object.entries(this.getAllPlayers()).sort((a, b) => b[1].total - a[1].total).slice(0, amount - 1)
-		return players;
+		return Object.entries(this.getAllPlayers()).sort((a, b) => b[1].total - a[1].total).slice(0, amount - 1);
 	},
 	// player stats
 	getPlayerGames(player) {
-		const games = this._content.filter(x => x.players.includes(player));
-		return games;
+		return this._content.filter(x => x.players.includes(player));
 	},
 	getPlayerRecentGames(player, amount) {
-		const games = this._content.filter(x => x.players.includes(player)).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
-		return games;
+		return this._content.filter(x => x.players.includes(player)).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
 	},
 	calcWinPercentage(player) {
 		return ((player.wins / player.total) * 100).toFixed(2) + "%";
@@ -253,12 +249,11 @@ Object.assign(client.punishments, {
 						client.makeModlogEntry(softbanData, client);
 						this.addData(softbanData);
 						this.forceSave();
-						const embeds = new client.embed()
-					    	.setTitle(`Case #${softbanData.id}: Softban`)
-					    	.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
-					    	.addFields({name: 'Reason', value: `\`${reason || "unspecified"}\``})
-					    	.setColor(client.config.embedColor)
-						return embeds
+						return new client.embed()
+							.setTitle(`Case #${softbanData.id}: Softban`)
+							.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
+							.addFields({name: 'Reason', value: `\`${reason || "unspecified"}\``})
+							.setColor(client.config.embedColor)
 					}
 				}
 			case "kick":
@@ -273,12 +268,11 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(kickData, client);
 					this.addData(kickData);
 					this.forceSave();
-					const embedk = new client.embed()
-					    .setTitle(`Case #${kickData.id}: Kick`)
-					    .setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
-					    .addFields({name: 'Reason', value: `\`${reason || "unspecified"}\``})
-					    .setColor(client.config.embedColor)
-					return embedk
+					return new client.embed()
+						.setTitle(`Case #${kickData.id}: Kick`)
+						.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
+						.addFields({name: 'Reason', value: `\`${reason || "unspecified"}\``})
+						.setColor(client.config.embedColor)
 				}
 			case "mute":
 				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
@@ -302,15 +296,19 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(muteData, client);
 					this.addData(muteData);
 					this.forceSave();
-					const embedm = new client.embed()
-					    .setTitle(`Case #${muteData.id}: Mute`)
+					return new client.embed()
+						.setTitle(`Case #${muteData.id}: Mute`)
 						.setDescription(`${member.user.tag}\n<@${member.user.id}>\n(\`${member.user.id}\`)`)
 						.addFields(
-						{name: 'Reason', value: `\`${reason || "unspecified"}\``},
-						{name: 'Duration', value: `${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)`})
+							{name: 'Reason', value: `\`${reason || "unspecified"}\``},
+							{name: 'Duration',
+								value: `${client.formatTime(timeInMillis, 4, {
+									longNames: true,
+									commas: true
+								})} (${timeInMillis}ms)`
+							})
 						.setColor(client.config.embedColor)
 						.setThumbnail('https://cdn.discordapp.com/attachments/858068843570003998/942295666137370715/muted.png')
-					return embedm
 				}
 			case "warn":
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
@@ -400,7 +398,7 @@ Object.assign(client.starboard, {
 				if (!embedMessage) {
 					delete this._content[reaction.message.id];
 				}
-				embedMessage.edit({
+				await embedMessage.edit({
 					content: `**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf("|"))}`,
 					embed: [embedMessage.embeds[0]]
 				});
@@ -430,7 +428,7 @@ Object.assign(client.starboard, {
 				if (!embedMessage) {
 					delete this._content[reaction.message.id];
 				}
-				embedMessage.edit({
+				await embedMessage.edit({
 					content: `**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf("|"))}`,
 					embed: [embedMessage.embeds[0]]
 				});
