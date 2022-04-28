@@ -11,12 +11,13 @@ module.exports = {
 
 		if(user){
 			let messagesArrayNotDefinitive = [];
-			messagesArrayNotDefinitive.push(await interaction.channel.messages.fetch({ limit: amount }));
+			await interaction.channel.messages.fetch({ limit: amount }).then(messages => {
+				messagesArrayNotDefinitive.push(messages.id);
+			})
 
-				interaction.reply({content: messagesArrayNotDefinitive[0]})
 				messagesArrayNotDefinitive.forEach(message => {
-				if(message.author.id === user.id){
-					messagesArray.push(message.id);
+				if(message === user.id){
+					messagesArray.push(message);
 				}
 			});
 		}else{
