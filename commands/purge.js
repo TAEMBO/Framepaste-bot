@@ -16,11 +16,15 @@ module.exports = {
 				interaction.reply({content: messagesArrayNotDefinitive[0]})
 				messagesArrayNotDefinitive.forEach(message => {
 				if(message.author.id === user.id){
-					messagesArray.push(message);
+					messagesArray.push(message.id);
 				}
 			});
 		}else{
-			messagesArray.push(await interaction.channel.messages.fetch({ limit: amount }));
+			await interaction.channel.messages.fetch({ limit: amount }).then(messages => {
+				messages.forEach(message => {
+					messagesArray.push(message.id);
+				});
+			});
 		}
 
 		await interaction.channel.bulkDelete(messagesArray);
