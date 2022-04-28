@@ -15,6 +15,8 @@ module.exports = {
 				messagesArrayNotDefinitive.push(messages.id);
 			})
 
+			interaction.reply({content: messagesArrayNotDefinitive})
+
 				messagesArrayNotDefinitive.forEach(message => {
 				if(message === user.id){
 					messagesArray.push(message);
