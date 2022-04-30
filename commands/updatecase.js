@@ -27,8 +27,26 @@ module.exports = {
             }
         });
 
-        interaction.reply(__dirname)
+        try {
+            fs.writeFileSync(path.resolve('./databases/punishments.json'), JSON.stringify(casesJson));
+            const sucessEmbed = new MessageEmbed()
+                .setColor('#00ff00')
+                .setTitle('Case updated')
+                .setDescription(`Case ${caseid} has been updated\nNew reason: ${reason}`);
 
+<<<<<<< Updated upstream
         fs.writeFileSync(require("../databases/punishments.json"), JSON.stringify(casesJson));
+=======
+            interaction.reply({embed: sucessEmbed });
+        }catch(err){
+            console.log(err);
+            const errorEmbed = new MessageEmbed()
+                .setColor('#ff0000')
+                .setTitle('Error')
+                .setDescription('An error occurred while updating the case, ask TÆMBØ to check the console  ');
+
+            interaction.reply({embed: errorEmbed });
+        }
+>>>>>>> Stashed changes
     }
 }
