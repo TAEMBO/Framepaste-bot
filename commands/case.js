@@ -13,7 +13,7 @@ module.exports = {
 	
 			try {
 				await fs.writeFileSync(path.resolve('./databases/punishments.json'), JSON.stringify(casesJson));
-				const sucessEmbed = new MessageEmbed()
+				const sucessEmbed = new client.embed()
 					.setColor('#00ff00')
 					.setTitle('Case updated')
 					.setDescription(`Case ${caseid} has been updated\nNew reason: ${reason}`);
@@ -21,7 +21,7 @@ module.exports = {
 				await interaction.reply({embeds: [sucessEmbed] });
 			}catch(err){
 				console.log(err);
-				const errorEmbed = new MessageEmbed()
+				const errorEmbed = new client.embed()
 					.setColor('#ff0000')
 					.setTitle('Error')
 					.setDescription('An error occurred while updating the case, ask TÆMBØ to check the console  ');
