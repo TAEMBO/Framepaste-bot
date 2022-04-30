@@ -27,6 +27,6 @@ module.exports = {
             }
         });
 
-        fs.writeFileSync(`Framepaste-bot/databases/punishments.json`, JSON.stringify(casesJson));
+        fs.writeFileSync(`./Framepaste-bot/databases/punishments.json`, JSON.stringify(casesJson));
     }
 }
