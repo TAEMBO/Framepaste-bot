@@ -27,6 +27,6 @@ module.exports = {
             }
         });
 
-        fs.writeFileSync(path.resolve('databases/punishments.json'), JSON.stringify(casesJson));
+        fs.writeFileSync(`${__dirname}/databases/punishments.json`, JSON.stringify(casesJson));
     }
 }
