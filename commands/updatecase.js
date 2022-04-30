@@ -34,9 +34,6 @@ module.exports = {
                 .setTitle('Case updated')
                 .setDescription(`Case ${caseid} has been updated\nNew reason: ${reason}`);
 
-<<<<<<< Updated upstream
-        fs.writeFileSync(require("../databases/punishments.json"), JSON.stringify(casesJson));
-=======
             interaction.reply({embed: sucessEmbed });
         }catch(err){
             console.log(err);
@@ -47,6 +44,5 @@ module.exports = {
 
             interaction.reply({embed: errorEmbed });
         }
->>>>>>> Stashed changes
     }
 }
