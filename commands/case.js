@@ -1,10 +1,34 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-
+const casesJson = require("../databases/punishments.json");
+const fs = require("node:fs");
+const path = require("node:path");
 module.exports = {
-	run: (client, interaction) => {
+	run: async (client, interaction) => {
 		if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command.`, allowedMentions: {roles: false}});
 		const subCmd = interaction.options.getSubcommand();
-		if (subCmd === "view") {
+		if(subCmd === "update") {
+			const caseid = interaction.options.getInteger('case_id');
+			const reason = interaction.options.getString('reason');
+			casesJson.find(x=>x.id===caseid).reason = reason;
+	
+			try {
+				await fs.writeFileSync(path.resolve('./databases/punishments.json'), JSON.stringify(casesJson));
+				const sucessEmbed = new MessageEmbed()
+					.setColor('#00ff00')
+					.setTitle('Case updated')
+					.setDescription(`Case ${caseid} has been updated\nNew reason: ${reason}`);
+	
+				await interaction.reply({embeds: [sucessEmbed] });
+			}catch(err){
+				console.log(err);
+				const errorEmbed = new MessageEmbed()
+					.setColor('#ff0000')
+					.setTitle('Error')
+					.setDescription('An error occurred while updating the case, ask TÆMBØ to check the console  ');
+	
+				interaction.reply({embeds: [errorEmbed] });
+			}
+		} else if (subCmd === "view") {
 			const caseid = interaction.options.getInteger("id");
 			const punishment = client.punishments._content.find(x => x.id === caseid);
 			if(!punishment) return interaction.reply({content: "A case with that ID wasn't found!"});
@@ -48,7 +72,7 @@ module.exports = {
 			return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		}
 	},
-	data: new SlashCommandBuilder().setName("case").setDescription("Views a member's cases, or a single case ID.").addSubcommand((optt)=>optt.setName("view").setDescription("Views a single case ID").addIntegerOption((opt)=>opt.setName("id").setDescription("The ID of the case.").setRequired(true))).addSubcommand((optt)=>optt.setName("member").setDescription("Views all a members cases").addUserOption((opt)=>opt.setName("user").setDescription("The user whomm's punishments you want to view.").setRequired(true)).addIntegerOption((opt)=>opt.setName("page").setDescription("The page number.").setRequired(false))),
+	data: new SlashCommandBuilder().setName("case").setDescription("Views a member's cases, or a single case ID.").addSubcommand((optt)=>optt.setName("view").setDescription("Views a single case ID").addIntegerOption((opt)=>opt.setName("id").setDescription("The ID of the case.").setRequired(true))).addSubcommand((optt)=>optt.setName("member").setDescription("Views all a members cases").addUserOption((opt)=>opt.setName("user").setDescription("The user whomm's punishments you want to view.").setRequired(true)).addIntegerOption((opt)=>opt.setName("page").setDescription("The page number.").setRequired(false))).addSubcommand((optt)=>optt.setName("update").setDescription("Updates a cases reason.").addIntegerOption((opt)=>opt.setName("case_id").setDescription("The ID Of The Case To Update.").setRequired(true)).addStringOption((opt)=>opt.setName("reason").setDescription("The New Reason For The Case.").setRequired(true))),
 	category: 'Moderation',
 	alias: ['cases'],
 };
