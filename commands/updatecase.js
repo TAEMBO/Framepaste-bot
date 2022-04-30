@@ -27,6 +27,8 @@ module.exports = {
             }
         });
 
+        interaction.reply(__dirname)
+
         fs.writeFileSync(require("./databases/punishments.json"), JSON.stringify(casesJson));
     }
 }
