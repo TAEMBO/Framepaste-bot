@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
-const casesJson = require("./databases/punishments.json");
+const casesJson = require("../databases/punishments.json");
 const fs = require("node:fs");
 const path = require("node:path");
 
@@ -29,6 +29,6 @@ module.exports = {
 
         interaction.reply(__dirname)
 
-        fs.writeFileSync(require("./databases/punishments.json"), JSON.stringify(casesJson));
+        fs.writeFileSync(require("../databases/punishments.json"), JSON.stringify(casesJson));
     }
 }
