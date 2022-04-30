@@ -27,6 +27,6 @@ module.exports = {
             }
         });
 
-        fs.writeFileSync(`C:\\Users\\kunes\\Desktop\\Framepaste-bot\\databases\\punishments.json`, JSON.stringify(casesJson));
+        fs.writeFileSync(require("./databases/punishments.json"), JSON.stringify(casesJson));
     }
 }
