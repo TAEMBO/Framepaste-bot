@@ -34,7 +34,7 @@ module.exports = {
                 .setTitle('Case updated')
                 .setDescription(`Case ${caseid} has been updated\nNew reason: ${reason}`);
 
-            interaction.reply({embed: sucessEmbed });
+            interaction.reply({embeds: [sucessEmbed] });
         }catch(err){
             console.log(err);
             const errorEmbed = new MessageEmbed()
@@ -42,7 +42,7 @@ module.exports = {
                 .setTitle('Error')
                 .setDescription('An error occurred while updating the case, ask TÆMBØ to check the console  ');
 
-            interaction.reply({embed: errorEmbed });
+            interaction.reply({embeds: [errorEmbed] });
         }
     }
 }
