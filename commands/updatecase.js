@@ -5,6 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 module.exports = {
+    disabled: true,
     data: new SlashCommandBuilder()
         .setName('updatecase')
         .setDescription('Update a case')
@@ -28,13 +29,13 @@ module.exports = {
         });
 
         try {
-            fs.writeFileSync(path.resolve('./databases/punishments.json'), JSON.stringify(casesJson));
+            await fs.writeFileSync(path.resolve('./databases/punishments.json'), JSON.stringify(casesJson));
             const sucessEmbed = new MessageEmbed()
                 .setColor('#00ff00')
                 .setTitle('Case updated')
                 .setDescription(`Case ${caseid} has been updated\nNew reason: ${reason}`);
 
-            interaction.reply({embeds: [sucessEmbed] });
+            await interaction.reply({embeds: [sucessEmbed] });
         }catch(err){
             console.log(err);
             const errorEmbed = new MessageEmbed()
