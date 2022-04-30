@@ -6,11 +6,8 @@ const path = require("node:path");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('update')
+        .setName('updatecase')
         .setDescription('Update a case')
-        .addSubcommand(a => a
-            .setName('case')
-            .setDescription('Update a case')
             .addIntegerOption(caseid => caseid
                 .setName('caseid')
                 .setDescription('The case ID')
@@ -18,7 +15,7 @@ module.exports = {
             .addStringOption(descriiption => descriiption
                 .setName('reason')
                 .setDescription('The new case reason')
-                .setRequired(true))),
+                .setRequired(true)),
     run: async (client, interaction) => {
 
         const caseid = interaction.options.getInteger('caseid');
