@@ -12,7 +12,7 @@ module.exports = {
         const acceptance = await client.channels.fetch(client.config.mainServer.channels.modlogs);
         const gameData = await frs.getGameDetails(games, "info", { language: ["en-US"] });
         const gams = await Object.values(gameData);
-        const msg = await acceptance.send({content: `<@&${client.config.mainServer.roles.botdeveloper}>`, embeds: [new MessageEmbed().setDescription(`${gams.map(x=>x.title).join(", ")}`).setTitle("New Game(s)!").setColor(client.config.embedColor)], components: [new MessageActionRow().addComponents(new MessageButton({label: "Accept", style: "SUCCESS", customId: "SEND"}), new MessageButton({label: "Deny", style: "DANGER", customId: "STOP"}))]})
+        const msg = await acceptance.send({content: `${client.config.eval.whitelist.map(x=>`<@${x}>`).join(", ")}`, embeds: [new MessageEmbed().setDescription(`${gams.map(x=>x.title).join(", ")}`).setTitle("New Game(s)!").setColor(client.config.embedColor)], components: [new MessageActionRow().addComponents(new MessageButton({label: "Accept", style: "SUCCESS", customId: "SEND"}), new MessageButton({label: "Deny", style: "DANGER", customId: "STOP"}))]})
         const filter = i => ["SEND", "STOP"].includes(i.customId) && client.hasModPerms(client, i.member) && i.message.id === msg.id;
         const collector = await acceptance.createMessageComponentCollector({ max: 1, filter, time: 18_000_000 });
         collector.on("collect", async (interaction) => {
