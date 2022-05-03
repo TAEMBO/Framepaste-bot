@@ -34,7 +34,22 @@ module.exports = {
 			{name: 'I don\'t want to write this', value: 'so here are examples\n\`\\CPU intel 9900k, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = intel (only intel CPUs will be searched)\nname search = 9900k (CPU name must include \"9900k\")\nfilter: price > 1000 (CPU msrp must be more than 1000 usd)\n\n\`,CPU 11900k\`\n1 search term\nno manufacturer, no filters\nnamesearch = 5700x (CPU name must include \"5700x\")\n\n\`\\CPU intel -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = intel\nmultiple search: list is active (\`-s\` also works)'})
 			return interaction.reply({embeds: [embed], allowedMentions: {repliedUser: false}, fetchReply: true});
 		} else if(subCmd === "search"){
-		const searchTerms = interaction.options.getString("query").split(",");
+		let searchTerms = interaction.options.getString("query").split(",");
+
+		const options = interaction.options.getString('options');
+
+		searchTerms = searchTerms.replaceAll('-sl', '').replaceAll('-s', '')
+
+		switch (options) {
+			case 'none':
+				break
+			case 'sl':
+				searchTerms = searchTerms + ' -sl'
+				break
+			case 's':
+				searchTerms = searchTerms + ' -s'
+				break
+		}
 
 		const multipleSearch = (() => {
 			const lastArg = searchTerms[searchTerms.length - 1];
@@ -248,5 +263,21 @@ module.exports = {
 		}
 	}
 	},
-	data: new SlashCommandBuilder().setName("cpu").setDescription("Finds a CPU.").addSubcommand((optt)=>optt.setName("help").setDescription("Shows you how to use the command.")).addSubcommand((optt)=>optt.setName("search").setDescription("Searches the db for the queried CPU.").addStringOption((opt)=>opt.setName("query").setDescription("The CPU to query for.").setRequired(true)))
+	data: new SlashCommandBuilder()
+		.setName("cpu").
+		setDescription("Finds a CPU.")
+		.addSubcommand((optt)=>optt.setName("help")
+			.setDescription("Shows you how to use the command."))
+		.addSubcommand((optt)=>optt
+			.setName("search").setDescription("Searches the db for the queried CPU.")
+			.addStringOption((opt)=>opt.setName("query")
+				.setDescription("The CPU to query for.")
+				.setRequired(true))
+			.addStringOption(options => options
+				.setName('options')
+				.setDescription('Search options for the commands')
+				.addChoice('sl - searches and gives a list and lets you chose from it', 'sl')
+				.addChoice('s - searches and gives you a list without the option to chose', 's')
+				.addChoice('none - searches only for the specific cpu you put', 'none')
+				.setRequired(true)))
 }
