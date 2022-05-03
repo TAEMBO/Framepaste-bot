@@ -1,6 +1,26 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
 	run: (client, interaction) => {
+
+		let searchTerms = interaction.options.getString("query")
+
+		const options = interaction.options.getString('options');
+
+		searchTerms = searchTerms.toString().replaceAll('-sl', '').replaceAll('-s', '')
+
+		switch (options) {
+			case 'none':
+				break
+			case 'sl':
+				searchTerms = searchTerms + ' -sl'
+				break
+			case 's':
+				searchTerms = searchTerms + ' -s'
+				break
+		}
+
+		searchTerms = searchTerms.split(",")
+
 		client.cpuCommand(client, interaction, "intel");
 	},
 	data: new SlashCommandBuilder()
