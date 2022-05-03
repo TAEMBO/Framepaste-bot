@@ -113,7 +113,24 @@ class YClient extends Client {
 	} else if(subCmd === "search"){
 	const manufacturer = `${manufacture}`.toUpperCase();
 	const color = manufacturer === 'INTEL' ? 2793983 : 13582629;
-	const search = interaction.options.getString("query").toLowerCase().split(',');
+        let search = interaction.options.getString("query")
+
+        const options = interaction.options.getString('options');
+
+        search = search.toString().replaceAll('-sl', '').replaceAll('-s', '')
+
+        switch (options) {
+            case 'none':
+                break
+            case 'sl':
+                search = search + ' -sl'
+                break
+            case 's':
+                search = search + ' -s'
+                break
+        }
+
+        search = search.toLowerCase().split(",")
 	let matches = new client.collection();
 	let nameSearch = false;
 	let filters = [];

@@ -51,7 +51,7 @@ module.exports = {
 				break
 		}
 
-		searchTerms = searchTerms.split(",")
+		searchTerms = searchTerms.toLowerCase().split(",")
 
 		const multipleSearch = (() => {
 			const lastArg = searchTerms[searchTerms.length - 1];
