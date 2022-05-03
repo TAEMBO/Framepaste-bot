@@ -38,7 +38,7 @@ module.exports = {
 
 		const options = interaction.options.getString('options');
 
-		searchTerms = searchTerms.replaceAll('-sl', '').replaceAll('-s', '')
+		searchTerms = searchTerms.toString().replaceAll('-sl', '').replaceAll('-s', '')
 
 		switch (options) {
 			case 'none':
