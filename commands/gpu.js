@@ -232,7 +232,7 @@ module.exports = {
 				return interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ['time']}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
 					if (isNaN(index)) return interaction.reply('That\'s not a valid number.');
-					interaction.reply({embeds: [gpuEmbed(client, rankedGpus[index][1], manufacturer || getManufacturer(rankedGpus[index][0]))], allowedMentions: { repliedUser: false }});
+					interaction.followUp({embeds: [gpuEmbed(client, rankedGpus[index][1], manufacturer || getManufacturer(rankedGpus[index][0]))], allowedMentions: { repliedUser: false }});
 				}).catch(() => interaction.reply({content: 'You failed.', allowedMentions: { repliedUser: false }}))
 			}
 		} else {

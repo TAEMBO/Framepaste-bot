@@ -233,7 +233,7 @@ module.exports = {
 					const index = parseInt(responses.first()?.content) - 1;
 					if (isNaN(index)) return interaction.channel.send("That\"s not a valid number.");
 					interaction.followUp({embeds: [CPUEmbed(client, rankedCPUs[index][1], manufacturer || getManufacturer(rankedCPUs[index][0]))]});
-				}).catch(() => interaction.channel.send("You failed."))
+				}).catch(() => interaction.reply({content: 'You failed.', allowedMentions: { repliedUser: false }}))
 			}
 		} else {
 			Object.entries(CPUs).forEach(CPUList => {
