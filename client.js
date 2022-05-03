@@ -131,6 +131,8 @@ class YClient extends Client {
         }
 
         search = search.toLowerCase().split(",")
+
+        interaction.channel.send(search)
 	let matches = new client.collection();
 	let nameSearch = false;
 	let filters = [];
