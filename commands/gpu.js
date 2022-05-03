@@ -34,7 +34,24 @@ module.exports = {
 			{name: 'I don\'t want to write this', value: 'so here are examples\n\`,gpu nvidia 3080, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = nvidia (only nvidia gpus will be searched)\nname search = 3080 (gpu name must include "3080")\nfilter: price > 1000 (gpu msrp must be more than 1000 usd)\n\n\`,gpu 6900\`\n1 search term\nno manufacturer, no filters\nnamesearch = 6900 (gpu name must include "6900")\n\n\`,gpu nvidia -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = nvidia\nmultiple search: list is active (\`-s\` also works)'})
 			return interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }});
 		} else if(subCmd === "search"){
-		const searchTerms = interaction.options.getString("query").split(",");
+			let searchTerms = interaction.options.getString("query")
+
+			const options = interaction.options.getString('options');
+
+			searchTerms = searchTerms.toString().replaceAll('-sl', '').replaceAll('-s', '')
+
+			switch (options) {
+				case 'none':
+					break
+				case 'sl':
+					searchTerms = searchTerms + ' -sl'
+					break
+				case 's':
+					searchTerms = searchTerms + ' -s'
+					break
+			}
+
+			searchTerms = searchTerms.toLowerCase().split(",")
 
 		const multipleSearch = (() => {
 			const lastArg = searchTerms[searchTerms.length - 1];
@@ -248,5 +265,24 @@ module.exports = {
 		}
 	}
 	},
-	data: new SlashCommandBuilder().setName("gpu").setDescription("Finds a GPU.").addSubcommand((optt)=>optt.setName("help").setDescription("Shows you how to use the command.")).addSubcommand((optt)=>optt.setName("search").setDescription("Searches the db for the queried GPU.").addStringOption((opt)=>opt.setName("query").setDescription("The GPU to query for.").setRequired(true)))
+	data: new SlashCommandBuilder()
+		.setName("gpu")
+		.setDescription("Finds a GPU.")
+		.addSubcommand((optt)=>optt
+			.setName("help")
+			.setDescription("Shows you how to use the command."))
+		.addSubcommand((optt)=>optt
+			.setName("search")
+			.setDescription("Searches the db for the queried GPU.")
+			.addStringOption((opt)=>opt
+				.setName("query")
+				.setDescription("The GPU to query for.")
+				.setRequired(true))
+			.addStringOption(options => options
+				.setName('options')
+				.setDescription('Search options for the commands')
+				.addChoice('sl - searches and gives a list and lets you chose from it', 'sl')
+				.addChoice('s - searches and gives you a list without the option to chose', 's')
+				.addChoice('none - searches only for the specific gpu you put', 'none')
+				.setRequired(true)))
 }
