@@ -34,7 +34,7 @@ module.exports = {
 			{name: 'I don\'t want to write this', value: 'so here are examples\n\`\\CPU intel 9900k, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = intel (only intel CPUs will be searched)\nname search = 9900k (CPU name must include \"9900k\")\nfilter: price > 1000 (CPU msrp must be more than 1000 usd)\n\n\`,CPU 11900k\`\n1 search term\nno manufacturer, no filters\nnamesearch = 5700x (CPU name must include \"5700x\")\n\n\`\\CPU intel -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = intel\nmultiple search: list is active (\`-s\` also works)'})
 			return interaction.reply({embeds: [embed], allowedMentions: {repliedUser: false}, fetchReply: true});
 		} else if(subCmd === "search"){
-		let searchTerms = interaction.options.getString("query").split(",");
+		let searchTerms = interaction.options.getString("query")
 
 		const options = interaction.options.getString('options');
 
@@ -50,6 +50,8 @@ module.exports = {
 				searchTerms = searchTerms + ' -s'
 				break
 		}
+
+		searchTerms = searchTerms.split(",")
 
 		const multipleSearch = (() => {
 			const lastArg = searchTerms[searchTerms.length - 1];
