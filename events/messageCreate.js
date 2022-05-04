@@ -154,7 +154,7 @@ module.exports = {
 		const BLACKLISTED_CHANNELS = [
 			client.config.mainServer.channels.botcommands, /* bot-commands */
 			"915420466238349322", /* mod-commands */
-			client.config.mainServer.channel.modlogs, /* mod-logs */
+			client.config.mainServer.channels.modlogs, /* mod-logs */
 			client.config.mainServer.channels.fpbtesting /* fpb-testing */
 		];
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
