@@ -12,11 +12,11 @@ module.exports = {
             collector.on("collect", async (int) => {
                 if(int.customId === "Yes"){
                     member.roles.remove(client.config.mainServer.roles.helper);
-                    interaction.deferUpdate()
+                    await interaction.deferUpdate();
                     msg.update({embeds: [new client.embed().setDescription(`<@${member.user.id}> has been removed from the <@&${client.config.mainServer.roles.helper}> role`).setColor(client.config.embedColor)], components: []})
                 } else if(int.customId === "No"){
                     msg.update({embeds: [new client.embed().setDescription(`Command canceled`).setColor(client.config.embedColor)], components: []});
-                    interaction.deferUpdate()
+                    await interaction.deferUpdate();
                 }
             });
         } else {
