@@ -267,22 +267,22 @@ module.exports = {
 	},
 	data: new SlashCommandBuilder()
 		.setName("gpu")
-		.setDescription("Finds a GPU.")
+		.setDescription("Finds a GPU")
 		.addSubcommand((optt)=>optt
 			.setName("help")
-			.setDescription("Shows you how to use the command."))
+			.setDescription("Shows you how to use the command"))
 		.addSubcommand((optt)=>optt
 			.setName("search")
-			.setDescription("Searches the db for the queried GPU.")
+			.setDescription("Searches GPUs")
 			.addStringOption((opt)=>opt
 				.setName("query")
-				.setDescription("The GPU to query for.")
+				.setDescription("The GPU(s) to search for")
 				.setRequired(true))
 			.addStringOption(options => options
 				.setName('options')
-				.setDescription('Search options for the commands')
-				.addChoice('sl - searches and gives a list and lets you chose from it', 'sl')
-				.addChoice('s - searches and gives you a list without the option to chose', 's')
-				.addChoice('none - searches only for the specific gpu you put', 'none')
+				.setDescription('Search options')
+				.addChoice('Search a list you can view', 'sl')
+				.addChoice('Search a list you can choose from', 's')
+				.addChoice('Search for specific GPU specs', 'none')
 				.setRequired(true)))
 }
