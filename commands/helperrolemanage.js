@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder, ButtonBuilder } = require("@discordjs/builders");
 const { MessageButton, MessageActionRow } = require("discord.js");
 
 module.exports = {
@@ -6,15 +6,17 @@ module.exports = {
         if(!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command.`, allowedMentions: {roles: false}})
         const member = interaction.options.getMember("member");
         if(member.roles.cache.has(client.config.mainServer.roles.helper)){
-            const msg = await interaction.reply({content: "This member already has the helper role, would you like me to remove it from them?", fetchReply: true, components: [new MessageActionRow().addComponents(new MessageButton().setCustomId(`Yes`).setStyle("SUCCESS").setLabel("Confirm"), new MessageButton().setCustomId(`No`).setStyle("DANGER").setLabel("Cancel"))]});
+            const msg = await interaction.reply({embeds: [new client.embed().setDescription(`This user already has the <@&${client.config.mainServer.roles.helper}> role, do you want to remove it from them?`).setColor(client.config.embedColor)], fetchReply: true, components: [new MessageActionRow().addComponents(new MessageButton().setCustomId(`Yes`).setStyle("SUCCESS").setLabel("Confirm"), new MessageButton().setCustomId(`No`).setStyle("DANGER").setLabel("Cancel"))]});
             const filter = (i) => ["Yes", "No"].includes(i.customId) && i.user.id === interaction.user.id;
             const collector = interaction.channel.createMessageComponentCollector({filter, max: 1, time: 30000});
             collector.on("collect", async (int) => {
                 if(int.customId === "Yes"){
                     member.roles.remove(client.config.mainServer.roles.helper);
-                    int.update({content: `Ok, I have Removed The Helper Role From <@${member.user.id}>`, components: []})
+                    interaction.deferUpdate()
+                    msg.update({embeds: [new client.embed().setDescription(`<@${member.user.id}> has been removed from the <@&${client.config.mainServer.roles.helper}> role`).setColor(client.config.embedColor)], components: []})
                 } else if(int.customId === "No"){
-                    int.update({content: "Alrighty, I have canceled the command!", components: []});
+                    msg.update({embeds: [new client.embed().setDescription(`Command canceled`).setColor(client.config.embedColor)], components: []});
+                    interaction.deferUpdate()
                 }
             });
         } else {
