@@ -6,6 +6,16 @@ module.exports = {
         const msg = await interaction.reply({content: "Pulling from repo...", allowedMentions: {repliedUser: false}, fetchReply: true});
         require("child_process").exec("git pull")
         msg.edit({content: "Pulled from repo"});
+
+        const options = interaction.options.getString('options');
+
+        switch (options) {
+          case 'ur':
+            msg.edit({content: "Restarting..."}).then(async ()=> eval(process.exit(-1)));
+            return
+          case 'u':
+            return;
+        }
       },
-    data: new SlashCommandBuilder().setName("update").setDescription("Pull from GitHub repository to live bot")
+    data: new SlashCommandBuilder().setName("update").setDescription("Pull from GitHub repository to live bot").addStringOption(options => options.setName('options').addChoice('Update and restart', 'ur').addChoice('Update', 'u').setRequired(true))
 };
