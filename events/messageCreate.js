@@ -152,10 +152,10 @@ module.exports = {
 		}
 
 		const BLACKLISTED_CHANNELS = [
-			"902524214718902332", /* bot-commands */
+			client.config.mainServer.channels.botcommands, /* bot-commands */
 			"915420466238349322", /* mod-commands */
-			"879581805529948180", /* mod-logs */
-			"940726714915495946" /* fpb-testing */
+			client.config.mainServer.channel.modlogs, /* mod-logs */
+			client.config.mainServer.channels.fpbtesting /* fpb-testing */
 		];
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id){ 
@@ -180,7 +180,7 @@ module.exports = {
 			if(nextRoleReq.eligible){
 			message.member.roles.add(nextRole);
 			message.member.roles.remove(lastRole);
-			client.channels.cache.get(client.config.mainServer.channels.bot_commands).send({content: `<@${message.author.id}> has received the <@&${nextRole}> role.`, allowedMentions: {roles: false}});
+			client.channels.cache.get(client.config.mainServer.channels.botcommands).send({content: `<@${message.author.id}> has received the <@&${nextRole}> role.`, allowedMentions: {roles: false}});
 			}
 			}
 		}
