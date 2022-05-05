@@ -191,7 +191,7 @@ module.exports = {
 			const limit = 64;
 			const embed = new client.embed()
 				.setTitle("Choose CPU")
-				.setDescription("Your search returned many CPUs. Choose one and respond with the corresponding number. (20s)"))
+				.setDescription("Your search returned many CPUs. Choose one and respond with the corresponding number. (20s)")
 			if (manufacturer === "intel") embed.setColor(2793983);
 			else if (manufacturer === "amd") embed.setColor(13582629);
 			else embed.setColor(client.config.embedColor);
