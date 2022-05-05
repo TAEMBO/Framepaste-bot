@@ -38,13 +38,10 @@ module.exports = {
 
 		const options = interaction.options.getString('options');
 
-		searchTerms = searchTerms.toString().replaceAll('-sl', '').replaceAll('-s', '')
+		searchTerms = searchTerms.toString().replaceAll('-s', '')
 
 		switch (options) {
 			case 'none':
-				break
-			case 'sl':
-				searchTerms = searchTerms + ' -sl'
 				break
 			case 's':
 				searchTerms = searchTerms + ' -s'
@@ -58,9 +55,6 @@ module.exports = {
 			if (lastArg.endsWith("-s")) {
 				searchTerms[searchTerms.length - 1] = lastArg.slice(0, -2).trim();
 				return "s";
-			} else if (lastArg.endsWith("-sl")) {
-				searchTerms[searchTerms.length - 1] = lastArg.slice(0, -3).trim();
-				return "sl";
 			} else return false;
 		})();
 
@@ -197,7 +191,7 @@ module.exports = {
 			const limit = 64;
 			const embed = new client.embed()
 				.setTitle("Choose CPU")
-				.setDescription("Your search returned many CPU\"s." +( multipleSearch === "s" ? " Choose one and respond with the corresponding number. (20s)" : " Here is a list of them."))
+				.setDescription("Your search returned many CPUs. Choose one and respond with the corresponding number. (20s)"))
 			if (manufacturer === "intel") embed.setColor(2793983);
 			else if (manufacturer === "amd") embed.setColor(13582629);
 			else embed.setColor(client.config.embedColor);
@@ -227,14 +221,12 @@ module.exports = {
 				embed.setFooter({text: `Showing ${limit} of ${rankedCPUs.length} CPUs.`})
 			}
 			interaction.reply({embeds: [embed]});
-			if (multipleSearch === "s") {
 				const filter = x => x.author.id === interaction.user.id && parseInt(x.content)
 				return interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ["time"]}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
 					if (isNaN(index)) return interaction.channel.send("That\"s not a valid number.");
 					interaction.followUp({embeds: [CPUEmbed(client, rankedCPUs[index][1], manufacturer || getManufacturer(rankedCPUs[index][0]))]});
-				}).catch(() => interaction.followUp({content: 'You failed.', allowedMentions: { repliedUser: false }}))
-			}
+				})
 		} else {
 			Object.entries(CPUs).forEach(CPUList => {
 				if (manufacturer) {
@@ -281,7 +273,6 @@ module.exports = {
 			.addStringOption(options => options
 				.setName('options')
 				.setDescription('Search options')
-				.addChoice('Search a list you can view', 'sl')
 				.addChoice('Search a list you can choose from', 's')
 				.addChoice('Search for specific CPU specs', 'none')
 				.setRequired(true)))
