@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, Faces } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
 	run: (client, interaction) => {
