@@ -13,6 +13,7 @@ module.exports = {
                 interaction.reply('Giveaway rerolled!');
             })
             .catch((e) => {
+                interaction.reply(e);
                 console.log(e);
             });
     },
