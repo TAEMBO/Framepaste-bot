@@ -11,7 +11,7 @@ module.exports = {
             interaction.reply('Unfroze server')     
             
          } else {
-            interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command`, allowedMentions: {roles: false}})
+            interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command`, allowedMentions: {roles: false}})
         }
     },
     data: new SlashCommandBuilder().setName("unfreeze").setDescription("Unlock the server for causals.")

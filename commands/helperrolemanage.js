@@ -3,7 +3,7 @@ const { MessageButton, MessageActionRow } = require("discord.js");
 
 module.exports = {
 	run: async (client, interaction) => {
-        if(!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command.`, allowedMentions: {roles: false}})
+        if(!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command.`, allowedMentions: {roles: false}})
         const member = interaction.options.getMember("member");
         if(member.roles.cache.has(client.config.mainServer.roles.helper)){
             const msg = await interaction.reply({embeds: [new client.embed().setDescription(`This user already has the <@&${client.config.mainServer.roles.helper}> role, do you want to remove it from them?`).setColor(client.config.embedColor)], fetchReply: true, components: [new MessageActionRow().addComponents(new MessageButton().setCustomId(`Yes`).setStyle("SUCCESS").setLabel("Confirm"), new MessageButton().setCustomId(`No`).setStyle("DANGER").setLabel("Cancel"))]});

@@ -379,8 +379,8 @@ class YClient extends Client {
         return milliseconds;
     }
     async punish(client, interaction, type) {
-        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
-        if (type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.minimod)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
+        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
+        if (type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.minimod)) return interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
         const member = interaction.options.getMember("member");
         const time = interaction.options.getString("time");
         const reason = interaction.options.getString("reason") ?? "None";
@@ -392,7 +392,7 @@ class YClient extends Client {
         }
     };
     async unPunish(client, interaction) {
-        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${interaction.guild.roles.cache.get(client.config.mainServer.roles.mod).id}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
+        if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
         const punishment = client.punishments._content.find(x => x.id === `${interaction.options.getInteger("case_id")}`);
         if (!punishment) return interaction.reply({content: "that isn't a valid case ID.", ephemeral: true});
         if (punishment.type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.minimod)) return interaction.reply({content: 'Trial moderators can only remove warnings.', ephemeral: true, allowedMentions: {roles: false}});
