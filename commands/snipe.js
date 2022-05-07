@@ -5,7 +5,7 @@ module.exports = {
         .setDescription("Gets the last deleted message in the channel."),
     run: (client, interaction) => {
 
-        let values = Array.from(client.snipes.values())
+        let values = Array.from(client.snipes)
 
         interaction.channel.reply(values.toString())
 
