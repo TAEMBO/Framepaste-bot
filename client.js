@@ -11,8 +11,7 @@ class YClient extends Client {
             intents: Object.keys(Discord.Intents.FLAGS),
             partials: ["MESSAGE", "REACTION", "CHANNEL"],
             disableEveryone: true
-        })
-        this.invites = new Map();
+        });        this.invites = new Map();
         this.config = require("./config.json");
         this.tokens = require("./tokens.json");
         this.frs = new FreeStuffApi({key: this.tokens.fsApiKey});
@@ -57,6 +56,11 @@ class YClient extends Client {
         this.lastGames = [];
         if(this.config.botSwitches.API) require("./API.js")(this);
         require("mongoose").connect(this.tokens.mongo_db);
+        this.addListener("log", async function(data){
+            const channel = await this.channels.fetch(this.config.mainServer.channels.modlogs);
+            channel.send(data);
+        });
+
     }
     async init(){
         this.login(this.tokens.token);
