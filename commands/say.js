@@ -20,7 +20,8 @@ module.exports = {
 
 		let logEmbed = new MessageEmbed()
 			.setTitle('Wisdom')
-			.setDescription(`User: ${interaction.user.tag}\nsaid: ${message}`)
+			.setDescription(`**User:** ${interaction.user.tag}\n**said:** ${message}`)
+			.setColor(client.config.embedColor)
 
 		client.emit('log', {embeds: [logEmbed]});
 	},
