@@ -14,7 +14,7 @@ module.exports = {
 			return;
 		}
 
-		await interaction.channel.send({content: message, mentions: []});
+		await interaction.channel.send({content: message, allowedMentions: { parse: [] }});
 		await interaction.deleteReply();
 
 		client.emit('log', {embeds: [new MessageEmbed().setTitle('Wisdom').setDescription(`**User:** ${interaction.user.tag}\n**said:** ${message}`).setColor(client.config.embedColor)]});
