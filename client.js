@@ -289,16 +289,6 @@ class YClient extends Client {
         });
         return embed;
     };
-    format24hClock(timestamp, includeSeconds = false) {
-        if (!(timestamp instanceof Date)) timestamp = new Date(timestamp);
-        let text = '';
-        text += ('0' + timestamp.getUTCHours()).slice(-2) + ':';
-        text += ('0' + timestamp.getUTCMinutes()).slice(-2);
-        if (includeSeconds) {
-            text += '.' + ('0' + timestamp.getUTCSeconds()).slice(-2)
-        }
-        return text;
-    };
     formatPunishmentType(punishment, client, cancels) {
         if (punishment.type === 'removeOtherPunishment') {
             cancels ||= this.punishments._content.find(x => x.id === punishment.cancels)
@@ -359,25 +349,6 @@ class YClient extends Client {
         // send embed in modlog channel
         client.channels.cache.get(client.config.mainServer.channels.caselogs).send({embeds: [embed]});
     };
-    parseTime(string) {
-        if (!string) return 0;
-        const expressions = string.split(' ');
-        let milliseconds = 0;
-        const timeNames = require("./timeNames.js");
-        expressions.forEach(expression => {
-            const int = parseInt(expression);
-            const identifier = expression.match(/[A-Z]/gi).join('').toLowerCase();
-            if (!int || !identifier) return;
-            const bestMatch = timeNames.find(x => x.name.startsWith(identifier));
-            if (bestMatch) { // indentifier is a partial or whole timeName
-                if (identifier === 'm') { // month and minute both start with m, if m is provided, prefer minutes
-                    milliseconds += int * timeNames.find(x => x.name === 'minute').length;
-                } else milliseconds += int * bestMatch.length;
-            }
-            return;
-        });
-        return milliseconds;
-    }
     async punish(client, interaction, type) {
         if (!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
         if (type !== 'warn' && interaction.member.roles.cache.has(client.config.mainServer.roles.minimod)) return interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command.`, ephemeral: true, allowedMentions: {roles: false}});
@@ -402,10 +373,4 @@ class YClient extends Client {
     };
 }
 
-class MusicPlayer extends EventEmitter {
-    constructor(client) {
-        super(client);
-        this.client = client;
-    }
-}
 module.exports = YClient;

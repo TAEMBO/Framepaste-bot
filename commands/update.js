@@ -11,7 +11,8 @@ module.exports = {
 
         switch (options) {
           case 'ur':
-            msg.edit({content: "Restarting..."}).then(async ()=> eval(process.exit(-1)));
+            msg.edit({content: "Restarting..."})
+            client.channels.cache.get(client.config.mainServer.channels.modlogs).send({embeds: [new client.embed().setTitle(`**Update and restart issued by ${interaction.user.tag}**`).setColor(client.config.embedColor).setTimestamp()]}).then(async ()=> eval(process.exit(-1)))
             return
           case 'u':
             return;
