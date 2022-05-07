@@ -5,27 +5,15 @@ module.exports = {
 		interaction.deferReply();
 
 		let message = interaction.options.getString("wisdom")
-		let result;
 
-		switch (message) {
-			case "everyone":
-				result = {content: 'bingus no trying to loophole', ephemeral: true}
-				break
-			case "http":
-				result = {content: 'bingus no trying to loophole with links', ephemeral: true}
-				break
-			default:
-				result = null
-				break
+		if(client.bannedWords.includes(message.toLowerCase()) || message.includes('http') || message.includes('discord.gg')){
+			await interaction.followUp({content: "Bingus no trying to loophole!", ephemeral: true});
+			await interaction.deleteReply();
+			return;
 		}
 
-		if(result){
-			await interaction.followUp(result)
-			await interaction.deleteReply()
-		}else{
-			interaction.channel.send({content: message})
-			await interaction.deleteReply()
-		}
+		await interaction.channel.send({content: message, mentions: []});
+		await interaction.deleteReply();
 
 	},
 	data: new SlashCommandBuilder().setName("say").setDescription("You are the bot").addStringOption((opt)=>opt.setName("wisdom").setDescription("dorime to what computation will bring us").setRequired(true))
