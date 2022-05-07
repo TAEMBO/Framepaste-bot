@@ -8,7 +8,7 @@ module.exports = {
 		const message = interaction.options.getString("wisdom");
 
 		if(client.bannedWords._content.includes(message.replace(" ", "").toLowerCase()) || message.replace(" ", "").includes('http') || message.replace(" ", "").includes('discord.gg')){
-			await interaction.editReply({content: "Bingus no trying to loophole!", ephemeral: true});
+			await interaction.followUp({content: "Bingus no trying to loophole!", ephemeral: true});
 			return;
 		}
 
