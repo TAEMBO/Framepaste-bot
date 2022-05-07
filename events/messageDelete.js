@@ -4,7 +4,7 @@ module.exports = {
     tracker: false,
     frs: false,
     execute: async (client, msg) => {
-        client.snipes.set(msg.channel.id, msg);
+        client.snipes.set(msg.channel.id, `${msg.content}-${msg.author}-${msg.channel.id}`);
         const channel = await client.channels.fetch(require("../config.json").mainServer.channels.modlogs);
         const dbEntry = client.starboard._content[msg.id];
         if(dbEntry?.e) {
