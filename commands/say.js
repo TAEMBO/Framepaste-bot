@@ -10,6 +10,7 @@ module.exports = {
 
 		if(client.bannedWords._content.includes(message.replace(" ", "").toLowerCase()) || message.replace(" ", "").includes('http') || message.replace(" ", "").includes('discord.gg')){
 			await interaction.followUp({content: "Bingus no trying to loophole!", ephemeral: true});
+			await interaction.deleteReply();
 			return;
 		}
 
