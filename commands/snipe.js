@@ -7,7 +7,7 @@ module.exports = {
 
         let values = Array.from(client.snipes)
 
-        interaction.channel.reply(values.toString())
+        interaction.channel.reply(typeof values[1].content)
 
     }
 }
