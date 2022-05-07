@@ -7,7 +7,7 @@ module.exports = {
 
 		let message = interaction.options.getString("wisdom")
 
-		if(client.bannedWords.includes(message.toLowerCase()) || message.includes('http') || message.includes('discord.gg')){
+		if(client.bannedWords._content.includes(message.toLowerCase()) || message.includes('http') || message.includes('discord.gg')){
 			await interaction.followUp({content: "Bingus no trying to loophole!", ephemeral: true});
 			await interaction.deleteReply();
 			return;
