@@ -3,7 +3,7 @@ const {MessageEmbed} = require("discord.js");
 
 module.exports = {
 	run: async (client, interaction) => {
-		interaction.deferReply();
+		await interaction.deferReply();
 
 		let message = interaction.options.getString("wisdom")
 
