@@ -12,7 +12,7 @@ module.exports = {
         } else if(subCmd === "reroll"){
         const id = interaction.options.getString("id");
         const giveaway = await client.giveaway.get(id);
-        if (!giveaway) return interaction.reply({content: '<:ohno:833150939275722782> That giveaway could not be found. Make sure you are using the giveaway ID or message ID of the giveaway.'});
+        if (!giveaway) return interaction.reply({content: 'Give a real giveaway ID dumbass.'});
         const channel = interaction.guild.channels.cache.get(giveaway.channel);
         const message = await channel.messages.fetch(giveaway.message);
         if (!message) return interaction.reply({content: "That giveaway doesn't exist"});
