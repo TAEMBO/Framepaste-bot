@@ -32,9 +32,7 @@ client.on("ready", async () => {
 	const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
     eventFiles.forEach((file)=>{
     const event = require(`./events/${file}`);
-    if(event.giveaway){
-	client.giveawaysManager.on(event.name, async (...args) => event.execute(...args));
-    } else if(event.frs){
+    if(event.frs){
 		client.frs.on(event.name, async (...args) => event.execute(client, client.frs, ...args));
 	} else {
 	client.on(event.name, async (...args) => event.execute(client, ...args));

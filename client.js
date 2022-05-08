@@ -5,6 +5,7 @@ const {FreeStuffApi} = require("freestuff");
 const database = require("./database");
 const {GiveawaysManager} = require("discord-giveaways");
 const EventEmitter = require("node:events");
+const gws = require("./gw.js");
 class YClient extends Client {
     constructor(options){
         super({
@@ -27,16 +28,7 @@ class YClient extends Client {
         this.memberCount_LastGuildFetchTimestamp = 0;
         this.starLimit = 3;
         this.selfStarAllowed = false;
-        this.giveawaysManager = new GiveawaysManager(this, {
-            storage: "./databases/giveaways.json",
-            updateCountdownEvery: 5000,
-            default: {
-                botsCanWin: false,
-                embedColor: this.config.embedColor,
-                embedColorEnd: 14495300,
-                reaction: "🎉"
-            }
-        });
+        this.giveaway = new gws(client);
         this.games = new Discord.Collection();
         this.commands = new Discord.Collection();
         this.registery = [];
