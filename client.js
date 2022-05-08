@@ -28,7 +28,7 @@ class YClient extends Client {
         this.memberCount_LastGuildFetchTimestamp = 0;
         this.starLimit = 3;
         this.selfStarAllowed = false;
-        this.giveaway = new gws(client);
+        this.giveaway = new gws(this);
         this.games = new Discord.Collection();
         this.commands = new Discord.Collection();
         this.registery = [];
