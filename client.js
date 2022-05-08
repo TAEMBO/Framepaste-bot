@@ -3,7 +3,6 @@ const Discord = require("discord.js");
 const fs = require("node:fs");
 const {FreeStuffApi} = require("freestuff");
 const database = require("./database");
-const {GiveawaysManager} = require("discord-giveaways");
 const EventEmitter = require("node:events");
 const gws = require("./gw.js");
 class YClient extends Client {
