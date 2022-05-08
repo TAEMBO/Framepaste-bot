@@ -55,14 +55,8 @@ module.exports = {
     if (commandFile) {
         if(commandFile.disabled) return interaction.reply({content: 'This command is disabled.', ephemeral: true});
         console.log(`${interaction.user.tag} used /${interaction.commandName} in ${interaction.channel.name}`);
-
-        try {
-            commandFile.run(client, interaction);
-            commandFile.uses ? commandFile.uses++ : commandFile.uses = 1;
-        } catch (error) {
-            console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
-            return interaction.reply("An error occured while executing that command.");
-        }
+        commandFile.run(client, interaction);
+        commandFile.uses ? commandFile.uses++ : commandFile.uses = 1;
     }
    }
    }
