@@ -3,6 +3,7 @@ const YClient = require("./client");
 const client = new YClient();
 client.init();
 const fs = require("fs");
+const {Collection} = require("discord.js");
 
 console.log(client.config.botSwitches)
 
@@ -49,6 +50,9 @@ client.modmailClient.on("ready", async () => {
 	}, 60000);
 	console.log(`Modmail Bot active as ${client.modmailClient.user.tag}`);
 });
+
+//snipe ???
+client.snipes = new Collection();
 
 // tic tac toe statistics database
 Object.assign(client.tictactoeDb, {
