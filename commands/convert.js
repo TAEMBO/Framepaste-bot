@@ -400,7 +400,7 @@ module.exports = {
 		// let's define the > or to, that they're using
 		const usedSeparator = converter.includes('>') ? '>' : 'to';
 		const starters = converter.slice(1, converter.indexOf(converter.find(x => x.includes(usedSeparator)))).join(' ').split(',').map(starter => {
-			starter = starter.trim();
+			const starter = starters.trim();
 
 			// fraction
 			if (starter.includes('/') || starter.includes(' per ')) {
