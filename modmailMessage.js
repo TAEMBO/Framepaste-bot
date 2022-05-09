@@ -22,7 +22,7 @@ module.exports = async (message, modmailClient, client) => {
 						await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail sent').setColor(client.config.embedColor)], components: []});
 						const caseId = (Date.now() + '').slice(0, -5); // case id is unix timestamp with accuracy of ~1 minute
 						const unimportant = message.content.toLowerCase().startsWith('[unimportant]') || message.content.toLowerCase().startsWith('unimportant'); // bool, is modmail unimportant?
-						await interaction.message.edit({embeds: [new client.embed().setTitle(':white_check_mark: Modmail received!').setDescription('Wait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to staff.').setFooter({text: `Case ${caseId}`}).setColor(7844437)], components: []}); // inform user that bot has received modmail
+						await interaction.message.edit({embeds: [new client.embed().setTitle(':white_check_mark: Modmail received!').setDescription('Wait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to staff.').setFooter({text: `Case ${caseId}`}).setColor(client.config.embedColorGreen)], components: []}); // inform user that bot has received modmail
 						modmailClient.threads.set(message.author.id, { messages: [], caseId, startTime: new Date() }); // create thread
 						modmailChannel.send({content: `${unimportant ? ' ' : client.config.mainServer.modmailPing.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}`, embeds: [new client.embed().setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setTitle(`New Modmail | Case ${caseId}`).setDescription(`<@${message.author.id}>\nSession opened for ${unimportant ? '20' : '10'} minutes.`).setColor(client.config.embedColor)]}); // inform mods of new modmail, show instructions
 						modmailChannel.send(`${message.content + '\n' + (message.attachments.first()?.url || '')}`)
@@ -54,7 +54,7 @@ module.exports = async (message, modmailClient, client) => {
 								const replyCaseId = args[1];
 								if (replyCaseId !== caseId) return; // replied to different convo than this
 								const reason = args.slice(2).join(' ');
-								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`With${reason ? ` reason: ${reason}` : 'out a reason.'}`).setFooter({text: `${modReply.member.roles.highest.name} | ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(14495300)]});
+								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`With${reason ? ` reason: ${reason}` : 'out a reason.'}`).setFooter({text: `${modReply.member.roles.highest.name} | ${modReply.author.tag}`, iconURL: `${modReply.member.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setColor(client.config.embedColorRed)]});
 								await modReply.react('✅');
 								modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} **M** (<@${modReply.author.id}>) Ended session. Reason: ${reason}`); // R = recipient, M = moderator
 								return modReplyCollector.stop();
@@ -81,12 +81,12 @@ module.exports = async (message, modmailClient, client) => {
 							modmailChannel.send({embeds: [embed]});
 							// remove from threads collection
 							if (!modmailClient.threads.get(message.author.id).messages.some(x => x.includes(' **M** ('))) {
-								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`The Modmail session ended automatically with no further response from a staff member, Please wait for one to contact you personally.`).setFooter({text: `Time limit reached | Case ${caseId}`}).setColor(14495300)]})
+								message.channel.send({embeds: [new client.embed().setTitle(':x: Session closed').setDescription(`The Modmail session ended automatically with no further response from a staff member, Please wait for one to contact you personally.`).setFooter({text: `Time limit reached | Case ${caseId}`}).setColor(client.config.embedColorRed)]})
 							}
 							modmailClient.threads.delete(message.author.id);
 						});
 				} else if(interaction.customId === "CANCEL") {
-					await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail canceled :x:').setColor(14495300)], components: []});
+					await interaction.message.edit({embeds: [new client.embed().setTitle('Modmail canceled :x:').setColor(client.config.embedColorRed)], components: []});
 					return;
 				}
 		});
