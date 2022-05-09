@@ -399,8 +399,8 @@ module.exports = {
 		if (!interaction.options.getString("conversion").includes('>') && !interaction.options.getString("conversion").includes('to')) return interaction.reply({content: 'There needs to be a greater-than sign (\`>\`) or the word "to" in your interaction, after the starters and before the target unit.', allowedMentions: { repliedUser: false }});
 		// let's define the > or to, that they're using
 		const usedSeparator = converter.includes('>') ? '>' : 'to';
-		const starters = converter.slice(1, converter.indexOf(converter.find(x => x.includes(usedSeparator)))).join(' ').split(',').map(starter => {
-			const starter = starters.trim();
+		const starters = converter.slice(1, converter.indexOf(converter.find(x => x.includes(usedSeparator)))).join(' ').split(',').map(startes => {
+			const starter = startes.trim();
 
 			// fraction
 			if (starter.includes('/') || starter.includes(' per ')) {
