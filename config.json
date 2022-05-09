@@ -12,13 +12,6 @@
 		"API": false,
 		"registerCommands": true
 	},
-	"Giveaway_Options": {
-		"giveawayManagerID": "",
-		"giveawayRoleID": "903649265224663121",
-		"giveawayMention": true,
-		"showMention": true,
-		"hostedBy": true
-	},
 	"eval": {
 		"allowed": true,
 		"whitelist": [
@@ -26,7 +19,6 @@
             "615761944154210305"
 		]
 	},
-	"enableAutoResponse": false,
 	"mainServer": {
 		"id":"858054240416432158",
 		"modmailPing": [
