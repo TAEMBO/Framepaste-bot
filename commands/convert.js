@@ -479,7 +479,7 @@ module.exports = {
 		const usedQuantities = new Set([target.quantity, ...starters.map(x => x.quantity)]);
 		const numeratorQuantities = new Set([target?.unit?.numeratorQuantity, ...starters.map(x => x?.unit?.numeratorQuantity)]);
 		const denominatorQuantities = new Set([target?.unit?.denominatorQuantity, ...starters.map(x => x?.unit?.denominatorQuantity)]);
-		if (usedQuantities.size > 1 || numeratorQuantities.size > 1 || denominatorQuantities.size > 1) return interaction.reply({content: `All starting units and the target unit must be of the same quantity. The quantities you used were \`${[...usedQuantities, ...numeratorQuantities, ...denominatorQuantities].filter(x => x)}\``, allowedMentions: { repliedUser: false }});
+		// if (usedQuantities.size > 1 || numeratorQuantities.size > 1 || denominatorQuantities.size > 1) return interaction.reply({content: `All starting units and the target unit must be of the same quantity. The quantities you used were \`${[...usedQuantities, ...numeratorQuantities, ...denominatorQuantities].filter(x => x)}\``, allowedMentions: { repliedUser: false }});
 		const quantity = [...usedQuantities][0];
 
 		// get absolute value: sum of all starters (starter amount * starter unit value)
