@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
     run: async (client, interaction) => {
-            if(!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command.`, allowedMentions: {roles: false});
+        if(!client.hasModPerms(client, interaction.member)) return interaction.reply({content: `You need the <@&${client.config.mainServer.roles.mod}> role to use this command.`, allowedMentions: {roles: false}});
         const subCmd = interaction.options.getSubcommand();
         if(subCmd === "start"){
         const winners = interaction.options.getInteger("winners");
