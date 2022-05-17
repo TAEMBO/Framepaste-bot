@@ -222,7 +222,7 @@ module.exports = {
 			}
 			interaction.reply({embeds: [embed]});
 				const filter = x => x.author.id === interaction.user.id && parseInt(x.content)
-				return interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ["time"]}).then(responses => {
+				return interaction.channel.awaitMessages({ filter, max: 1, time: 20000}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
 					if (isNaN(index)) return interaction.channel.send("That\"s not a valid number.");
 					interaction.followUp({embeds: [CPUEmbed(client, rankedCPUs[index][1], manufacturer || getManufacturer(rankedCPUs[index][0]))]});
