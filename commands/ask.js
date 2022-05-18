@@ -9,6 +9,5 @@ module.exports = {
         .setFooter({text: 'cloned from discord.gg/buildapc', iconURL: 'https://cdn.discordapp.com/icons/286168815585198080/a_e1016a9b8d8f7c97dafef6b655e0d1b1.webp'});
         interaction.reply({embeds: [embed], allowedMentions: { repliedUser: false }})
 	},
-	data: new SlashCommandBuilder().setName("ask").setDescription("links to don't ask to ask"),
-	hidden: true
+	data: new SlashCommandBuilder().setName("ask").setDescription("links to don't ask to ask")
 };
