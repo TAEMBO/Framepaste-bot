@@ -11,6 +11,5 @@ module.exports = {
             interaction.channel.send(`<@${member.id}> has received an honorary ban!`)}
         return;
     },
-    data: new SlashCommandBuilder().setName("band").setDescription("Honorary ban").addUserOption((opt)=>opt.setName("user").setDescription(".").setRequired(false)),
-    hidden: true
+    data: new SlashCommandBuilder().setName("band").setDescription("Honorary ban").addUserOption((opt)=>opt.setName("user").setDescription(".").setRequired(false))
 };
