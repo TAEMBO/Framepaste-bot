@@ -195,12 +195,12 @@ module.exports = {
 	if (message.content.toLowerCase().includes("forgor")) {
 		message.react("💀")
 	}
-	if (message.content.toLowerCase().includes("mryeester")) {
+	/* if (message.content.toLowerCase().includes("mryeester")) {
 		message.react(":yeester:947946389210529832")
 	}
 	if (message.content.toLowerCase().includes("deez nuts")) {
 		message.react(":obamatroll:911214574815023154")
-	}
+	} */
 	if (message.content.toLowerCase().includes('warn')) {
 		// 20% chance it will respond with an image
 		if (Math.random() < 0.2) message.reply({content: 'https://media.discordapp.net/attachments/858068843570003998/935651851494363136/c472i6ozwl561_remastered.jpg', allowedMentions: { repliedUser: false }}).then(x => setTimeout(() => x.delete(), 7000))
