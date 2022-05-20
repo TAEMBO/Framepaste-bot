@@ -8,7 +8,7 @@ module.exports = {
 				client.cpuCommand(client, interaction, "intel");
 				console.log("cpu.js Intel")
 			case 'a':
-				client.cpuCommand(client, interaction, "amd";
+				client.cpuCommand(client, interaction, "amd");
 				console.log("cpu.js AMD")
 		}
 	},
