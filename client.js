@@ -222,7 +222,7 @@ class YClient extends Client {
 				const cpu = await client.cpulist[manufacturer][bestMatches[index]];
 				const ee = await cpuEmbed(client, {cpu, manufacturer, color})
 				interaction.followUp({embeds: [ee]});
-			}).catch(err => interaction.followUp('Invalid response.'));
+			}).catch(err => console.log('No number supplied'));
 		});
 	}
     }
