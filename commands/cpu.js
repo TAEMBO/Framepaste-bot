@@ -3,18 +3,14 @@ module.exports = {
 	run: (client, interaction) => {
 		const chooseBrand = interaction.options.getString("brand");
 		
-		let brand = '';
-		
 		switch (chooseBrand) {
 			case 'i':
-				brand = "intel";
-				return;
+				client.cpuCommand(client, interaction, "intel");
+				console.log("cpu.js Intel")
 			case 'a':
-				brand = "amd";
-				return;
+				client.cpuCommand(client, interaction, "amd";
+				console.log("cpu.js AMD")
 		}
-		
-		client.cpuCommand(client, interaction, brand);
 	},
 	data: new SlashCommandBuilder().setName("cpu")
 		.setDescription("searches CPU specs")
