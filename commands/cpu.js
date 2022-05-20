@@ -1,18 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
 	run: (client, interaction) => {
-		const chooseBrand = interaction.options.getString("brand");
-		
-		switch (chooseBrand) {
-			case 'i':
-				client.cpuCommand(client, interaction, "intel");
-				console.log("cpu.js Intel")
-				return;
-			case 'a':
-				client.cpuCommand(client, interaction, "amd");
-				console.log("cpu.js AMD")
-				return;
-		}
+		client.cpuCommand(client, interaction, interaction.options.getString("brand"));
 	},
 	data: new SlashCommandBuilder().setName("cpu")
 		.setDescription("searches CPU specs")
@@ -25,8 +14,8 @@ module.exports = {
 			.addStringOption((opt)=>opt
 				.setName("brand")
 				.setDescription("The brand to filter for")
-				.addChoice('Intel', 'i')
-				.addChoice('AMD', 'a')
+				.addChoice('Intel', 'intel')
+				.addChoice('AMD', 'amd')
 				.setRequired(true))
 			.addStringOption((opt)=>opt
 				.setName("query")
