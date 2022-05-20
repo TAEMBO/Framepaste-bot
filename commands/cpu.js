@@ -12,6 +12,7 @@ module.exports = {
 			case 'a':
 				brand = "amd";
 				return;
+		}
 		
 		client.cpuCommand(client, interaction, brand);
 	},
