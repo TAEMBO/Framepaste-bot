@@ -4,6 +4,7 @@ const client = new YClient();
 client.init();
 const fs = require("fs");
 const {Collection} = require("discord.js");
+const path = require("node:path");
 
 console.log(client.config.botSwitches)
 
@@ -525,3 +526,8 @@ setInterval(() => {
 client.modmailClient.on("messageCreate", message => {
 	require("./modmailMessage.js")(message, client.modmailClient, client);
 });
+
+const functionFiles = fs.readdirSync(path.resolve('./functions')).filter(file => file.endsWith(".js"));
+for (const file of functionFiles){
+	client[file.slice(0, -3)] = require(path.resolve(`./functions/${file}`));
+}
