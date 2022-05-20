@@ -24,7 +24,6 @@ module.exports = {
 			.addStringOption(options => options
 				.setName('options')
 				.setDescription('Search options')
-				.addChoice('sl', 'sl')
 				.addChoice('Search a list you can choose from', 's')
 				.addChoice('Search for specific CPU specs', 'none')
 				.setRequired(true)))

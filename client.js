@@ -112,32 +112,14 @@ class YClient extends Client {
 
         const options = interaction.options.getString('options');
 
-        search = search.toString().replaceAll('-sl', '').replaceAll('-s', '')
-
-        switch (options) {
-            case 'none':
-                break
-            case 'sl':
-                search = search + ' -sl'
-                break
-            case 's':
-                search = search + ' -s'
-                break
-        }
-
         search = search.toLowerCase().split(",")
 	let matches = new client.collection();
 	let nameSearch = false;
 	let filters = [];
 	let oneResult = true;
 	let multipleResponseAsk = true;
-	if (search[search.length - 1].endsWith('-s')) {
+	if (options === 's') {
 		oneResult = false;
-		search[search.length - 1] = search[search.length - 1].slice(0, -2).trim();
-	} else if (search[search.length - 1].endsWith('-sl')) {
-		oneResult = false;
-		multipleResponseAsk = false;
-		search[search.length - 1] = search[search.length - 1].slice(0, -3).trim();
 	}
 	let prematureError = false;
 	search.forEach((statement, index) => {
@@ -208,13 +190,12 @@ class YClient extends Client {
 		});
 		const embed = new client.embed()
 			.setTitle('Choose CPU')
-			.setDescription(`Your search returned many CPUs. ${multipleResponseAsk ? 'Respond with the corresponding number to learn more about a specific cpu.' : 'Here is a list of them.'}`)
+			.setDescription(`Your search returned many CPUs. Respond with the corresponding number (20s) to learn more about a specific CPU.'}`)
 			.setFooter({text: matches.filter(x => x).size > limit ? 'Showing ' + limit + ' best matches of ' + matches.filter(x => x).size + ' total matches.' : 'Showing all ' + matches.filter(x => x).size + ' matches.'}).setColor(color)
 		text.forEach((x, i) => {
             embed.addFields({name: `Page ${(i)}`, value: x, inline: true});
 		});
 		interaction.reply({embeds: [embed]}).then(async embedMessage => {
-			if (!multipleResponseAsk) return;
 			const filter = m => m.author.id === interaction.user.id;
 			interaction.channel.awaitMessages({ filter, max: 1, time: 40000, errors: ['time'] }).then(async collected => {
 				const index = parseInt(collected.first().content);
