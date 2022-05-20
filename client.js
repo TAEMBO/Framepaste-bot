@@ -190,14 +190,14 @@ class YClient extends Client {
 		});
 		const embed = new client.embed()
 			.setTitle('Choose CPU')
-			.setDescription(`Your search returned many CPUs. Respond with the corresponding number (20s) to learn more about a specific CPU.'}`)
+			.setDescription('Your search returned many CPUs. Respond with the corresponding number (20s) to learn more about a specific CPU.')
 			.setFooter({text: matches.filter(x => x).size > limit ? 'Showing ' + limit + ' best matches of ' + matches.filter(x => x).size + ' total matches.' : 'Showing all ' + matches.filter(x => x).size + ' matches.'}).setColor(color)
 		text.forEach((x, i) => {
             embed.addFields({name: `Page ${(i)}`, value: x, inline: true});
 		});
 		interaction.reply({embeds: [embed]}).then(async embedMessage => {
 			const filter = m => m.author.id === interaction.user.id;
-			interaction.channel.awaitMessages({ filter, max: 1, time: 40000, errors: ['time'] }).then(async collected => {
+			interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ['time'] }).then(async collected => {
 				const index = parseInt(collected.first().content);
 				if (!typeof index === Number) return;
 				const cpu = await client.cpulist[manufacturer][bestMatches[index]];
