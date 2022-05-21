@@ -347,6 +347,15 @@ class YClient extends Client {
         const unpunishResult = await client.punishments.removePunishment(punishment.id, interaction.user.id, reason);
         interaction.reply(unpunishResult);
     };
+    rmArrValue(array, value) {
+        for(let i = 0; i < array.length; i++){
+            if(array[i].includes(value)){
+                array.splice(i, 1)
+                break;
+            }
+        }
+        return array;
+    };
 }
 
 module.exports = YClient;
