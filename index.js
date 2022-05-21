@@ -52,9 +52,6 @@ client.modmailClient.on("ready", async () => {
 	console.log(`Modmail Bot active as ${client.modmailClient.user.tag}`);
 });
 
-//snipe ???
-client.snipes = new Collection();
-
 // tic tac toe statistics database
 Object.assign(client.tictactoeDb, {
 	// global stats
