@@ -11,15 +11,17 @@ class YClient extends Client {
             intents: Object.keys(Discord.Intents.FLAGS),
             partials: ["MESSAGE", "REACTION", "CHANNEL"],
             disableEveryone: true
-        });        this.invites = new Map();
+        });        
+        this.invites = new Map();
         this.config = require("./config.json");
         this.tokens = require("./tokens.json");
         this.frs = new FreeStuffApi({key: this.tokens.fsApiKey});
-        this.memeQueue = new Discord.Collection;
+        this.memeQueue = new Discord.Collection();
         this.embed = Discord.MessageEmbed;
         this.collection = Discord.Collection;
         this.messageCollector = Discord.MessageCollector;
         this.messageattachment = Discord.MessageAttachment;
+        this.snipes = new Discord.Collection();
         this.cpulist = {
             INTEL: JSON.parse(fs.readFileSync(__dirname + "/databases/cpulist-INTEL.json")),
             AMD: JSON.parse(fs.readFileSync(__dirname + "/databases/cpulist-AMD.json")),
