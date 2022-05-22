@@ -7,20 +7,26 @@ module.exports = {
 		await interaction.editReply('Loading...')
 
 		const message = interaction.options.getString("wisdom");
-		let reply = interaction.options.getString("reply");
+		const reply = interaction.options.getString("reply");
 
 		if(client.bannedWords._content.includes(message.replace(" ", "").toLowerCase()) || message.replace(" ", "").includes('http') || message.replace(" ", "").includes('discord.gg')){
 			await interaction.followUp({content: "Bingus no trying to loophole!", ephemeral: true});
 			await interaction.deleteReply();
 			return;
+<<<<<<< HEAD
 		}
 
 		if(typeof await interaction.channel.messages.fetch(reply) === "object"){
 			interaction.channel.messages.fetch(reply).reply({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }})
+=======
+		};
+                const msg = reply ? await interaction.channel.messages.fetch(reply).catch(()=>{return null}) : null;
+		if(msg){
+			msg.reply({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }})
+>>>>>>> main
 		}else{
 			await interaction.channel.send({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }});
-		}
-		await interaction.deleteReply();
+		};
 
 		client.emit('log', {embeds: [new MessageEmbed().setTitle('Wisdom').setDescription(`**User:** ${interaction.user.tag}\n**said:** ${message}`).setColor(client.config.embedColor)]});
 	},
