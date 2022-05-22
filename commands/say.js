@@ -16,7 +16,7 @@ module.exports = {
 		}
 
 		if(typeof await interaction.channel.messages.fetch(reply) === "object"){
-			interaction.channel.messages.get(reply).reply({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }})
+			interaction.channel.messages.fetch(reply).reply({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }})
 		}else{
 			await interaction.channel.send({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }});
 		}
