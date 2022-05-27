@@ -1,6 +1,5 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const fs = require('fs')
-const moment = require('moment')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('yestercounter')
@@ -12,6 +11,7 @@ module.exports = {
             .setName('view')
             .setDescription('view since when yeester didn\'t talk')),
     run: async (client, interaction) => {
+        const moment = require('moment')
         let database = require('./databases/counter.json')
 
         if(!database.time){
