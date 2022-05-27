@@ -17,8 +17,8 @@ module.exports = {
         }
 
         if(interaction.options.getSubcommand() ===  'reset'){
-            database.time = Date.now().toString()
-            await interaction.reply({content: `The counter has been reset to today: <t:${Date.now()}>`})
+            database.time = Math.round(new Date() / 1000)
+            await interaction.reply({content: `The counter has been reset to today: <t:${Math.round(new Date() / 1000)}>`})
         }else if(interaction.options.getSubcommand() === 'view'){
             await interaction.reply({content: `Yeester didn't talk since <t:${database.time}>`})
         }
