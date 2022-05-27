@@ -2,7 +2,7 @@ const {SlashCommandBuilder} = require("@discordjs/builders");
 const fs = require('fs')
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('yestercounter')
+        .setName('yeestercounter')
         .setDescription('Yeester counter')
         .addSubcommand(reset => reset
             .setName('reset')
