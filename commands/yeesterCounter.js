@@ -37,6 +37,7 @@ module.exports = {
                 return;
             }
             database.time = time
+            await interaction.reply({content: `The counter has been set to <t:${time}>`})
         }else if(interaction.options.getSubcommand() === 'view'){
             await interaction.reply({content: `Yeester didn't talk since <t:${database.time}>`})
         }
