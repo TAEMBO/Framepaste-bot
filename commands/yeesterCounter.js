@@ -15,7 +15,8 @@ module.exports = {
             .setDescription('set the counter to some unix timestamp')
             .addIntegerOption(int => int
                 .setName('time')
-                .setDescription('time'))),
+                .setDescription('time')
+                .setRequired(true))),
     run: async (client, interaction) => {
         let database = require('../databases/counter.json')
 
