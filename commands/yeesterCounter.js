@@ -43,7 +43,7 @@ module.exports = {
             await interaction.reply({content: `Yeester didn't talk since <t:${database.time}>`})
         }
 
-        fs.writeFileSync('../databases/counter.json', JSON.stringify(database))
+        fs.writeFileSync('./databases/counter.json', JSON.stringify(database))
 
         database = "dsakldjkasljd";
         console.log(database)
