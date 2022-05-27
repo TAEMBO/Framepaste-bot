@@ -21,7 +21,7 @@ module.exports = {
         let database = require('../databases/counter.json')
 
         if(!database.time){
-            database.time = Date.now().toString();
+            database.time = Math.round(new Date() / 1000)
         }
 
         if(interaction.options.getSubcommand() ===  'reset'){
