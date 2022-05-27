@@ -281,8 +281,9 @@ module.exports = {
 			.addStringOption(options => options
 				.setName('options')
 				.setDescription('Search options')
-				.addChoice('Search a list you can view', 'sl')
-				.addChoice('Search a list you can choose from', 's')
-				.addChoice('Search for specific GPU specs', 'none')
+				.addChoices(
+					{name: 'Search a list you can view', value: 'sl'},
+					{name: 'Search a list you can choose from', value: 's'},
+					{name: 'Search for specific GPU specs', value: 'none'})
 				.setRequired(true)))
 }

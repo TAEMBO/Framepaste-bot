@@ -18,5 +18,14 @@ module.exports = {
             return;
         }
       },
-    data: new SlashCommandBuilder().setName("update").setDescription("Pull from GitHub repository to live bot").addStringOption(opt => opt.setName('options').setDescription('Restart as well?').addChoice('Update and restart', 'ur').addChoice('Update', 'u').setRequired(true))
+    data: new SlashCommandBuilder()
+    .setName("update")
+    .setDescription("Pull from GitHub repository to live bot")
+    .addStringOption(opt => opt
+      .setName('options')
+      .setDescription('Restart as well?')
+      .addChoices(
+        {name: 'Update and restart', value: 'ur'},
+        {name: 'Update', value: 'u'})
+      .setRequired(true))
 };

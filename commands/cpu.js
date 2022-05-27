@@ -14,8 +14,9 @@ module.exports = {
 			.addStringOption((opt)=>opt
 				.setName("brand")
 				.setDescription("The brand to filter for")
-				.addChoice('Intel', 'intel')
-				.addChoice('AMD', 'amd')
+				.addChoices(
+					{name: 'Intel', value: 'intel'},
+					{name: 'AMD', value: 'amd'})
 				.setRequired(true))
 			.addStringOption((opt)=>opt
 				.setName("query")
@@ -24,7 +25,8 @@ module.exports = {
 			.addStringOption(options => options
 				.setName('options')
 				.setDescription('Search options')
-				.addChoice('Search a list you can choose from', 's')
-				.addChoice('Search for specific CPU specs', 'none')
+				.addChoices(
+					{name: 'Search a list you can choose from', value: 's'},
+					{name: 'Search for specific CPU specs', value: 'none'})
 				.setRequired(true)))
 };
