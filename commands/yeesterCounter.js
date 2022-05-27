@@ -24,7 +24,7 @@ module.exports = {
         }
 
         if(interaction.options.getSubcommand() ===  'reset'){
-            if(!client.hasModPerms(client, interaction.user)){
+            if(!client.hasModPerms(client, interaction.member)){
                 await interaction.reply({content: 'You don\'t have perms to use this command', ephemeral: true})
                 return;
             }
@@ -32,7 +32,7 @@ module.exports = {
             await interaction.reply({content: `The counter has been reset to today: <t:${Math.round(new Date() / 1000)}>`})
         }else if(interaction.options.getSubcommand() ===  'set'){
             const time = interaction.options.getInteger('time')
-            if(!client.hasModPerms(client, interaction.user)){
+            if(!client.hasModPerms(client, interaction.member)){
                 await interaction.reply({content: 'You don\'t have perms to use this command', ephemeral: true})
                 return;
             }
