@@ -5,6 +5,7 @@ client.init();
 const fs = require("fs");
 const {Collection} = require("discord.js");
 const path = require("node:path");
+require('@memw/betterconsole')();
 
 console.log(client.config.botSwitches)
 
