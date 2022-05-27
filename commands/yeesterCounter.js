@@ -1,5 +1,4 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
-const fs = require('fs')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('yestercounter')
@@ -11,7 +10,6 @@ module.exports = {
             .setName('view')
             .setDescription('view since when yeester didn\'t talk')),
     run: async (client, interaction) => {
-        const moment = require('moment')
         let database = require('./databases/counter.json')
 
         if(!database.time){
@@ -20,9 +18,9 @@ module.exports = {
 
         if(interaction.option.getSubcommand() === 'reset'){
             database.time = Date.now().toString()
-            await interaction.reply({content: `The counter has been reset to today \`${moment(Date.now())}\``})
+            await interaction.reply({content: `The counter has been reset to today: <t:${Date.now()}>`})
         }else if(interaction.option.getSubcommand() === 'view'){
-            await interaction.reply({content: `The last time yeester said something is \`${moment(database.time)}\``})
+            await interaction.reply({content: `Yeester didn't talk since <t:${database.time}>`})
         }
 
         database = "dsakldjkasljd";
