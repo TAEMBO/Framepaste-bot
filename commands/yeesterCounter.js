@@ -18,7 +18,7 @@ module.exports = {
                 .setDescription('time')
                 .setRequired(true))),
     run: async (client, interaction) => {
-        let database = require('../databases/counter.json')
+        let database = require('./databases/counter.json')
 
         if(!database.time){
             database.time = Date.now().toString();
