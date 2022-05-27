@@ -10,7 +10,7 @@ module.exports = {
             .setName('view')
             .setDescription('view since when yeester didn\'t talk')),
     run: async (client, interaction) => {
-        let database = require('./databases/counter.json')
+        let database = require('../databases/counter.json')
 
         if(!database.time){
             database.time = Date.now().toString();
