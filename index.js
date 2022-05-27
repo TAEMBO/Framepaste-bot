@@ -7,7 +7,7 @@ const {Collection} = require("discord.js");
 const path = require("node:path");
 require('@memw/betterconsole')();
 
-console.log(client.config.botSwitches)
+console.normalLog(client.config.botSwitches)
 
 // global properties
 client.on("ready", async () => {
@@ -22,7 +22,7 @@ client.on("ready", async () => {
 	setInterval(()=>{client.guilds.cache.get(client.config.mainServer.id).invites.fetch().then((invs)=>{invs.forEach(async(inv)=>{client.invites.set(inv.code, {uses: inv.uses, creator: inv.inviter.id})})})}, 500000)
 	if(client.config.botSwitches.registerCommands) client.guilds.cache.get(client.config.mainServer.id).commands.set(client.registery).catch((e)=>{console.log(`Couldn't register commands bcuz: ${e}`)});
 	process.on("unhandledRejection", async (error)=>{
-		console.log(error)
+		console.error(error)
 		await client.channels.fetch(require("./config.json").mainServer.channels.modlogs).then((channel)=>{
         channel.send({content: `${client.config.eval.whitelist.map(x=>`<@${x}>`).join(", ")}`, embeds: [new Discord.MessageEmbed().setTitle("Error Caught!").setColor("#420420").setDescription(`**Error:** \`${error.message}\`\n\n**Stack:** \`${`${error.stack}`.slice(0, 2500)}\``)]})
 		})
@@ -30,7 +30,7 @@ client.on("ready", async () => {
 	setInterval(async () => {
 	        client.user.setActivity('paint dry.', { type: "STREAMING", url: "https://twitch.tv/mryeester"});
 	}, 60000);
-	console.log("\x1b[36m", `Bot active as ${client.user.tag}.`);
+	console.info(`Bot active as ${client.user.tag}.`);
 
 	const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
     eventFiles.forEach((file)=>{
@@ -50,7 +50,7 @@ client.modmailClient.on("ready", async () => {
 			type: "LISTENING",
 		});
 	}, 60000);
-	console.log(`Modmail Bot active as ${client.modmailClient.user.tag}`);
+	console.info(`Modmail Bot active as ${client.modmailClient.user.tag}`);
 });
 
 // tic tac toe statistics database
