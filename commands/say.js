@@ -12,13 +12,13 @@ module.exports = {
 			await interaction.followUp({content: "Bingus no trying to loophole!", ephemeral: true});
 			await interaction.deleteReply();
 			return;
-		};
+		}
                 const msg = reply ? await interaction.channel.messages.fetch(reply).catch(()=>{return null}) : null;
 		if(msg){
-			msg.reply({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }})
+			await msg.reply({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }})
 		}else{
 			await interaction.channel.send({content: message, allowedMentions: { roles: false, users: false, mention_everyone: false }});
-		};
+		}
 
 		client.emit('log', {embeds: [new MessageEmbed().setTitle('Wisdom').setDescription(`**User:** ${interaction.user.tag}\n**said:** ${message}`).setColor(client.config.embedColor)]});
 	},
