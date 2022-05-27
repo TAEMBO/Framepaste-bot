@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+require('@memw/betterconsole')();
 class Database {
 	constructor(dir, dataType) {
 		this._dataType = dataType;
@@ -28,7 +29,7 @@ class Database {
 		const json = fs.readFileSync(this._path);
 		const array = JSON.parse(json);
 		this._content = array;
-		console.log(this._path + ' Database Loaded');
+		console.trace(`${this._path} Database Loaded`);
 		return this;
 	}
 	forceSave(db = this, force = false) {
@@ -36,7 +37,7 @@ class Database {
 		const newJson = JSON.stringify(db._content);
 		if (oldJson !== newJson || force) {
 			fs.writeFileSync(db._path, newJson);
-			if (this._saveNotifs) console.log(this._path + ' Database Saved');
+			if (this._saveNotifs) console.log(`${this._path} Database Saved`);
 		}
 		return db;
 	}
