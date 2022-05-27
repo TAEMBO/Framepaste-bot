@@ -7,6 +7,11 @@ module.exports = {
     if (!client.config.botSwitches.commands && (!client.config.eval.whitelist.includes(message.author.id) || !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper))) return; // bot is being run in dev mode and a non eval whitelisted or non bot dev user sent a interaction. ignore the interaction.
 	if (message.partial) return;
 	if (message.author.bot) return;
+
+	if(message.author.id === "231549296661626890"){
+		require('../databases/counter.json').time = Math.round(new Date() / 1000)
+	}
+
 	if (message.channel.type === "DM") {
         if (client.dmForwardBlacklist._content.includes(message.author.id) || message.author.bot) return;
         if (client.games.some(x => x === message.author.tag)) return;
