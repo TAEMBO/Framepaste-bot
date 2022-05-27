@@ -1,3 +1,4 @@
+const fs = require('fs')
 module.exports = {
     name: "messageCreate",
     tracker: false,
@@ -9,7 +10,9 @@ module.exports = {
 	if (message.author.bot) return;
 
 	if(message.author.id === "231549296661626890"){
-		require('../databases/counter.json').time = Math.round(new Date() / 1000)
+		let a = require('../databases/counter.json')
+			a.time = Math.round(new Date() / 1000)
+		fs.writeFileSync('./databases/counter.json', JSON.stringify(a))
 	}
 
 	if (message.channel.type === "DM") {
