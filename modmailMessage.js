@@ -27,7 +27,7 @@ module.exports = async (message, modmailClient, client) => {
 						modmailChannel.send({content: `${unimportant ? ' ' : client.config.mainServer.modmailPing.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}`, embeds: [new client.embed().setAuthor({name: `${message.author.tag} (${message.author.id})`, iconURL: `${message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 128 })}`}).setTitle(`New Modmail | Case ${caseId}`).setDescription(`<@${message.author.id}>\nSession opened for ${unimportant ? '20' : '10'} minutes.`).setColor(client.config.embedColor)]}); // inform mods of new modmail, show instructions
 						modmailChannel.send(`${message.content + '\n' + (message.attachments.first()?.url || '')}`)
 						modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} **R**: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // add recipients message to summary
-						let collectorEndTimestamp = Date.now() + 10 * 60 * 200; // modmail will end in 10 minutes
+						let collectorEndTimestamp = Date.now() + 10 * 60 * 1000; // modmail will end in 10 minutes
 						if (unimportant) collectorEndTimestamp += 10 * 60 * 1000; // if unimportant, give mods 10 more minutes of time to reply
 						let timeWarning = false; // bot has not warned of low time remaining
 						const modReplyCollector = modmailChannel.createMessageCollector({}); // create message collector in modmail channel for moderators
