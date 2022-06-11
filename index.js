@@ -350,7 +350,7 @@ Object.assign(client.punishments, {
 					
 					if (typeof removePunishmentResult !== "string") {
 						member.timeout(null, `${reason || "unspecified"} | Case #${id}`)
-						removePunishmentResult.send(`You've been unmuted in ${removePunishmentResult.guild.name}.`);
+						removePunishmentResult.send(`You've been unmuted in ${removePunishmentResult.guild.name}.`).catch(() => console.log("Failed to DM user of unmute."));
 						removePunishmentResult = removePunishmentResult.user; // removing a role returns a guildmember
 					}
 				} else {
