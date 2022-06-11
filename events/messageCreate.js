@@ -196,7 +196,7 @@ module.exports = {
 	if (!client.config.botSwitches.automod) return;
 	if (message.content.includes("discord.gg/") && !message.member.roles.cache.has(client.config.mainServer.roles.mod) && !message.member.roles.cache.has(client.config.mainServer.roles.botdeveloper)&& message.guild.id === client.config.mainServer.id) {
 		message.delete()
-		client.punishments.addPunishment("warn", message.member, { reason: "Discord advertisement" }, client.user.id)
+		client.punishments.addPunishment("warn", message.member, { reason: "Discord advertisement", interaction: message }, client.user.id)
 		message.channel.send("No advertising other Discord servers.").then(x => setTimeout(() => x.delete(), 10000))
 	}
 	// auto responses
