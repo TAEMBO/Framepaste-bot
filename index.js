@@ -313,7 +313,7 @@ Object.assign(client.punishments, {
 				}
 			case "warn":
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => setTimeout(() => interaction.channel?.send(`Failed to DM <@${member.user.id}>.`), 500));
+				const warnResult = await member.send(`You've been warned in ${member.guild.name} for reason \`${reason || "unspecified"}\` (Case #${warnData.id})`).catch(err => {if (moderator !== '795443537356521502') {setTimeout(() => interaction.channel?.send(`Failed to DM <@${member.user.id}>.`), 500)}});
 				if (typeof warnResult === "string") {
 					return `Warn was unsuccessful: ${warnResult}`;
 				} else {
