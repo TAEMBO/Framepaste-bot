@@ -3,8 +3,8 @@ const Discord = require("discord.js");
 const fs = require("node:fs");
 const {FreeStuffApi} = require("freestuff");
 const database = require("./database");
-const EventEmitter = require("node:events");
 const gws = require("./gw.js");
+const { Player } = require("discord-player");
 class YClient extends Client {
     constructor(options){
         super({
@@ -15,6 +15,7 @@ class YClient extends Client {
         this.invites = new Map();
         this.config = require("./config.json");
         this.tokens = require("./tokens.json");
+        this.music = new Player(this, {ytdlOptions: {quality: "highest", highWaterMark: 1 << 25}});
         this.frs = new FreeStuffApi({key: this.tokens.fsApiKey});
         this.memeQueue = new Discord.Collection();
         this.embed = Discord.MessageEmbed;
