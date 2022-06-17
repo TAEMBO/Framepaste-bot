@@ -198,7 +198,7 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('Choose GPU')
 				.setDescription('Your search returned many GPU\'s.' +( multipleSearch === 's' ? ' Choose one and respond with the corresponding number. (20s)' : ' Here is a list of them.'))
-			if (manufacturer === 'nvidia') embed.setColor('75b900');
+			if (manufacturer === 'nvidia') embed.setColor(7715072);
 			else if (manufacturer === 'amd') embed.setColor(13582629);
 			else embed.setColor(client.config.embedColor);
 			let text = '';
