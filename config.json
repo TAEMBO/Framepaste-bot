@@ -4,7 +4,7 @@
 	"embedColorRed": 15548997,
 	"botSwitches": {
 		"fpb": true,
-		"modmail": true,
+		"modmail": false,
 		"commands": true,
 		"automod": true,
 		"reactionRoles": true,
