@@ -49,7 +49,7 @@ class YClient extends Client {
         this.modmailClient.threads = new Discord.Collection();
         this.lastGames = [];
         if(this.config.botSwitches.API) require("./API.js")(this);
-        require("mongoose").connect(this.tokens.mongo_db, {dbName: "framepaste", keepAlive: true }).then((e)=>{console.log("MongoDB Connected!")});
+        require("mongoose").connect(this.tokens.mongo_db);
         this.addListener("log", async function(data){
             const channel = await this.channels.fetch(this.config.mainServer.channels.modlogs);
             channel.send(data);
