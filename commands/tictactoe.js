@@ -32,7 +32,7 @@ module.exports = {
 				.setDescription(`This user has played a total of ${playerStats.total} games.\n${playerStats.wins} of those were wins.\n${playerStats.losses} of those were losses.\n${playerStats.draws} of those were draws.\nThis user has a win percentage of \`${db.calcWinPercentage(playerStats)}\``)
 				.setColor(client.config.embedColor)
 			return interaction.channel.send({embeds: [embed]});
-		} else if(subCmd === "play"){
+		} else if(subCmd === "start"){
 		if (client.games.has(interaction.channel.id)) {
 			return interaction.reply({content: `There is already an ongoing game in this channel created by ${client.games.get(interaction.channel.id)}`, ephemeral: true});
 		}
