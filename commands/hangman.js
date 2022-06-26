@@ -7,7 +7,7 @@ module.exports = {
 		}
 		client.games.set(interaction.channel.id, interaction.user.tag);
 		await interaction.reply({content: `Game started!`, ephemeral: true});
-		const ea = await interaction.followUp({content: `A hangman game has started!\nAnyone can guess letters or the full word by doing \`guess [letter or word]\`\nThe word is:\n\`\`\`\n${hideWord()}\n\`\`\``, fetchReply: true});
+		const ea = await interaction.followUp({content: `A hangman game has started!\nAnyone can guess letters or the full word by doing \`guess [letter or word]\``, fetchReply: true});
 		const word = interaction.options.getString("word");
 		const guessedWordsIndices = [];
 		const guesses = [];
